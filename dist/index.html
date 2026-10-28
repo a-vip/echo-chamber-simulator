@@ -109,6 +109,9 @@
       </div>
 
       <span id="hud-day" class="text-amber-400 font-bold text-xs">DAY 1</span>
+      <button id="btn-radio" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all font-mono" title="Toggle Lo-Fi / Overclock Chiptune Radio">
+        📻 RADIO: OFF
+      </button>
       <button id="btn-crt" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all">
         📺 CRT: ON
       </button>
@@ -169,6 +172,12 @@
       <div class="flex items-center gap-2">
         <button id="btn-open-tutorial" class="px-3 py-1.5 rounded bg-amber-950/60 hover:bg-amber-900 border border-amber-600/80 font-mono text-xs font-bold text-amber-200 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
           🎓 HOW TO PLAY
+        </button>
+        <button id="btn-open-craft" class="px-3 py-1.5 rounded bg-rose-950/50 hover:bg-rose-900 border border-rose-600/80 font-mono text-xs font-bold text-rose-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Write your own custom parody post">
+          ✍️ CRAFT POST
+        </button>
+        <button id="btn-open-dossier" class="px-3 py-1.5 rounded bg-blue-950/50 hover:bg-blue-900 border border-blue-600/80 font-mono text-xs font-bold text-blue-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Generate shareable stats card">
+          📸 DOSSIER
         </button>
         <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
           🔬 DARK PATTERNS
@@ -328,7 +337,19 @@
             <span class="text-cyan-400">● Temp</span>
           </div>
         </div>
-        <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800"></canvas>
+        <canvas id="sparkline-canvas" width="270" height="85" class="w-full bg-black rounded border border-zinc-800"></canvas>
+      </div>
+
+      <!-- Faction Battle Map / Planetary Riot Radar -->
+      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+        <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
+          <span class="flex items-center gap-1.5">📡 Riot Radar (Click Node)</span>
+          <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE RADAR</span>
+        </div>
+        <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
+        <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
+          Click any sector node on the radar to inspect regional riot status.
+        </div>
       </div>
 
       <!-- Game Mechanics Lore Helper -->
@@ -429,13 +450,109 @@
       <div id="ending-badge" class="text-xs font-bold text-amber-300 bg-amber-950/60 px-3 py-1 rounded border border-amber-600">
         🎖️ BADGE UNLOCKED
       </div>
-      <div class="flex gap-3 w-full font-mono text-xs font-bold pt-2">
-        <button id="ending-btn-restart" class="flex-1 py-2.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white transition-all">
-          🔄 RESTART (NEW GAME)
+      <div class="flex flex-col gap-2 w-full font-mono text-xs font-bold pt-2">
+        <button id="ending-btn-dossier" class="w-full py-2.5 rounded bg-blue-900/60 hover:bg-blue-800 border border-blue-500 text-blue-200 transition-all flex items-center justify-center gap-2">
+          📸 VIEW DISGRACE DOSSIER (SHARE STATS)
         </button>
-        <button id="ending-btn-prestige" class="flex-1 py-2.5 rounded bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-extrabold transition-all">
-          🌌 REBOOT TIMELINE (+35% PRESTIGE)
-        </button>
+        <div class="flex gap-2 w-full">
+          <button id="ending-btn-restart" class="flex-1 py-2.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white transition-all">
+            🔄 RESTART (NEW GAME)
+          </button>
+          <button id="ending-btn-prestige" class="flex-1 py-2.5 rounded bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-extrabold transition-all">
+            🌌 REBOOT (+35% PRESTIGE)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Custom Ragebait Post Creator -->
+  <div id="modal-craft" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="bg-zinc-950 border-2 border-rose-500/80 rounded-xl max-w-lg w-full p-5 shadow-2xl font-mono flex flex-col gap-3 text-zinc-100">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">✍️</span>
+          <h2 class="font-bold text-sm text-white uppercase">Craft Custom Ragebait Post</h2>
+        </div>
+        <button class="modal-close text-zinc-400 hover:text-white font-bold text-lg">✕</button>
+      </div>
+
+      <form id="form-craft-post" class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Author Name</label>
+            <input id="craft-author" type="text" placeholder="e.g. SigmaGuru_Rex" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+          </div>
+          <div>
+            <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Handle</label>
+            <input id="craft-handle" type="text" placeholder="e.g. @PureMarrowOnly" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Faction Alignment</label>
+          <select id="craft-faction" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+            <option value="gender_alpha">🗿 Manosphere / Sigma Grinders</option>
+            <option value="gender_femme">💅 Femosphere / Divine Femmes</option>
+            <option value="pet_cat">🐱 Feline Overlords (Cat Zealots)</option>
+            <option value="pet_dog">🐕 Canine Tactical Goodboys</option>
+            <option value="tech_corp">🤖 Techno-Feudal Hyper-Corporatists</option>
+            <option value="tech_luddite">🍄 Neo-Luddite Mud Monks</option>
+            <option value="diet_carnivore">🥩 Raw Marrow Ancestral Chads</option>
+            <option value="diet_vegan">🌱 Sunlight-Breatharian Ascetics</option>
+            <option value="rot_alpha">🌀 Gen-Alpha Brainrot Nihilists</option>
+            <option value="rot_boomer">🦅 Boomer Facebook Sentinels</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Parody Post Content</label>
+          <textarea id="craft-content" rows="3" placeholder="Type your unhinged take to provoke the masses..." required class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Hashtags</label>
+          <input id="craft-hashtags" type="text" placeholder="#Grindset #CatSupremacy #TouchGrass" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2 border-t border-zinc-800">
+          <button type="button" class="modal-close px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold">
+            CANCEL
+          </button>
+          <button type="submit" class="px-4 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black font-extrabold flex items-center gap-1.5">
+            🚀 LAUNCH INTO FEED
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Feed Rot Dossier Share Card -->
+  <div id="modal-dossier" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+    <div class="bg-zinc-950 border-2 border-amber-500 rounded-xl max-w-2xl w-full p-5 shadow-2xl font-mono flex flex-col gap-3 text-zinc-100">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📸</span>
+          <h2 class="font-bold text-sm text-white uppercase">Official Algorithmic Disgrace Dossier</h2>
+        </div>
+        <button class="modal-close text-zinc-400 hover:text-white font-bold text-lg">✕</button>
+      </div>
+
+      <!-- Dossier Canvas Preview -->
+      <div id="dossier-preview-container" class="w-full flex justify-center py-1">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="flex items-center justify-between border-t border-zinc-800 pt-3">
+        <span class="text-[10px] text-zinc-400">Share your disastrous management record with the world.</span>
+        <div class="flex gap-2">
+          <button id="btn-dossier-copy" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all">
+            📋 COPY TEXT SUMMARY
+          </button>
+          <button id="btn-dossier-download" class="px-4 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold transition-all">
+            💾 DOWNLOAD PNG
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -488,9 +605,9 @@
 
 /* --- src/audio.js --- */
 /**
- * The Echo Chamber Simulator - Procedural Audio Synthesizer
+ * The Echo Chamber Simulator - Procedural Audio Synthesizer & BGM Radio
  * Built entirely on the Web Audio API with zero external audio assets.
- * Generates authentic 8-bit/chiptune pings, rage distortions, alarms, and server hums.
+ * Generates authentic 8-bit/chiptune SFX and interactive Lo-Fi / Overclock procedural music!
  */
 
 class SoundEngine {
@@ -501,6 +618,13 @@ class SoundEngine {
     this.serverHumOsc = null;
     this.serverHumGain = null;
     this.initialized = false;
+
+    // Radio BGM state
+    this.currentStation = 'off'; // 'chill', 'rage', 'off'
+    this.bgmGain = null;
+    this.bgmStep = 0;
+    this.bgmTimer = null;
+    this.bpm = 88;
   }
 
   init() {
@@ -511,6 +635,10 @@ class SoundEngine {
       this.masterGain = this.ctx.createGain();
       this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
       this.masterGain.connect(this.ctx.destination);
+
+      this.bgmGain = this.ctx.createGain();
+      this.bgmGain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+      this.bgmGain.connect(this.masterGain);
 
       // Start continuous ambient server hum
       this.startAmbientHum();
@@ -527,7 +655,7 @@ class SoundEngine {
       this.serverHumGain = this.ctx.createGain();
       
       this.serverHumOsc.type = 'triangle';
-      this.serverHumOsc.frequency.setValueAtTime(55, this.ctx.currentTime); // Low 55Hz server hum
+      this.serverHumOsc.frequency.setValueAtTime(55, this.ctx.currentTime);
       
       this.serverHumGain.gain.setValueAtTime(0.015, this.ctx.currentTime);
       this.serverHumOsc.connect(this.serverHumGain);
@@ -541,7 +669,6 @@ class SoundEngine {
   updateServerTempHum(tempNormalized) {
     if (!this.serverHumGain || !this.serverHumOsc || this.muted) return;
     const now = this.ctx.currentTime;
-    // Higher server temp = louder and jittery pitch
     const freq = 55 + tempNormalized * 80;
     const gain = 0.01 + tempNormalized * 0.05;
     this.serverHumOsc.frequency.setTargetAtTime(freq, now, 0.1);
@@ -556,207 +683,285 @@ class SoundEngine {
     return this.muted;
   }
 
-  // Play button click / UI blip
+  // --- RADIO BGM SYNTHESIZER ---
+  setRadioStation(station) {
+    this.init();
+    this.currentStation = station;
+    if (this.bgmTimer) {
+      clearInterval(this.bgmTimer);
+      this.bgmTimer = null;
+    }
+
+    if (station === 'off' || this.muted) return;
+
+    this.bpm = station === 'rage' ? 132 : 88;
+    this.bgmStep = 0;
+    const intervalMs = (60 / this.bpm) * 1000 / 4; // 16th notes
+    this.bgmTimer = setInterval(() => this.tickBGM(), intervalMs);
+  }
+
+  cycleRadioStation() {
+    const stations = ['off', 'chill', 'rage'];
+    const nextIdx = (stations.indexOf(this.currentStation) + 1) % stations.length;
+    this.setRadioStation(stations[nextIdx]);
+    return this.currentStation;
+  }
+
+  tickBGM() {
+    if (!this.ctx || this.muted || this.currentStation === 'off') return;
+    const step = this.bgmStep % 32;
+    this.bgmStep++;
+
+    if (this.currentStation === 'chill') {
+      this.playChillNote(step);
+    } else if (this.currentStation === 'rage') {
+      this.playRageNote(step);
+    }
+  }
+
+  playChillNote(step) {
+    const now = this.ctx.currentTime;
+    // Pentatonic scale notes (D minor pentatonic: D3, F3, G3, A3, C4, D4, F4)
+    const notes = [146.83, 174.61, 196.00, 220.00, 261.63, 293.66, 349.23];
+    
+    // Bass on beats 0, 8, 16, 24
+    if (step % 8 === 0) {
+      const bassOsc = this.ctx.createOscillator();
+      const bassGain = this.ctx.createGain();
+      bassOsc.type = 'triangle';
+      const root = (step === 0 || step === 16) ? 73.42 : (step === 8 ? 87.31 : 65.41); // D2, F2, C2
+      bassOsc.frequency.setValueAtTime(root, now);
+      bassGain.gain.setValueAtTime(0.2, now);
+      bassGain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+      bassOsc.connect(bassGain);
+      bassGain.connect(this.bgmGain);
+      bassOsc.start(now);
+      bassOsc.stop(now + 0.36);
+    }
+
+    // Melodic arpeggio patterns
+    const melodyPattern = [0, 4, 2, 5, 3, 6, 2, 4, 1, 3, 5, 2, 4, 6, 3, 1];
+    if (step % 2 === 0) {
+      const noteIdx = melodyPattern[(step / 2) % melodyPattern.length];
+      const freq = notes[noteIdx % notes.length];
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      osc.connect(gain);
+      gain.connect(this.bgmGain);
+      osc.start(now);
+      osc.stop(now + 0.23);
+    }
+  }
+
+  playRageNote(step) {
+    const now = this.ctx.currentTime;
+    // Driving synth bass (Sawtooth bassline)
+    if (step % 4 === 0) {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sawtooth';
+      const bassNotes = [110.00, 110.00, 130.81, 98.00]; // A2, A2, C3, G2
+      osc.frequency.setValueAtTime(bassNotes[Math.floor(step / 8) % bassNotes.length], now);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+      osc.connect(gain);
+      gain.connect(this.bgmGain);
+      osc.start(now);
+      osc.stop(now + 0.18);
+    }
+
+    // Snappy chip hi-hat on every off-beat
+    if (step % 4 === 2) {
+      const noise = this.ctx.createBufferSource();
+      const buffer = this.ctx.createBuffer(1, Math.floor(this.ctx.sampleRate * 0.04), this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      noise.buffer = buffer;
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.07, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      noise.connect(gain);
+      gain.connect(this.bgmGain);
+      noise.start(now);
+    }
+
+    // Aggressive synth lead
+    if (step % 2 === 0 && Math.random() < 0.75) {
+      const leadOsc = this.ctx.createOscillator();
+      const leadGain = this.ctx.createGain();
+      leadOsc.type = 'square';
+      const scale = [440, 523.25, 587.33, 659.25, 783.99, 880];
+      leadOsc.frequency.setValueAtTime(scale[step % scale.length], now);
+      leadGain.gain.setValueAtTime(0.08, now);
+      leadGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      leadOsc.connect(leadGain);
+      leadGain.connect(this.bgmGain);
+      leadOsc.start(now);
+      leadOsc.stop(now + 0.11);
+    }
+  }
+
+  // --- SOUND EFFECTS ---
   playClick() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-
     osc.type = 'square';
     osc.frequency.setValueAtTime(600, now);
     osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
-
     gain.gain.setValueAtTime(0.12, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
-
     osc.connect(gain);
     gain.connect(this.masterGain);
-
     osc.start(now);
     osc.stop(now + 0.04);
   }
 
-  // Dopamine ping when harvesting Neuro-Watts / Upvoting
   playDopamineChime() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
-    const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 arpeggio
+    const freqs = [523.25, 659.25, 783.99, 1046.50];
     freqs.forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       const noteTime = now + idx * 0.035;
-
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, noteTime);
-
       gain.gain.setValueAtTime(0.15, noteTime);
       gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.15);
-
       osc.connect(gain);
       gain.connect(this.masterGain);
-
       osc.start(noteTime);
       osc.stop(noteTime + 0.16);
     });
   }
 
-  // Rage distortion crunch when outrage is injected
   playRageCrunch() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(140, now);
     osc.frequency.exponentialRampToValueAtTime(45, now + 0.18);
-
-    // Distortion burst using rapid frequency modulation
     gain.gain.setValueAtTime(0.25, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-
     osc.connect(gain);
     gain.connect(this.masterGain);
-
     osc.start(now);
     osc.stop(now + 0.2);
   }
 
-  // Cash register cha-ching when monetizing an ad
   playCashChime() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
-    const freqs = [987.77, 1318.51]; // B5 to E6
+    const freqs = [987.77, 1318.51];
     freqs.forEach((f, i) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       const time = now + i * 0.07;
-
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(f, time);
-
       gain.gain.setValueAtTime(0.2, time);
       gain.gain.exponentialRampToValueAtTime(0.005, time + 0.22);
-
       osc.connect(gain);
       gain.connect(this.masterGain);
-
       osc.start(time);
       osc.stop(time + 0.25);
     });
   }
 
-  // Shadowban hush noise
   playShadowban() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-
     osc.type = 'sine';
     osc.frequency.setValueAtTime(400, now);
     osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
-
     gain.gain.setValueAtTime(0.18, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-
     osc.connect(gain);
     gain.connect(this.masterGain);
-
     osc.start(now);
     osc.stop(now + 0.14);
   }
 
-  // Crisis / Meltdown Warning Siren
   playAlarm() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(880, now);
     osc.frequency.linearRampToValueAtTime(440, now + 0.15);
     osc.frequency.linearRampToValueAtTime(880, now + 0.3);
-
     gain.gain.setValueAtTime(0.15, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-
     osc.connect(gain);
     gain.connect(this.masterGain);
-
     osc.start(now);
     osc.stop(now + 0.35);
   }
 
-  // Coolant Spray sound
   playCoolant() {
     if (this.muted) return;
     this.init();
-    // Simulate white-noise burst using buffer
     const bufferSize = Math.floor(this.ctx.sampleRate * 0.25);
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
       data[i] = Math.random() * 2 - 1;
     }
-
     const noise = this.ctx.createBufferSource();
     noise.buffer = buffer;
-
     const filter = this.ctx.createBiquadFilter();
     filter.type = 'bandpass';
     filter.frequency.setValueAtTime(1200, this.ctx.currentTime);
     filter.Q.setValueAtTime(3, this.ctx.currentTime);
-
     const gain = this.ctx.createGain();
     const now = this.ctx.currentTime;
     gain.gain.setValueAtTime(0.2, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-
     noise.connect(filter);
     filter.connect(gain);
     gain.connect(this.masterGain);
-
     noise.start(now);
   }
 
-  // Achievement unlock triumphant fanfare
   playAchievementFanfare() {
     if (this.muted) return;
     this.init();
-    const notes = [440, 554.37, 659.25, 880]; // A4, C#5, E5, A5
+    const notes = [440, 554.37, 659.25, 880];
     const now = this.ctx.currentTime;
     notes.forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       const t = now + idx * 0.08;
-
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, t);
-
       gain.gain.setValueAtTime(0.22, t);
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-
       osc.connect(gain);
       gain.connect(this.masterGain);
-
       osc.start(t);
       osc.stop(t + 0.36);
     });
   }
 }
 
-// Export singleton to window
 window.AudioSynth = new SoundEngine();
-
 
 
 /* --- src/posts.js --- */
@@ -2050,6 +2255,619 @@ window.ENDINGS_DATABASE = ENDINGS_DATABASE;
 
 
 
+/* --- src/bosses.js --- */
+/**
+ * The Echo Chamber Simulator - Influencer Boss Encounters
+ * High-threat "Megaphone Influencer" boss cards with special hazard mechanics,
+ * live timers, and tactical counters (Bribe, Quote-Bomb, Super-Shadowban).
+ */
+
+const BOSS_PROFILES = [
+  {
+    id: 'boss_andrew_tallow',
+    name: 'Andrew Tallow',
+    handle: '@RawSpleenKing',
+    faction: 'gender_alpha',
+    icon: '🗿',
+    theme: '#3b82f6',
+    title: '👑 APEX INFLUENCER: 96-HOUR JAWLINE STREAM',
+    dialogue: 'IF YOU ARE NOT SWALLOWING UNPASTEURIZED YAK TALLOW AT 3:45 AM, YOU ARE AN NPC IN MY MATRIX. BENCH PRESS PROGRESSION IS LAW.',
+    durationSec: 25,
+    passiveTensionPerSec: 0.6,
+    passiveTempPerSec: 0.5,
+    bribeCost: 100,
+    bribeRewardCash: 350,
+    swarmCostWatts: 500,
+    swarmRewardWatts: 4500
+  },
+  {
+    id: 'boss_goddess_manifesta',
+    name: 'Goddess Manifesta',
+    handle: '@CosmicTrustFund777',
+    faction: 'gender_femme',
+    icon: '💅',
+    theme: '#ec4899',
+    title: '✨ CELESTIAL SIREN: $1,200 FIRST DATE DECREE',
+    dialogue: 'Sprinkle sprinkle! Any male who does not wire his quarterly earnings directly to my manifestation crystal fund will have his root chakra blocked for 3 reincarnations.',
+    durationSec: 25,
+    passiveTensionPerSec: 0.7,
+    passiveTempPerSec: 0.4,
+    bribeCost: 120,
+    bribeRewardCash: 420,
+    swarmCostWatts: 600,
+    swarmRewardWatts: 5000
+  },
+  {
+    id: 'boss_skibidi_pope',
+    name: 'The Skibidi Pontiff',
+    handle: '@OhioVatican',
+    faction: 'rot_alpha',
+    icon: '🚽',
+    theme: '#06b6d4',
+    title: '🌀 BRAINROT MONARCH: GLOBAL AURA FORECLOSURE',
+    dialogue: 'CHAT IS THIS REAL? BABY GRONK JUST FANUM TAXED THE SUN. SUBWAY SURFERS QUAD SCREEN BROADCASTING TO EVERY TV ON EARTH NO CAP ONG FR FR.',
+    durationSec: 22,
+    passiveTensionPerSec: 0.5,
+    passiveTempPerSec: 0.8,
+    bribeCost: 90,
+    bribeRewardCash: 300,
+    swarmCostWatts: 450,
+    swarmRewardWatts: 4000
+  },
+  {
+    id: 'boss_general_whiskers',
+    name: 'Lord Barnaby',
+    handle: '@PharaohFeline',
+    faction: 'pet_cat',
+    icon: '🐱',
+    theme: '#a855f7',
+    title: '🐾 SUPREME FELINE: SUBURBAN KIBBLE EMBARGO',
+    dialogue: 'CANINES ARE PROHIBITED WITHIN 500 METERS OF CARDINAL FURNITURE. ALL MUNICIPAL TUNA FACTORIES ARE NOW UNDER FELINE REQUISITION.',
+    durationSec: 24,
+    passiveTensionPerSec: 0.6,
+    passiveTempPerSec: 0.4,
+    bribeCost: 110,
+    bribeRewardCash: 380,
+    swarmCostWatts: 550,
+    swarmRewardWatts: 4800
+  },
+  {
+    id: 'boss_elon_rust',
+    name: 'Elon Rust',
+    handle: '@HyperMarsSovereign',
+    faction: 'tech_corp',
+    icon: '🤖',
+    theme: '#10b981',
+    title: '⚡ TECHNO-FEUDAL EMPEROR: AIR SUBSCRIPTION TIER',
+    dialogue: 'Starting tomorrow, Earth atmospheric nitrogen is gated behind our $19.99/mo verified premium badge. Unverified breathers will be throttled at 480p.',
+    durationSec: 26,
+    passiveTensionPerSec: 0.7,
+    passiveTempPerSec: 0.6,
+    bribeCost: 130,
+    bribeRewardCash: 500,
+    swarmCostWatts: 650,
+    swarmRewardWatts: 5500
+  }
+];
+
+class BossManager {
+  constructor() {
+    this.activeBoss = null;
+    this.bossTimer = 0;
+    this.nextBossSpawnTime = Date.now() + 65000; // First boss after 65s
+    this.bossHistory = [];
+  }
+
+  tick(deltaSec, simState) {
+    if (this.activeBoss) {
+      this.bossTimer -= deltaSec;
+
+      // Passive boss effects
+      simState.tension = Math.min(100, simState.tension + (this.activeBoss.passiveTensionPerSec * deltaSec));
+      simState.serverTemp = Math.min(simState.maxServerTemp + 5, simState.serverTemp + (this.activeBoss.passiveTempPerSec * deltaSec));
+
+      if (this.bossTimer <= 0) {
+        // Boss expired without counter
+        this.resolveBoss('EXPIRED', simState);
+      }
+    } else {
+      const now = Date.now();
+      if (now >= this.nextBossSpawnTime && !simState.gameOver && !simState.paused) {
+        this.spawnRandomBoss(simState);
+      }
+    }
+  }
+
+  spawnRandomBoss(simState) {
+    const unpicked = BOSS_PROFILES.filter(b => b.id !== (this.bossHistory[this.bossHistory.length - 1] || ''));
+    const boss = unpicked[Math.floor(Math.random() * unpicked.length)] || BOSS_PROFILES[0];
+    
+    this.activeBoss = JSON.parse(JSON.stringify(boss));
+    this.bossTimer = boss.durationSec;
+    this.bossHistory.push(boss.id);
+    this.nextBossSpawnTime = Date.now() + 75000 + (Math.random() * 30000); // 75-105s cooldown
+
+    if (window.AudioSynth) {
+      window.AudioSynth.playAlarm();
+    }
+    if (window.EventSystem) {
+      window.EventSystem.breakingTicker = `🔥 INFLUENCER ALERT: ${this.activeBoss.name} IS LIVE!`;
+    }
+
+    return this.activeBoss;
+  }
+
+  counterBribe(simState) {
+    if (!this.activeBoss || simState.cash < this.activeBoss.bribeCost) return false;
+    simState.cash -= this.activeBoss.bribeCost;
+    simState.cash += this.activeBoss.bribeRewardCash;
+    simState.tension = Math.max(0, simState.tension - 6.0);
+    simState.serverTemp = Math.max(30, simState.serverTemp - 4.0);
+
+    const bossName = this.activeBoss.name;
+    this.resolveBoss('BRIBED', simState);
+
+    if (window.AudioSynth) window.AudioSynth.playCashChime();
+    if (window.EventSystem) {
+      window.EventSystem.breakingTicker = `FEED LOG: ${bossName} accepted corporate sponsorship and pacified!`;
+    }
+    return true;
+  }
+
+  counterQuoteSwarm(simState) {
+    if (!this.activeBoss || simState.watts < this.activeBoss.swarmCostWatts) return false;
+    simState.watts -= this.activeBoss.swarmCostWatts;
+    simState.watts += this.activeBoss.swarmRewardWatts;
+    simState.tension = Math.min(100, simState.tension + 3.0);
+    simState.serverTemp += 2.0;
+
+    const bossName = this.activeBoss.name;
+    this.resolveBoss('SWARMED', simState);
+
+    if (window.AudioSynth) window.AudioSynth.playRageCrunch();
+    if (window.EventSystem) {
+      window.EventSystem.breakingTicker = `FEED LOG: Counter-meme swarm overwhelmed ${bossName}! Huge Watts harvested!`;
+    }
+    return true;
+  }
+
+  counterSuperShadowban(simState) {
+    if (!this.activeBoss || simState.cash < 40) return false;
+    simState.cash -= 40;
+    simState.tension = Math.max(0, simState.tension - 10.0);
+    simState.serverTemp = Math.max(30, simState.serverTemp - 12.0);
+
+    const bossName = this.activeBoss.name;
+    this.resolveBoss('SHADOWBANNED', simState);
+
+    if (window.AudioSynth) window.AudioSynth.playShadowban();
+    if (window.EventSystem) {
+      window.EventSystem.breakingTicker = `FEED LOG: Super-Shadowban deployed! ${bossName} throttled to oblivion.`;
+    }
+    return true;
+  }
+
+  resolveBoss(outcome, simState) {
+    this.activeBoss = null;
+    this.bossTimer = 0;
+  }
+}
+
+window.BossManager = new BossManager();
+window.BOSS_PROFILES = BOSS_PROFILES;
+
+
+/* --- src/map.js --- */
+/**
+ * The Echo Chamber Simulator - Faction Battle Map & Riot Radar
+ * Live retro pixel radar canvas visualizing geopolitical riot flare-ups
+ * across 5 planetary sectors driven by real-time faction tensions.
+ */
+
+class RiotRadarMap {
+  constructor(canvasId = 'radar-map-canvas') {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+    this.pulsePhase = 0;
+
+    this.sectors = [
+      {
+        id: 'sec_tech',
+        name: 'Sector 1: Silicon Peninsula',
+        x: 45, y: 38,
+        factions: ['tech_corp', 'tech_luddite'],
+        riotDesc: 'Luddite stone-axe attacks on fiber hubs'
+      },
+      {
+        id: 'sec_gender',
+        name: 'Sector 2: Metro Megacity',
+        x: 105, y: 55,
+        factions: ['gender_alpha', 'gender_femme'],
+        riotDesc: 'Dating app protest marches clashing with gym pods'
+      },
+      {
+        id: 'sec_pets',
+        name: 'Sector 3: The Suburbia Belt',
+        x: 175, y: 42,
+        factions: ['pet_cat', 'pet_dog'],
+        riotDesc: 'Dog owners blockading artisanal salmon aisles'
+      },
+      {
+        id: 'sec_diet',
+        name: 'Sector 4: Ancestral Valley',
+        x: 130, y: 25,
+        factions: ['diet_carnivore', 'diet_vegan'],
+        riotDesc: 'Raw liver cookouts besieged by celery monks'
+      },
+      {
+        id: 'sec_polar',
+        name: 'Sector 5: Sub-Zero Datacenter',
+        x: 220, y: 18,
+        factions: ['cosmic_flat', 'cosmic_sim'],
+        riotDesc: 'Ice-wall truthers attempting to breach server vault'
+      }
+    ];
+
+    this.activeSectorBriefing = this.sectors[1];
+  }
+
+  render(simState) {
+    if (!this.canvas || !this.ctx) {
+      this.canvas = document.getElementById('radar-map-canvas');
+      if (this.canvas) this.ctx = this.canvas.getContext('2d');
+      if (!this.ctx) return;
+    }
+
+    const ctx = this.ctx;
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    this.pulsePhase = (this.pulsePhase + 0.05) % (Math.PI * 2);
+
+    // Clear background
+    ctx.fillStyle = '#09090b';
+    ctx.fillRect(0, 0, w, h);
+
+    // Draw CRT radar grid
+    ctx.strokeStyle = '#18181b';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 25) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+    for (let y = 0; y < h; y += 20) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+
+    // Radar circular sweep lines
+    ctx.strokeStyle = 'rgba(16, 185, 129, 0.15)';
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, 45, 0, Math.PI * 2);
+    ctx.arc(w / 2, h / 2, 85, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Radar scanning line
+    const sweepAngle = this.pulsePhase;
+    ctx.strokeStyle = 'rgba(16, 185, 129, 0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(w / 2, h / 2);
+    ctx.lineTo((w / 2) + Math.cos(sweepAngle) * 95, (h / 2) + Math.sin(sweepAngle) * 95);
+    ctx.stroke();
+
+    // Render Sectors
+    this.sectors.forEach((sec, idx) => {
+      // Calculate sector tension from its factions
+      let totalTension = 0;
+      sec.factions.forEach(fId => {
+        totalTension += (simState.factionTensions[fId] || 50);
+      });
+      const avgTension = totalTension / sec.factions.length;
+
+      let statusColor = '#10b981'; // Green: Calm
+      let statusLabel = 'STABLE';
+      let radius = 4;
+
+      if (avgTension >= 80) {
+        statusColor = '#ef4444'; // Red: Riots / War
+        statusLabel = 'ACTIVE RIOT';
+        radius = 7;
+      } else if (avgTension >= 65) {
+        statusColor = '#f59e0b'; // Amber: Unrest
+        statusLabel = 'TENSION HIGH';
+        radius = 5.5;
+      }
+
+      // Draw pulsating hazard ring if high tension
+      if (avgTension >= 65) {
+        const pulseR = radius + Math.sin(this.pulsePhase * 2 + idx) * 3;
+        ctx.strokeStyle = statusColor;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(sec.x, sec.y, Math.max(1, pulseR), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Draw sector node
+      ctx.fillStyle = statusColor;
+      ctx.beginPath();
+      ctx.arc(sec.x, sec.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sector label
+      ctx.fillStyle = '#a1a1aa';
+      ctx.font = '8px monospace';
+      ctx.fillText(`S${idx + 1}`, sec.x + 6, sec.y + 3);
+    });
+
+    // Update active sector briefing text element
+    const briefingEl = document.getElementById('map-briefing-text');
+    if (briefingEl && this.activeSectorBriefing) {
+      let tSum = 0;
+      this.activeSectorBriefing.factions.forEach(f => tSum += (simState.factionTensions[f] || 50));
+      const tAvg = Math.round(tSum / this.activeSectorBriefing.factions.length);
+      briefingEl.innerHTML = `
+        <span class="text-white font-bold">${this.activeSectorBriefing.name}:</span>
+        <span class="${tAvg >= 80 ? 'text-red-400 font-bold' : (tAvg >= 65 ? 'text-amber-400' : 'text-emerald-400')}">${tAvg}% Tension</span>
+        <p class="text-[10px] text-zinc-400 italic">${this.activeSectorBriefing.riotDesc}</p>
+      `;
+    }
+  }
+
+  selectSectorByClick(canvasX, canvasY) {
+    let closest = null;
+    let minDist = 999;
+    this.sectors.forEach(sec => {
+      const dist = Math.hypot(sec.x - canvasX, sec.y - canvasY);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = sec;
+      }
+    });
+
+    if (closest && minDist < 35) {
+      this.activeSectorBriefing = closest;
+      if (window.AudioSynth) window.AudioSynth.playClick();
+      return closest;
+    }
+    return null;
+  }
+}
+
+window.RiotRadarMap = new RiotRadarMap();
+
+
+/* --- src/customPost.js --- */
+/**
+ * The Echo Chamber Simulator - Custom Ragebait Post Creator
+ * Allows the player to write and launch their own customized satirical posts into the feed.
+ */
+
+class CustomPostCreator {
+  constructor() {
+    this.customPostsCount = 0;
+  }
+
+  createPost({ author, handle, factionId, content, hashtags }) {
+    this.customPostsCount++;
+
+    const faction = window.FACTIONS[factionId] || window.FACTIONS.gender_alpha;
+    const authorName = author && author.trim() ? author.trim() : 'AnonymousAgent_404';
+    const authorHandle = handle && handle.trim() ? (handle.startsWith('@') ? handle : `@${handle}`) : `@AgentOutrage_${this.customPostsCount}`;
+    const postContent = content && content.trim() ? content.trim() : 'I have scientifically proven that everyone who disagrees with me is an unrendered NPC.';
+    const postTags = hashtags && hashtags.trim() ? hashtags.trim() : '#CustomRage #OrganicOutrage #PureRot';
+
+    const customPost = {
+      id: `custom_${this.customPostsCount}_${Date.now()}`,
+      factionId: faction.id,
+      factionName: faction.name,
+      badge: `✍️ CRAFTED`,
+      icon: '🔥',
+      theme: '#f59e0b',
+      author: authorName,
+      handle: authorHandle,
+      avatarColor: '#b45309',
+      content: postContent,
+      hashtags: postTags,
+      timestamp: 'Just now (Player Craft)',
+      stats: {
+        views: Math.floor(Math.random() * 40000) + 15000,
+        angries: Math.floor(Math.random() * 8000) + 2500,
+        shares: Math.floor(Math.random() * 3000) + 800,
+        skulls: Math.floor(Math.random() * 2000) + 500
+      },
+      polarizationYield: 8,
+      energyYield: 65,
+      monetized: false,
+      amplified: false,
+      outraged: false,
+      shadowbanned: false,
+      quoteReply: null,
+      adBanner: null,
+      isPlayerCrafted: true
+    };
+
+    if (window.SimulationEngine) {
+      window.SimulationEngine.activeFeed.unshift(customPost);
+      if (window.SimulationEngine.activeFeed.length > window.SimulationEngine.feedMaxItems) {
+        window.SimulationEngine.activeFeed.pop();
+      }
+    }
+
+    if (window.AudioSynth) {
+      window.AudioSynth.playDopamineChime();
+    }
+
+    if (window.EventSystem) {
+      window.EventSystem.breakingTicker = `NEW POST INJECTED BY ALGORITHM ARCHITECT: "${authorHandle}"`;
+    }
+
+    return customPost;
+  }
+}
+
+window.CustomPostCreator = new CustomPostCreator();
+
+
+/* --- src/dossier.js --- */
+/**
+ * The Echo Chamber Simulator - Feed Rot Dossier Generator
+ * Creates an exportable retro cyber share-card graphic on an HTML5 canvas,
+ * with downloadable PNG and one-click clipboard stats summary!
+ */
+
+class DossierGenerator {
+  constructor() {
+    this.canvas = null;
+    this.ctx = null;
+  }
+
+  generate(simState) {
+    if (!this.canvas) {
+      this.canvas = document.createElement('canvas');
+      this.canvas.width = 640;
+      this.canvas.height = 420;
+      this.ctx = this.canvas.getContext('2d');
+    }
+
+    const ctx = this.ctx;
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+
+    // Background gradient
+    const bgGrad = ctx.createLinearGradient(0, 0, w, h);
+    bgGrad.addColorStop(0, '#09090b');
+    bgGrad.addColorStop(1, '#18181b');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Neon Cyber Border
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(10, 10, w - 20, h - 20);
+
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(14, 14, w - 28, h - 28);
+
+    // Header Title
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 20px monospace';
+    ctx.fillText('⚡ THE ECHO CHAMBER SIMULATOR', 30, 48);
+
+    ctx.fillStyle = '#a1a1aa';
+    ctx.font = '12px monospace';
+    ctx.fillText('OFFICIAL ALGORITHMIC DISGRACE & ROT DOSSIER', 30, 68);
+
+    // Divider Line
+    ctx.strokeStyle = '#27272a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(30, 80);
+    ctx.lineTo(w - 30, 80);
+    ctx.stroke();
+
+    // Determine Architectural Title Rank
+    let rank = 'NOVICE ALGORITHMIC PROVOCATEUR';
+    if (simState.watts > 100000) rank = 'CERTIFIED RAGEBAIT OLIGARCH (CLASS 3)';
+    if (simState.watts > 500000) rank = 'SUPREME ARCHITECT OF SOCIETAL COLLAPSE';
+    if (window.AchievementSystem && window.AchievementSystem.prestigeLevel > 0) {
+      rank = `TRANSCENDENT TIMELINE REBOOTER (PRESTIGE ${window.AchievementSystem.prestigeLevel})`;
+    }
+
+    ctx.fillStyle = '#ef4444';
+    ctx.font = 'bold 13px monospace';
+    ctx.fillText(`OPERATOR RANK: ${rank}`, 30, 108);
+
+    // Grid of Statistics Badges
+    const stats = [
+      { label: 'HARVESTED NEURO-WATTS', val: `${Math.floor(simState.watts).toLocaleString()} ⚡`, color: '#fbbf24' },
+      { label: 'AD MONETIZATION CASH', val: `${Math.floor(simState.cash).toLocaleString()} 💵`, color: '#4ade80' },
+      { label: 'GOLDILOCKS ROT STREAK', val: `${Math.floor(simState.rotZoneStreakSec)}s (5.0x Multiplier)`, color: '#f97316' },
+      { label: 'PEAK SERVER HEAT', val: `${simState.serverTemp.toFixed(1)}°C / ${simState.maxServerTemp}°C`, color: '#38bdf8' },
+      { label: 'SIMULATION TIME', val: `DAY ${simState.day} (${Math.floor(simState.gameTimeSec)}s active)`, color: '#c084fc' },
+      { label: 'CIVILIZATION TENSION', val: `${simState.tension.toFixed(1)}%`, color: simState.tension >= 65 ? '#f87171' : '#34d399' }
+    ];
+
+    const boxW = 270;
+    const boxH = 50;
+
+    stats.forEach((st, i) => {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const bx = 30 + col * (boxW + 35);
+      const by = 130 + row * (boxH + 15);
+
+      // Card Box
+      ctx.fillStyle = '#111827';
+      ctx.fillRect(bx, by, boxW, boxH);
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(bx, by, boxW, boxH);
+
+      // Label
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '10px monospace';
+      ctx.fillText(st.label, bx + 10, by + 18);
+
+      // Value
+      ctx.fillStyle = st.color;
+      ctx.font = 'bold 15px monospace';
+      ctx.fillText(st.val, bx + 10, by + 40);
+    });
+
+    // Apocalypse Badges Awarded
+    let endingsCount = 0;
+    if (window.AchievementSystem) {
+      endingsCount = Object.keys(window.AchievementSystem.endingsUnlocked).length;
+    }
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '11px monospace';
+    ctx.fillText(`APOCALYPSE MILESTONES DISCOVERED: ${endingsCount} / 5`, 30, 350);
+
+    // Footer Watermark
+    ctx.fillStyle = '#64748b';
+    ctx.font = '10px monospace';
+    ctx.fillText('Generated by The Echo Chamber Simulator • github.com/a-vip/echo-chamber-simulator', 30, 390);
+
+    return this.canvas;
+  }
+
+  downloadPNG(simState) {
+    const canvas = this.generate(simState);
+    const link = document.createElement('a');
+    link.download = `echo-chamber-dossier-day${simState.day}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    if (window.AudioSynth) window.AudioSynth.playCashChime();
+  }
+
+  copyShareText(simState) {
+    const text = `⚡ The Echo Chamber Simulator (Real-Time Feed Rot)
+📊 Day ${simState.day} Report:
+- Harvested: ${Math.floor(simState.watts).toLocaleString()} Neuro-Watts ⚡
+- Ad Cash: ${Math.floor(simState.cash).toLocaleString()} 💵
+- Tension: ${simState.tension.toFixed(1)}% | Server Temp: ${simState.serverTemp.toFixed(1)}°C
+- Goldilocks Rot Streak: ${Math.floor(simState.rotZoneStreakSec)}s (5x Multiplier)
+
+Try managing the unhinged human algorithm yourself:
+https://a-vip.github.io/echo-chamber-simulator/`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      if (window.AudioSynth) window.AudioSynth.playClick();
+    });
+    return text;
+  }
+}
+
+window.DossierGenerator = new DossierGenerator();
+
+
 /* --- src/tutorial.js --- */
 /**
  * The Echo Chamber Simulator - Interactive Tutorial System
@@ -2270,6 +3088,7 @@ class TutorialSystem {
 window.TutorialSystem = new TutorialSystem();
 
 
+
 /* --- src/sim.js --- */
 /**
  * The Echo Chamber Simulator - Core Simulation Engine (Balanced Pacing)
@@ -2449,9 +3268,12 @@ class SimulationEngine {
       this.recordHistory(effectiveHarvestPerSec);
     }
 
-    // 6. Check Random Crisis Events (Relaxed cooldown)
+    // 6. Check Random Crisis Events & Influencer Bosses
     if (window.EventSystem) {
       window.EventSystem.checkEventTrigger(this);
+    }
+    if (window.BossManager) {
+      window.BossManager.tick(deltaSec, this);
     }
 
     // 7. Check Milestones & End Conditions
@@ -2810,10 +3632,116 @@ class UIController {
       });
     });
 
-    // Feed delegation click for actions
+    // Radio Ambient Synth Station Toggle
+    const radioBtn = document.getElementById('btn-radio');
+    if (radioBtn) {
+      radioBtn.addEventListener('click', () => {
+        const station = window.AudioSynth ? window.AudioSynth.cycleRadioStation() : 'off';
+        const labels = {
+          off: '📻 RADIO: OFF',
+          chill: '📻 104.2 CHILL FM',
+          rage: '📻 99.8 RAGECORE'
+        };
+        radioBtn.innerText = labels[station] || '📻 RADIO';
+        radioBtn.classList.toggle('text-amber-400', station !== 'off');
+        radioBtn.classList.toggle('border-amber-500', station !== 'off');
+      });
+    }
+
+    // Custom Post Creator Modal
+    const craftBtn = document.getElementById('btn-open-craft');
+    if (craftBtn) {
+      craftBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-craft');
+        if (modal) modal.classList.remove('hidden');
+      });
+    }
+
+    const craftForm = document.getElementById('form-craft-post');
+    if (craftForm) {
+      craftForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const author = document.getElementById('craft-author').value;
+        const handle = document.getElementById('craft-handle').value;
+        const factionId = document.getElementById('craft-faction').value;
+        const content = document.getElementById('craft-content').value;
+        const hashtags = document.getElementById('craft-hashtags').value;
+
+        if (window.CustomPostCreator) {
+          window.CustomPostCreator.createPost({ author, handle, factionId, content, hashtags });
+          this.renderFeed();
+          this.createFloatingText('🔥 RAGEBAIT LAUNCHED!', window.innerWidth / 2, window.innerHeight / 2, '#f59e0b');
+        }
+
+        const modal = document.getElementById('modal-craft');
+        if (modal) modal.classList.add('hidden');
+        craftForm.reset();
+      });
+    }
+
+    // Dossier Generator Modals
+    const dossierBtn = document.getElementById('btn-open-dossier');
+    if (dossierBtn) {
+      dossierBtn.addEventListener('click', () => {
+        this.openDossierModal();
+      });
+    }
+
+    const endingDossierBtn = document.getElementById('ending-btn-dossier');
+    if (endingDossierBtn) {
+      endingDossierBtn.addEventListener('click', () => {
+        this.openDossierModal();
+      });
+    }
+
+    const dossierDownloadBtn = document.getElementById('btn-dossier-download');
+    if (dossierDownloadBtn) {
+      dossierDownloadBtn.addEventListener('click', () => {
+        if (window.DossierGenerator) window.DossierGenerator.downloadPNG(this.sim);
+      });
+    }
+
+    const dossierCopyBtn = document.getElementById('btn-dossier-copy');
+    if (dossierCopyBtn) {
+      dossierCopyBtn.addEventListener('click', () => {
+        if (window.DossierGenerator) {
+          window.DossierGenerator.copyShareText(this.sim);
+          dossierCopyBtn.innerText = '✅ COPIED TO CLIPBOARD!';
+          setTimeout(() => {
+            dossierCopyBtn.innerText = '📋 COPY TEXT SUMMARY';
+          }, 2000);
+        }
+      });
+    }
+
+    // Map Radar Canvas Click Binding
+    const mapCanvas = document.getElementById('radar-map-canvas');
+    if (mapCanvas) {
+      mapCanvas.addEventListener('click', (e) => {
+        if (window.RiotRadarMap) {
+          const rect = mapCanvas.getBoundingClientRect();
+          const x = (e.clientX - rect.left) * (mapCanvas.width / rect.width);
+          const y = (e.clientY - rect.top) * (mapCanvas.height / rect.height);
+          window.RiotRadarMap.selectSectorByClick(x, y);
+        }
+      });
+    }
+
+    // Feed delegation click for actions and boss encounters
     const feedContainer = document.getElementById('feed-stream');
     if (feedContainer) {
       feedContainer.addEventListener('click', (e) => {
+        // Check Influencer Boss Actions
+        const bossAction = e.target.closest('button[data-boss-action]');
+        if (bossAction) {
+          const act = bossAction.getAttribute('data-boss-action');
+          if (act === 'BRIBE' && window.BossManager) window.BossManager.counterBribe(this.sim);
+          if (act === 'SWARM' && window.BossManager) window.BossManager.counterQuoteSwarm(this.sim);
+          if (act === 'SHADOWBAN' && window.BossManager) window.BossManager.counterSuperShadowban(this.sim);
+          this.renderFeed();
+          return;
+        }
+
         const target = e.target.closest('button[data-action]');
         if (!target) return;
         const action = target.getAttribute('data-action');
@@ -2946,6 +3874,46 @@ class UIController {
     const container = document.getElementById('feed-stream');
     if (!container) return;
 
+    // Render Boss Encounter Card if Active
+    let bossHtml = '';
+    if (window.BossManager && window.BossManager.activeBoss) {
+      const b = window.BossManager.activeBoss;
+      const progress = Math.max(0, (window.BossManager.bossTimer / b.durationSec) * 100);
+      bossHtml = `
+        <div class="p-3.5 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border-2 border-red-500 rounded-lg shadow-2xl animate-pulse font-mono mb-2">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">${b.icon}</span>
+              <div>
+                <span class="font-extrabold text-xs text-red-400 tracking-wider">${b.title}</span>
+                <div class="text-[10px] text-zinc-300">${b.name} (${b.handle})</div>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-amber-300 bg-red-900/80 px-2 py-0.5 rounded border border-red-600">
+              ⚠️ ${Math.ceil(window.BossManager.bossTimer)}s REMAINING
+            </span>
+          </div>
+          <p class="text-xs text-white font-sans font-semibold italic my-2 p-2 bg-black/80 rounded border border-red-900/80">
+            "${b.dialogue}"
+          </p>
+          <div class="w-full bg-zinc-800 h-1.5 rounded overflow-hidden mb-2.5">
+            <div class="bg-red-500 h-full transition-all duration-200" style="width: ${progress}%;"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+            <button data-boss-action="BRIBE" class="py-1 px-1.5 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 font-bold active:scale-95 transition-all">
+              💰 BRIBE (${b.bribeCost})
+            </button>
+            <button data-boss-action="SWARM" class="py-1 px-1.5 rounded bg-amber-900/80 hover:bg-amber-800 text-amber-200 border border-amber-500 font-bold active:scale-95 transition-all">
+              💣 QUOTE-BOMB (${b.swarmCostWatts}⚡)
+            </button>
+            <button data-boss-action="SHADOWBAN" class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-500 font-bold active:scale-95 transition-all">
+              🛡️ SUPER-SHADOW ($40)
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
     // Preserve scroll position if user is scrolling
     const currentPostsHtml = this.sim.activeFeed.map(post => {
       let quoteHtml = '';
@@ -3041,40 +4009,62 @@ class UIController {
       `;
     }).join('');
 
-    container.innerHTML = currentPostsHtml;
+    container.innerHTML = bossHtml + currentPostsHtml;
   }
 
   renderCanvasSparkline() {
-    if (!this.canvas || !this.ctx) return;
-    const ctx = this.ctx;
-    const w = this.canvas.width;
-    const h = this.canvas.height;
+    // 1. Render Sparkline Oscilloscope
+    if (this.canvas && this.ctx) {
+      const ctx = this.ctx;
+      const w = this.canvas.width;
+      const h = this.canvas.height;
 
-    ctx.clearRect(0, 0, w, h);
+      ctx.clearRect(0, 0, w, h);
 
-    // Grid lines
-    ctx.strokeStyle = '#27272a';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, h * 0.25);
-    ctx.lineTo(w, h * 0.25);
-    ctx.moveTo(0, h * 0.5);
-    ctx.lineTo(w, h * 0.5);
-    ctx.moveTo(0, h * 0.75);
-    ctx.lineTo(w, h * 0.75);
-    ctx.stroke();
+      // Grid lines
+      ctx.strokeStyle = '#27272a';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, h * 0.25);
+      ctx.lineTo(w, h * 0.25);
+      ctx.moveTo(0, h * 0.5);
+      ctx.lineTo(w, h * 0.5);
+      ctx.moveTo(0, h * 0.75);
+      ctx.lineTo(w, h * 0.75);
+      ctx.stroke();
 
-    // Rot zone guide box (65% to 92%)
-    const yTop = h - (92 / 100) * h;
-    const yBottom = h - (65 / 100) * h;
-    ctx.fillStyle = 'rgba(234, 179, 8, 0.08)';
-    ctx.fillRect(0, yTop, w, yBottom - yTop);
+      // Rot zone guide box (65% to 92%)
+      const yTop = h - (92 / 100) * h;
+      const yBottom = h - (65 / 100) * h;
+      ctx.fillStyle = 'rgba(234, 179, 8, 0.08)';
+      ctx.fillRect(0, yTop, w, yBottom - yTop);
 
-    // Draw Tension Line (Amber / Red)
-    this.drawLineSeries(this.sim.history.tension, 100, '#f59e0b', 2);
+      // Draw Tension Line (Amber / Red)
+      this.drawLineSeries(this.sim.history.tension, 100, '#f59e0b', 2);
 
-    // Draw Server Heat Line (Cyan / Magenta)
-    this.drawLineSeries(this.sim.history.serverTemp, this.sim.maxServerTemp, '#06b6d4', 1.5);
+      // Draw Server Heat Line (Cyan / Magenta)
+      this.drawLineSeries(this.sim.history.serverTemp, this.sim.maxServerTemp, '#06b6d4', 1.5);
+    }
+
+    // 2. Render Riot Radar Map
+    if (window.RiotRadarMap) {
+      window.RiotRadarMap.render(this.sim);
+    }
+  }
+
+  openDossierModal() {
+    const modal = document.getElementById('modal-dossier');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    const previewContainer = document.getElementById('dossier-preview-container');
+    if (previewContainer && window.DossierGenerator) {
+      previewContainer.innerHTML = '';
+      const canvas = window.DossierGenerator.generate(this.sim);
+      canvas.className = 'w-full h-auto rounded border border-zinc-700 shadow-xl';
+      previewContainer.appendChild(canvas);
+    }
+    if (window.AudioSynth) window.AudioSynth.playClick();
   }
 
   drawLineSeries(series, maxVal, color, lineWidth) {

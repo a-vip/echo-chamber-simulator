@@ -44,9 +44,15 @@ The algorithmic stream dynamically generates hundreds of satirical posts across 
   * 🤬 **POLARIZE (Outrage-Inject):** Injects a blistering antagonistic quote-reply from a rival faction to spark flame wars!
   * 💰 **AD-FARM:** Slaps predatory unskippable sponsor ads (testosterone gummies, manifestation e-books) over the post to generate cold hard Cash ($).
   * 🛡️ **SHADOWBAN:** Throttles inflammatory posts to cool down server heat and reduce social tension.
-* **Tactical Interventions:**
+* **Tactical Interventions & Controls:**
   * 🤖 **Deploy Rage Bot Brigades ($80):** Injects 50,000 synthetic bot accounts to re-ignite dying arguments.
   * ❄️ **Cryo-Coolant Spray ($60):** Sprays liquid nitrogen into server racks to avert immediate thermal meltdown.
+  * ⏸ **Pace Controls:** Instant pause (`⏸`), normal speed (`▶ 1x`), and fast-forward (`⏩ 2x`).
+  * 📻 **Procedural Synth Radio:** Switch between `104.2 CHILL FM` and `99.8 RAGECORE` procedural 8-bit chip tracks.
+  * ✍️ **Craft Ragebait:** Write and inject your own custom parody posts directly into the live feed!
+  * 📸 **Dossier Generator:** Render, download PNGs, and copy shareable summaries of your algorithmic disgrace.
+  * 📡 **Planetary Riot Radar:** Live interactive tactical map tracking geopolitical riots across 5 planetary sectors.
+  * 👑 **Influencer Boss Encounters:** Deal with Megaphone Influencers (*Andrew Tallow*, *Goddess Manifesta*, *The Skibidi Pontiff*) via Bribes, Quote-Bombs, or Super-Shadowbans.
 
 ---
 

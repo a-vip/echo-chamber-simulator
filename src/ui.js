@@ -164,10 +164,116 @@ class UIController {
       });
     });
 
-    // Feed delegation click for actions
+    // Radio Ambient Synth Station Toggle
+    const radioBtn = document.getElementById('btn-radio');
+    if (radioBtn) {
+      radioBtn.addEventListener('click', () => {
+        const station = window.AudioSynth ? window.AudioSynth.cycleRadioStation() : 'off';
+        const labels = {
+          off: '📻 RADIO: OFF',
+          chill: '📻 104.2 CHILL FM',
+          rage: '📻 99.8 RAGECORE'
+        };
+        radioBtn.innerText = labels[station] || '📻 RADIO';
+        radioBtn.classList.toggle('text-amber-400', station !== 'off');
+        radioBtn.classList.toggle('border-amber-500', station !== 'off');
+      });
+    }
+
+    // Custom Post Creator Modal
+    const craftBtn = document.getElementById('btn-open-craft');
+    if (craftBtn) {
+      craftBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-craft');
+        if (modal) modal.classList.remove('hidden');
+      });
+    }
+
+    const craftForm = document.getElementById('form-craft-post');
+    if (craftForm) {
+      craftForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const author = document.getElementById('craft-author').value;
+        const handle = document.getElementById('craft-handle').value;
+        const factionId = document.getElementById('craft-faction').value;
+        const content = document.getElementById('craft-content').value;
+        const hashtags = document.getElementById('craft-hashtags').value;
+
+        if (window.CustomPostCreator) {
+          window.CustomPostCreator.createPost({ author, handle, factionId, content, hashtags });
+          this.renderFeed();
+          this.createFloatingText('🔥 RAGEBAIT LAUNCHED!', window.innerWidth / 2, window.innerHeight / 2, '#f59e0b');
+        }
+
+        const modal = document.getElementById('modal-craft');
+        if (modal) modal.classList.add('hidden');
+        craftForm.reset();
+      });
+    }
+
+    // Dossier Generator Modals
+    const dossierBtn = document.getElementById('btn-open-dossier');
+    if (dossierBtn) {
+      dossierBtn.addEventListener('click', () => {
+        this.openDossierModal();
+      });
+    }
+
+    const endingDossierBtn = document.getElementById('ending-btn-dossier');
+    if (endingDossierBtn) {
+      endingDossierBtn.addEventListener('click', () => {
+        this.openDossierModal();
+      });
+    }
+
+    const dossierDownloadBtn = document.getElementById('btn-dossier-download');
+    if (dossierDownloadBtn) {
+      dossierDownloadBtn.addEventListener('click', () => {
+        if (window.DossierGenerator) window.DossierGenerator.downloadPNG(this.sim);
+      });
+    }
+
+    const dossierCopyBtn = document.getElementById('btn-dossier-copy');
+    if (dossierCopyBtn) {
+      dossierCopyBtn.addEventListener('click', () => {
+        if (window.DossierGenerator) {
+          window.DossierGenerator.copyShareText(this.sim);
+          dossierCopyBtn.innerText = '✅ COPIED TO CLIPBOARD!';
+          setTimeout(() => {
+            dossierCopyBtn.innerText = '📋 COPY TEXT SUMMARY';
+          }, 2000);
+        }
+      });
+    }
+
+    // Map Radar Canvas Click Binding
+    const mapCanvas = document.getElementById('radar-map-canvas');
+    if (mapCanvas) {
+      mapCanvas.addEventListener('click', (e) => {
+        if (window.RiotRadarMap) {
+          const rect = mapCanvas.getBoundingClientRect();
+          const x = (e.clientX - rect.left) * (mapCanvas.width / rect.width);
+          const y = (e.clientY - rect.top) * (mapCanvas.height / rect.height);
+          window.RiotRadarMap.selectSectorByClick(x, y);
+        }
+      });
+    }
+
+    // Feed delegation click for actions and boss encounters
     const feedContainer = document.getElementById('feed-stream');
     if (feedContainer) {
       feedContainer.addEventListener('click', (e) => {
+        // Check Influencer Boss Actions
+        const bossAction = e.target.closest('button[data-boss-action]');
+        if (bossAction) {
+          const act = bossAction.getAttribute('data-boss-action');
+          if (act === 'BRIBE' && window.BossManager) window.BossManager.counterBribe(this.sim);
+          if (act === 'SWARM' && window.BossManager) window.BossManager.counterQuoteSwarm(this.sim);
+          if (act === 'SHADOWBAN' && window.BossManager) window.BossManager.counterSuperShadowban(this.sim);
+          this.renderFeed();
+          return;
+        }
+
         const target = e.target.closest('button[data-action]');
         if (!target) return;
         const action = target.getAttribute('data-action');
@@ -300,6 +406,46 @@ class UIController {
     const container = document.getElementById('feed-stream');
     if (!container) return;
 
+    // Render Boss Encounter Card if Active
+    let bossHtml = '';
+    if (window.BossManager && window.BossManager.activeBoss) {
+      const b = window.BossManager.activeBoss;
+      const progress = Math.max(0, (window.BossManager.bossTimer / b.durationSec) * 100);
+      bossHtml = `
+        <div class="p-3.5 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border-2 border-red-500 rounded-lg shadow-2xl animate-pulse font-mono mb-2">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">${b.icon}</span>
+              <div>
+                <span class="font-extrabold text-xs text-red-400 tracking-wider">${b.title}</span>
+                <div class="text-[10px] text-zinc-300">${b.name} (${b.handle})</div>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-amber-300 bg-red-900/80 px-2 py-0.5 rounded border border-red-600">
+              ⚠️ ${Math.ceil(window.BossManager.bossTimer)}s REMAINING
+            </span>
+          </div>
+          <p class="text-xs text-white font-sans font-semibold italic my-2 p-2 bg-black/80 rounded border border-red-900/80">
+            "${b.dialogue}"
+          </p>
+          <div class="w-full bg-zinc-800 h-1.5 rounded overflow-hidden mb-2.5">
+            <div class="bg-red-500 h-full transition-all duration-200" style="width: ${progress}%;"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+            <button data-boss-action="BRIBE" class="py-1 px-1.5 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 font-bold active:scale-95 transition-all">
+              💰 BRIBE ($${b.bribeCost})
+            </button>
+            <button data-boss-action="SWARM" class="py-1 px-1.5 rounded bg-amber-900/80 hover:bg-amber-800 text-amber-200 border border-amber-500 font-bold active:scale-95 transition-all">
+              💣 QUOTE-BOMB (${b.swarmCostWatts}⚡)
+            </button>
+            <button data-boss-action="SHADOWBAN" class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-500 font-bold active:scale-95 transition-all">
+              🛡️ SUPER-SHADOW ($40)
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
     // Preserve scroll position if user is scrolling
     const currentPostsHtml = this.sim.activeFeed.map(post => {
       let quoteHtml = '';
@@ -395,40 +541,62 @@ class UIController {
       `;
     }).join('');
 
-    container.innerHTML = currentPostsHtml;
+    container.innerHTML = bossHtml + currentPostsHtml;
   }
 
   renderCanvasSparkline() {
-    if (!this.canvas || !this.ctx) return;
-    const ctx = this.ctx;
-    const w = this.canvas.width;
-    const h = this.canvas.height;
+    // 1. Render Sparkline Oscilloscope
+    if (this.canvas && this.ctx) {
+      const ctx = this.ctx;
+      const w = this.canvas.width;
+      const h = this.canvas.height;
 
-    ctx.clearRect(0, 0, w, h);
+      ctx.clearRect(0, 0, w, h);
 
-    // Grid lines
-    ctx.strokeStyle = '#27272a';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, h * 0.25);
-    ctx.lineTo(w, h * 0.25);
-    ctx.moveTo(0, h * 0.5);
-    ctx.lineTo(w, h * 0.5);
-    ctx.moveTo(0, h * 0.75);
-    ctx.lineTo(w, h * 0.75);
-    ctx.stroke();
+      // Grid lines
+      ctx.strokeStyle = '#27272a';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, h * 0.25);
+      ctx.lineTo(w, h * 0.25);
+      ctx.moveTo(0, h * 0.5);
+      ctx.lineTo(w, h * 0.5);
+      ctx.moveTo(0, h * 0.75);
+      ctx.lineTo(w, h * 0.75);
+      ctx.stroke();
 
-    // Rot zone guide box (65% to 92%)
-    const yTop = h - (92 / 100) * h;
-    const yBottom = h - (65 / 100) * h;
-    ctx.fillStyle = 'rgba(234, 179, 8, 0.08)';
-    ctx.fillRect(0, yTop, w, yBottom - yTop);
+      // Rot zone guide box (65% to 92%)
+      const yTop = h - (92 / 100) * h;
+      const yBottom = h - (65 / 100) * h;
+      ctx.fillStyle = 'rgba(234, 179, 8, 0.08)';
+      ctx.fillRect(0, yTop, w, yBottom - yTop);
 
-    // Draw Tension Line (Amber / Red)
-    this.drawLineSeries(this.sim.history.tension, 100, '#f59e0b', 2);
+      // Draw Tension Line (Amber / Red)
+      this.drawLineSeries(this.sim.history.tension, 100, '#f59e0b', 2);
 
-    // Draw Server Heat Line (Cyan / Magenta)
-    this.drawLineSeries(this.sim.history.serverTemp, this.sim.maxServerTemp, '#06b6d4', 1.5);
+      // Draw Server Heat Line (Cyan / Magenta)
+      this.drawLineSeries(this.sim.history.serverTemp, this.sim.maxServerTemp, '#06b6d4', 1.5);
+    }
+
+    // 2. Render Riot Radar Map
+    if (window.RiotRadarMap) {
+      window.RiotRadarMap.render(this.sim);
+    }
+  }
+
+  openDossierModal() {
+    const modal = document.getElementById('modal-dossier');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    const previewContainer = document.getElementById('dossier-preview-container');
+    if (previewContainer && window.DossierGenerator) {
+      previewContainer.innerHTML = '';
+      const canvas = window.DossierGenerator.generate(this.sim);
+      canvas.className = 'w-full h-auto rounded border border-zinc-700 shadow-xl';
+      previewContainer.appendChild(canvas);
+    }
+    if (window.AudioSynth) window.AudioSynth.playClick();
   }
 
   drawLineSeries(series, maxVal, color, lineWidth) {

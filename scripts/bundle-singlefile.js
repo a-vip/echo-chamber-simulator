@@ -19,6 +19,10 @@ const scripts = [
   'src/upgrades.js',
   'src/events.js',
   'src/achievements.js',
+  'src/bosses.js',
+  'src/map.js',
+  'src/customPost.js',
+  'src/dossier.js',
   'src/tutorial.js',
   'src/sim.js',
   'src/ui.js'

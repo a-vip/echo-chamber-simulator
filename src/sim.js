@@ -176,9 +176,12 @@ class SimulationEngine {
       this.recordHistory(effectiveHarvestPerSec);
     }
 
-    // 6. Check Random Crisis Events (Relaxed cooldown)
+    // 6. Check Random Crisis Events & Influencer Bosses
     if (window.EventSystem) {
       window.EventSystem.checkEventTrigger(this);
+    }
+    if (window.BossManager) {
+      window.BossManager.tick(deltaSec, this);
     }
 
     // 7. Check Milestones & End Conditions

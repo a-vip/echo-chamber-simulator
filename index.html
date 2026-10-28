@@ -109,6 +109,9 @@
       </div>
 
       <span id="hud-day" class="text-amber-400 font-bold text-xs">DAY 1</span>
+      <button id="btn-radio" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all font-mono" title="Toggle Lo-Fi / Overclock Chiptune Radio">
+        📻 RADIO: OFF
+      </button>
       <button id="btn-crt" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all">
         📺 CRT: ON
       </button>
@@ -169,6 +172,12 @@
       <div class="flex items-center gap-2">
         <button id="btn-open-tutorial" class="px-3 py-1.5 rounded bg-amber-950/60 hover:bg-amber-900 border border-amber-600/80 font-mono text-xs font-bold text-amber-200 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
           🎓 HOW TO PLAY
+        </button>
+        <button id="btn-open-craft" class="px-3 py-1.5 rounded bg-rose-950/50 hover:bg-rose-900 border border-rose-600/80 font-mono text-xs font-bold text-rose-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Write your own custom parody post">
+          ✍️ CRAFT POST
+        </button>
+        <button id="btn-open-dossier" class="px-3 py-1.5 rounded bg-blue-950/50 hover:bg-blue-900 border border-blue-600/80 font-mono text-xs font-bold text-blue-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Generate shareable stats card">
+          📸 DOSSIER
         </button>
         <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
           🔬 DARK PATTERNS
@@ -328,7 +337,19 @@
             <span class="text-cyan-400">● Temp</span>
           </div>
         </div>
-        <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800"></canvas>
+        <canvas id="sparkline-canvas" width="270" height="85" class="w-full bg-black rounded border border-zinc-800"></canvas>
+      </div>
+
+      <!-- Faction Battle Map / Planetary Riot Radar -->
+      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+        <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
+          <span class="flex items-center gap-1.5">📡 Riot Radar (Click Node)</span>
+          <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE RADAR</span>
+        </div>
+        <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
+        <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
+          Click any sector node on the radar to inspect regional riot status.
+        </div>
       </div>
 
       <!-- Game Mechanics Lore Helper -->
@@ -429,13 +450,109 @@
       <div id="ending-badge" class="text-xs font-bold text-amber-300 bg-amber-950/60 px-3 py-1 rounded border border-amber-600">
         🎖️ BADGE UNLOCKED
       </div>
-      <div class="flex gap-3 w-full font-mono text-xs font-bold pt-2">
-        <button id="ending-btn-restart" class="flex-1 py-2.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white transition-all">
-          🔄 RESTART (NEW GAME)
+      <div class="flex flex-col gap-2 w-full font-mono text-xs font-bold pt-2">
+        <button id="ending-btn-dossier" class="w-full py-2.5 rounded bg-blue-900/60 hover:bg-blue-800 border border-blue-500 text-blue-200 transition-all flex items-center justify-center gap-2">
+          📸 VIEW DISGRACE DOSSIER (SHARE STATS)
         </button>
-        <button id="ending-btn-prestige" class="flex-1 py-2.5 rounded bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-extrabold transition-all">
-          🌌 REBOOT TIMELINE (+35% PRESTIGE)
-        </button>
+        <div class="flex gap-2 w-full">
+          <button id="ending-btn-restart" class="flex-1 py-2.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white transition-all">
+            🔄 RESTART (NEW GAME)
+          </button>
+          <button id="ending-btn-prestige" class="flex-1 py-2.5 rounded bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-extrabold transition-all">
+            🌌 REBOOT (+35% PRESTIGE)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Custom Ragebait Post Creator -->
+  <div id="modal-craft" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="bg-zinc-950 border-2 border-rose-500/80 rounded-xl max-w-lg w-full p-5 shadow-2xl font-mono flex flex-col gap-3 text-zinc-100">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">✍️</span>
+          <h2 class="font-bold text-sm text-white uppercase">Craft Custom Ragebait Post</h2>
+        </div>
+        <button class="modal-close text-zinc-400 hover:text-white font-bold text-lg">✕</button>
+      </div>
+
+      <form id="form-craft-post" class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Author Name</label>
+            <input id="craft-author" type="text" placeholder="e.g. SigmaGuru_Rex" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+          </div>
+          <div>
+            <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Handle</label>
+            <input id="craft-handle" type="text" placeholder="e.g. @PureMarrowOnly" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Faction Alignment</label>
+          <select id="craft-faction" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+            <option value="gender_alpha">🗿 Manosphere / Sigma Grinders</option>
+            <option value="gender_femme">💅 Femosphere / Divine Femmes</option>
+            <option value="pet_cat">🐱 Feline Overlords (Cat Zealots)</option>
+            <option value="pet_dog">🐕 Canine Tactical Goodboys</option>
+            <option value="tech_corp">🤖 Techno-Feudal Hyper-Corporatists</option>
+            <option value="tech_luddite">🍄 Neo-Luddite Mud Monks</option>
+            <option value="diet_carnivore">🥩 Raw Marrow Ancestral Chads</option>
+            <option value="diet_vegan">🌱 Sunlight-Breatharian Ascetics</option>
+            <option value="rot_alpha">🌀 Gen-Alpha Brainrot Nihilists</option>
+            <option value="rot_boomer">🦅 Boomer Facebook Sentinels</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Parody Post Content</label>
+          <textarea id="craft-content" rows="3" placeholder="Type your unhinged take to provoke the masses..." required class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-zinc-400 uppercase font-bold mb-1">Hashtags</label>
+          <input id="craft-hashtags" type="text" placeholder="#Grindset #CatSupremacy #TouchGrass" class="w-full p-2 bg-zinc-900 border border-zinc-700 rounded text-zinc-100 focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2 border-t border-zinc-800">
+          <button type="button" class="modal-close px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold">
+            CANCEL
+          </button>
+          <button type="submit" class="px-4 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black font-extrabold flex items-center gap-1.5">
+            🚀 LAUNCH INTO FEED
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Feed Rot Dossier Share Card -->
+  <div id="modal-dossier" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+    <div class="bg-zinc-950 border-2 border-amber-500 rounded-xl max-w-2xl w-full p-5 shadow-2xl font-mono flex flex-col gap-3 text-zinc-100">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📸</span>
+          <h2 class="font-bold text-sm text-white uppercase">Official Algorithmic Disgrace Dossier</h2>
+        </div>
+        <button class="modal-close text-zinc-400 hover:text-white font-bold text-lg">✕</button>
+      </div>
+
+      <!-- Dossier Canvas Preview -->
+      <div id="dossier-preview-container" class="w-full flex justify-center py-1">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="flex items-center justify-between border-t border-zinc-800 pt-3">
+        <span class="text-[10px] text-zinc-400">Share your disastrous management record with the world.</span>
+        <div class="flex gap-2">
+          <button id="btn-dossier-copy" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all">
+            📋 COPY TEXT SUMMARY
+          </button>
+          <button id="btn-dossier-download" class="px-4 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold transition-all">
+            💾 DOWNLOAD PNG
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -488,6 +605,10 @@
   <script src="src/upgrades.js"></script>
   <script src="src/events.js"></script>
   <script src="src/achievements.js"></script>
+  <script src="src/bosses.js"></script>
+  <script src="src/map.js"></script>
+  <script src="src/customPost.js"></script>
+  <script src="src/dossier.js"></script>
   <script src="src/tutorial.js"></script>
   <script src="src/sim.js"></script>
   <script src="src/ui.js"></script>
