@@ -1,0 +1,23 @@
+{
+  "name": "echo-chamber-simulator",
+  "version": "1.0.0",
+  "description": "The Echo Chamber Simulator (Real-Time Feed Rot) - A satire-heavy balance & management simulation game.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 8089",
+    "desktop": "python launcher.py",
+    "bundle": "node scripts/bundle-singlefile.js",
+    "test": "node -e \"console.log('Validating bundle...'); require('./scripts/bundle-singlefile.js'); console.log('Bundle tests passed!')\""
+  },
+  "keywords": [
+    "game",
+    "simulation",
+    "satire",
+    "social-media",
+    "pixel-art",
+    "management",
+    "web-audio"
+  ],
+  "author": "a-vip",
+  "license": "MIT"
+}

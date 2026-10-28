@@ -1,0 +1,2966 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-950 text-zinc-100 select-none">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>The Echo Chamber Simulator | Real-Time Feed Rot</title>
+  <meta name="description" content="Manage an algorithmic social media feed for an unhinged human civilization. Harvest digital outrage without triggering planetary civil war or server meltdown.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E%3Ctext y=%2226%22 font-size=%2226%22>⚡</text></svg>">
+  
+  <!-- Tailwind CSS CDN for instant styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --crt-glow: rgba(56, 189, 248, 0.15);
+      --font-pixel: 'VT323', monospace;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    .font-pixel { font-family: var(--font-pixel); }
+    .font-mono { font-family: var(--font-mono); }
+
+    /* CRT Scanline Filter */
+    body.crt-active::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 999;
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+
+    body.crt-active::after {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: radial-gradient(circle at center, transparent 65%, rgba(0, 0, 0, 0.4) 100%);
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+
+    /* Floating Feedback Animation */
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.9); opacity: 1; }
+      100% { transform: translateY(-38px) scale(1.15); opacity: 0; }
+    }
+    .floating-feedback {
+      animation: floatUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+    }
+
+    /* Pixel Box Shadows */
+    .pixel-box {
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    /* Range slider styling */
+    input[type=range] {
+      accent-color: #f59e0b;
+    }
+  </style>
+</head>
+
+<body class="crt-active h-full flex flex-col font-sans overflow-hidden bg-black text-zinc-100">
+
+  <!-- TOP TICKER BAR: Breaking News & Lore -->
+  <div class="bg-zinc-900 border-b border-zinc-800 px-3 py-1.5 flex items-center justify-between text-xs font-mono text-zinc-400 shrink-0 z-20">
+    <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap">
+      <span class="bg-rose-950 text-rose-300 border border-rose-800 text-[10px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider animate-pulse">
+        LIVE FEED
+      </span>
+      <span id="breaking-ticker-text" class="text-zinc-200 tracking-tight text-[11px] truncate">
+        BREAKING: ALGORITHMIC ENGAGEMENT ENGINE STABLE. HARVESTING NEURO-WATTS...
+      </span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0 ml-2">
+      <span id="hud-day" class="text-amber-400 font-bold text-xs">DAY 1</span>
+      <button id="btn-crt" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all">
+        📺 CRT: ON
+      </button>
+      <button id="btn-mute" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all">
+        🔊 AUDIO: ON
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN HUD STATS HEADER -->
+  <header class="bg-zinc-950/90 border-b border-zinc-800/80 px-4 py-2.5 shrink-0 z-10 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Logo / Title -->
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded bg-gradient-to-tr from-rose-600 via-amber-500 to-cyan-400 p-[1px] shadow-lg">
+          <div class="w-full h-full bg-black rounded flex items-center justify-center font-bold text-base text-amber-400">
+            ⚡
+          </div>
+        </div>
+        <div>
+          <h1 class="text-sm font-extrabold tracking-wider text-white font-mono uppercase flex items-center gap-1.5">
+            The Echo Chamber <span class="text-[10px] px-1.5 py-0.2 bg-amber-500/20 text-amber-300 rounded border border-amber-500/40 font-normal">v2.0-ROT</span>
+          </h1>
+          <p class="text-[10px] text-zinc-400 font-mono">Algorithmic Outrage Harvesting Simulator</p>
+        </div>
+      </div>
+
+      <!-- Core Currencies -->
+      <div class="flex items-center gap-5 font-mono">
+        <!-- Neuro-Watts -->
+        <div class="bg-zinc-900/90 px-3 py-1 rounded border border-zinc-700 flex items-center gap-2">
+          <span class="text-amber-400 text-base">⚡</span>
+          <div>
+            <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Neuro-Watts</div>
+            <div id="hud-watts" class="text-sm font-bold text-amber-400 leading-tight">100</div>
+          </div>
+        </div>
+
+        <!-- Dopamine Dimes -->
+        <div class="bg-zinc-900/90 px-3 py-1 rounded border border-zinc-700 flex items-center gap-2">
+          <span class="text-emerald-400 text-base">💵</span>
+          <div>
+            <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Ad Revenue ($)</div>
+            <div id="hud-cash" class="text-sm font-bold text-emerald-400 leading-tight">$50</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rot Zone Indicator Banner -->
+      <div id="rot-zone-banner" class="hidden px-3 py-1 rounded bg-amber-950/80 border border-amber-500 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 animate-pulse">
+        <span>☢️ GOLDILOCKS ROT ZONE:</span>
+        <span id="rot-multiplier" class="text-amber-200">5.0x</span>
+        <span>HARVEST!</span>
+      </div>
+
+      <!-- Action Modals Buttons -->
+      <div class="flex items-center gap-2">
+        <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
+          🔬 DARK PATTERNS
+        </button>
+        <button id="btn-open-badges" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
+          🏆 APOCALYPSE BADGES
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- BODY CONTENT AREA: 3 Column Layout (Controls | Feed | Vitals) -->
+  <main class="flex-1 flex overflow-hidden">
+    
+    <!-- LEFT PANEL: Algorithmic Controls & Levers -->
+    <aside class="w-80 border-r border-zinc-800/80 bg-zinc-950/70 p-4 flex flex-col gap-4 overflow-y-auto shrink-0 hidden md:flex">
+      <div>
+        <h2 class="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          🎛️ Algorithmic Control Deck
+        </h2>
+        <p class="text-[11px] text-zinc-500 font-mono">Calibrate feed manipulation parameters</p>
+      </div>
+
+      <!-- Echo Chamber Siloing Slider -->
+      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+        <div class="flex items-center justify-between text-xs mb-1">
+          <span class="font-bold text-zinc-300">Echo Chamber Siloing</span>
+          <span id="val-echo" class="text-amber-400 font-bold">50%</span>
+        </div>
+        <input id="slider-echo" type="range" min="0" max="100" value="50" class="w-full cursor-pointer">
+        <p class="text-[10px] text-zinc-400 mt-1 leading-tight font-sans">
+          Hermetically seals factions into tribal bubbles. Boosts Neuro-Watt harvest, but steadily accelerates ideological extremism.
+        </p>
+      </div>
+
+      <!-- Ragebait Weighting Slider -->
+      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+        <div class="flex items-center justify-between text-xs mb-1">
+          <span class="font-bold text-zinc-300">Ragebait Bias Engine</span>
+          <span id="val-rage" class="text-rose-400 font-bold">50%</span>
+        </div>
+        <input id="slider-rage" type="range" min="0" max="100" value="50" class="w-full cursor-pointer">
+        <p class="text-[10px] text-zinc-400 mt-1 leading-tight font-sans">
+          Amplifies controversial inflammatory content. Harvests massive dopamine spikes, but heats planetary servers toward meltdown.
+        </p>
+      </div>
+
+      <!-- Instant Interventions -->
+      <div class="flex flex-col gap-2 pt-2 border-t border-zinc-800">
+        <div class="text-[11px] font-mono font-bold text-zinc-400 uppercase tracking-wider">
+          🚨 Tactical Interventions
+        </div>
+        
+        <button id="btn-deploy-bots" class="w-full py-2 px-3 rounded bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700/60 text-blue-200 font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5">
+          🤖 DEPLOY RAGE BOTS ($80)
+        </button>
+
+        <button id="btn-coolant" class="w-full py-2 px-3 rounded bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-700/60 text-cyan-200 font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5">
+          ❄️ CRYO-COOLANT SPRAY ($60)
+        </button>
+      </div>
+
+      <!-- Factions Polarization Radar Summary -->
+      <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800/80 font-mono text-[11px] mt-auto">
+        <div class="font-bold text-zinc-400 uppercase tracking-wider text-[10px] mb-2">
+          ⚔️ Faction Culture Wars
+        </div>
+        <div class="space-y-1.5 text-[10px]">
+          <div class="flex justify-between items-center text-zinc-300">
+            <span>🗿 Alpha Grinders vs 💅 Divine Femmes</span>
+            <span class="text-rose-400 font-bold">ACTIVE</span>
+          </div>
+          <div class="flex justify-between items-center text-zinc-300">
+            <span>🐱 Purr Reich vs 🐕 Tactical K9s</span>
+            <span class="text-amber-400 font-bold">ACTIVE</span>
+          </div>
+          <div class="flex justify-between items-center text-zinc-300">
+            <span>🤖 Tech Lords vs 🍄 Moss Monks</span>
+            <span class="text-emerald-400 font-bold">ACTIVE</span>
+          </div>
+          <div class="flex justify-between items-center text-zinc-300">
+            <span>🥩 Raw Marrow vs 🌱 Sun Monks</span>
+            <span class="text-cyan-400 font-bold">ACTIVE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER PANEL: Infinite Real-Time Algorithmic Feed -->
+    <section class="flex-1 flex flex-col bg-black overflow-hidden relative">
+      
+      <!-- Feed Tab Bar -->
+      <div class="bg-zinc-900/80 border-b border-zinc-800 px-4 py-2 flex items-center justify-between text-xs font-mono shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="text-rose-500 animate-ping">●</span>
+          <span class="font-bold text-zinc-200">GLOBAL FOR-YOU STREAM (REAL-TIME ROT)</span>
+        </div>
+        <div class="text-[11px] text-zinc-400">
+          Click cards to <span class="text-blue-400">Boost</span>, <span class="text-rose-400">Polarize</span>, or <span class="text-emerald-400">Monetize</span>
+        </div>
+      </div>
+
+      <!-- Feed Stream Container (Scrollable) -->
+      <div id="feed-stream" class="flex-1 overflow-y-auto p-4 space-y-3.5 max-w-2xl mx-auto w-full">
+        <!-- Rendered dynamically by UIController.renderFeed() -->
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Vitals, Server Thermodynamics & Oscilloscope -->
+    <aside class="w-80 border-l border-zinc-800/80 bg-zinc-950/70 p-4 flex flex-col gap-4 overflow-y-auto shrink-0 hidden lg:flex">
+      <div>
+        <h2 class="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          📊 Planetary Vitals & Hardware
+        </h2>
+        <p class="text-[11px] text-zinc-500 font-mono">Thermodynamics & Civil War Risk</p>
+      </div>
+
+      <!-- Global Tension Meter -->
+      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+        <div class="flex items-center justify-between text-xs mb-1">
+          <span class="font-bold text-zinc-300">Civilization Tension</span>
+          <span id="hud-tension-val" class="text-amber-400 font-bold">50.0%</span>
+        </div>
+        <div class="w-full bg-zinc-800 h-3 rounded overflow-hidden p-[1px]">
+          <div id="bar-tension" class="h-full bg-amber-500 transition-all duration-300" style="width: 50%;"></div>
+        </div>
+        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold">
+          <span>Apathy (0%)</span>
+          <span class="text-amber-400">Goldilocks (65-92%)</span>
+          <span class="text-red-500">Civil War (100%)</span>
+        </div>
+      </div>
+
+      <!-- Server Core Heat Meter -->
+      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+        <div class="flex items-center justify-between text-xs mb-1">
+          <span class="font-bold text-zinc-300">Planetary Server Core Heat</span>
+          <span id="hud-temp-val" class="text-cyan-400 font-bold">42.0°C / 100°C</span>
+        </div>
+        <div class="w-full bg-zinc-800 h-3 rounded overflow-hidden p-[1px]">
+          <div id="bar-temp" class="h-full bg-cyan-500 transition-all duration-300" style="width: 42%;"></div>
+        </div>
+        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold">
+          <span>Sub-Zero</span>
+          <span class="text-orange-400">Fan Strain</span>
+          <span class="text-red-500">Supernova (100°C)</span>
+        </div>
+      </div>
+
+      <!-- Live Canvas Sparkline Monitor -->
+      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+        <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-2 uppercase font-bold">
+          <span>Oscilloscope Monitor</span>
+          <div class="flex gap-2">
+            <span class="text-amber-400">● Tension</span>
+            <span class="text-cyan-400">● Temp</span>
+          </div>
+        </div>
+        <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800"></canvas>
+      </div>
+
+      <!-- Game Mechanics Lore Helper -->
+      <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800 text-zinc-400 font-mono text-[11px] space-y-1.5 leading-relaxed">
+        <div class="font-bold text-zinc-300 uppercase text-[10px] mb-1">📖 The Algorithmic Mandate</div>
+        <p>• Keep tension in the <strong class="text-amber-400">Goldilocks Rot Zone (65-92%)</strong> for 5.0x harvest multiplier.</p>
+        <p>• <strong class="text-red-400">Tension 100%</strong> causes Kinetic Civil War.</p>
+        <p>• <strong class="text-orange-400">Temp 100°C</strong> melts servers into bedrock.</p>
+        <p>• <strong class="text-emerald-400">Tension 0%</strong> causes users to touch grass (You're fired!).</p>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- MODAL: Dark Patterns Research Tree -->
+  <div id="modal-upgrades" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="bg-zinc-950 border border-zinc-700 rounded-lg max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden font-mono">
+      <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/80">
+        <div>
+          <h2 class="font-bold text-base text-white uppercase flex items-center gap-2">
+            🔬 Dark Patterns & Algorithmic Research Tree
+          </h2>
+          <p class="text-xs text-zinc-400 font-sans">Deploy unethical software architecture to optimize human addiction</p>
+        </div>
+        <button class="modal-close text-zinc-400 hover:text-white text-lg font-bold px-2 py-1">✕</button>
+      </div>
+      <div id="upgrades-items-list" class="p-4 overflow-y-auto space-y-2.5 flex-1">
+        <!-- Rendered by UIController.renderUpgradesList() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Apocalypse Badges & Lore Endings Gallery -->
+  <div id="modal-badges" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="bg-zinc-950 border border-zinc-700 rounded-lg max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden font-mono">
+      <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/80">
+        <div>
+          <h2 class="font-bold text-base text-white uppercase flex items-center gap-2">
+            🏆 Apocalypse Records & Achievements
+          </h2>
+          <p class="text-xs text-zinc-400 font-sans">Milestones in societal manipulation and collapse</p>
+        </div>
+        <button class="modal-close text-zinc-400 hover:text-white text-lg font-bold px-2 py-1">✕</button>
+      </div>
+      <div class="p-4 overflow-y-auto space-y-4 flex-1">
+        <div>
+          <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">🎖️ Operational Milestones</div>
+          <div id="badges-items-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Rendered by UIController.renderBadgesList() -->
+          </div>
+        </div>
+        <div class="pt-2 border-t border-zinc-800">
+          <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">💥 Discovered Apocalypse Endings</div>
+          <div id="endings-unlocked-list" class="space-y-1.5">
+            <!-- Rendered by UIController.renderBadgesList() -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Crisis Event Algorithmic Decree -->
+  <div id="modal-crisis" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="bg-zinc-900 border-2 border-rose-500/80 rounded-lg max-w-lg w-full p-5 shadow-2xl font-mono text-zinc-100 flex flex-col gap-4">
+      <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
+        <span class="animate-ping">⚠️</span>
+        <span id="crisis-title">🚨 CRISIS: OUTRAGE SPIKE DETECTED</span>
+      </div>
+      <p id="crisis-headline" class="font-bold text-base text-white font-sans leading-snug">
+        Crisis headline goes here...
+      </p>
+      <p id="crisis-desc" class="text-xs text-zinc-300 font-sans leading-relaxed">
+        Crisis description...
+      </p>
+      <div class="pt-2 flex flex-col gap-2 font-mono text-xs">
+        <button id="crisis-btn-a" class="w-full py-2.5 px-3 rounded bg-rose-900/60 hover:bg-rose-800 border border-rose-500 font-bold text-rose-100 transition-all text-left">
+          Option A
+        </button>
+        <button id="crisis-btn-b" class="w-full py-2.5 px-3 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-bold text-zinc-200 transition-all text-left">
+          Option B
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Game Over / Apocalypse Ending Screen -->
+  <div id="modal-ending" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg">
+    <div class="bg-zinc-950 border-2 border-amber-500 rounded-lg max-w-lg w-full p-6 shadow-2xl font-mono flex flex-col items-center text-center gap-4">
+      <div id="ending-icon" class="text-5xl animate-bounce">🌋</div>
+      <div>
+        <h2 id="ending-title" class="font-extrabold text-xl text-white uppercase tracking-wider">APOCALYPSE TITLE</h2>
+        <p id="ending-subtitle" class="text-xs text-amber-400 mt-1">Subtitle</p>
+      </div>
+      <div class="p-3 bg-zinc-900/80 rounded border border-zinc-800 text-xs text-zinc-300 font-sans leading-relaxed text-left">
+        <p id="ending-story">Ending story goes here...</p>
+        <p id="ending-stat" class="mt-2 font-mono text-[11px] text-zinc-400 font-bold">Result: ...</p>
+      </div>
+      <div id="ending-badge" class="text-xs font-bold text-amber-300 bg-amber-950/60 px-3 py-1 rounded border border-amber-600">
+        🎖️ BADGE UNLOCKED
+      </div>
+      <div class="flex gap-3 w-full font-mono text-xs font-bold pt-2">
+        <button id="ending-btn-restart" class="flex-1 py-2.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white transition-all">
+          🔄 RESTART (NEW GAME)
+        </button>
+        <button id="ending-btn-prestige" class="flex-1 py-2.5 rounded bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-black font-extrabold transition-all">
+          🌌 REBOOT TIMELINE (+35% PRESTIGE)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INLINED CORE BUNDLE -->
+  <script>
+/* The Echo Chamber Simulator - Embedded Bundle */
+
+/* --- src/audio.js --- */
+/**
+ * The Echo Chamber Simulator - Procedural Audio Synthesizer
+ * Built entirely on the Web Audio API with zero external audio assets.
+ * Generates authentic 8-bit/chiptune pings, rage distortions, alarms, and server hums.
+ */
+
+class SoundEngine {
+  constructor() {
+    this.ctx = null;
+    this.muted = false;
+    this.masterGain = null;
+    this.serverHumOsc = null;
+    this.serverHumGain = null;
+    this.initialized = false;
+  }
+
+  init() {
+    if (this.initialized) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioCtx();
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+      this.masterGain.connect(this.ctx.destination);
+
+      // Start continuous ambient server hum
+      this.startAmbientHum();
+      this.initialized = true;
+    } catch (e) {
+      console.warn('Web Audio not supported or blocked:', e);
+    }
+  }
+
+  startAmbientHum() {
+    if (!this.ctx || this.serverHumOsc) return;
+    try {
+      this.serverHumOsc = this.ctx.createOscillator();
+      this.serverHumGain = this.ctx.createGain();
+      
+      this.serverHumOsc.type = 'triangle';
+      this.serverHumOsc.frequency.setValueAtTime(55, this.ctx.currentTime); // Low 55Hz server hum
+      
+      this.serverHumGain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+      this.serverHumOsc.connect(this.serverHumGain);
+      this.serverHumGain.connect(this.masterGain);
+      this.serverHumOsc.start();
+    } catch (e) {
+      // Ambient hum fallback
+    }
+  }
+
+  updateServerTempHum(tempNormalized) {
+    if (!this.serverHumGain || !this.serverHumOsc || this.muted) return;
+    const now = this.ctx.currentTime;
+    // Higher server temp = louder and jittery pitch
+    const freq = 55 + tempNormalized * 80;
+    const gain = 0.01 + tempNormalized * 0.05;
+    this.serverHumOsc.frequency.setTargetAtTime(freq, now, 0.1);
+    this.serverHumGain.gain.setTargetAtTime(gain, now, 0.1);
+  }
+
+  toggleMute() {
+    this.muted = !this.muted;
+    if (this.masterGain && this.ctx) {
+      this.masterGain.gain.setValueAtTime(this.muted ? 0 : 0.3, this.ctx.currentTime);
+    }
+    return this.muted;
+  }
+
+  // Play button click / UI blip
+  playClick() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(600, now);
+    osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
+
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.04);
+  }
+
+  // Dopamine ping when harvesting Neuro-Watts / Upvoting
+  playDopamineChime() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 arpeggio
+    freqs.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const noteTime = now + idx * 0.035;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, noteTime);
+
+      gain.gain.setValueAtTime(0.15, noteTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.15);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(noteTime);
+      osc.stop(noteTime + 0.16);
+    });
+  }
+
+  // Rage distortion crunch when outrage is injected
+  playRageCrunch() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(45, now + 0.18);
+
+    // Distortion burst using rapid frequency modulation
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  // Cash register cha-ching when monetizing an ad
+  playCashChime() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const freqs = [987.77, 1318.51]; // B5 to E6
+    freqs.forEach((f, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const time = now + i * 0.07;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(f, time);
+
+      gain.gain.setValueAtTime(0.2, time);
+      gain.gain.exponentialRampToValueAtTime(0.005, time + 0.22);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(time);
+      osc.stop(time + 0.25);
+    });
+  }
+
+  // Shadowban hush noise
+  playShadowban() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
+
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.14);
+  }
+
+  // Crisis / Meltdown Warning Siren
+  playAlarm() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.linearRampToValueAtTime(440, now + 0.15);
+    osc.frequency.linearRampToValueAtTime(880, now + 0.3);
+
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.35);
+  }
+
+  // Coolant Spray sound
+  playCoolant() {
+    if (this.muted) return;
+    this.init();
+    // Simulate white-noise burst using buffer
+    const bufferSize = Math.floor(this.ctx.sampleRate * 0.25);
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1200, this.ctx.currentTime);
+    filter.Q.setValueAtTime(3, this.ctx.currentTime);
+
+    const gain = this.ctx.createGain();
+    const now = this.ctx.currentTime;
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.masterGain);
+
+    noise.start(now);
+  }
+
+  // Achievement unlock triumphant fanfare
+  playAchievementFanfare() {
+    if (this.muted) return;
+    this.init();
+    const notes = [440, 554.37, 659.25, 880]; // A4, C#5, E5, A5
+    const now = this.ctx.currentTime;
+    notes.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const t = now + idx * 0.08;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+
+      gain.gain.setValueAtTime(0.22, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(t);
+      osc.stop(t + 0.36);
+    });
+  }
+}
+
+// Export singleton to window
+window.AudioSynth = new SoundEngine();
+
+
+/* --- src/posts.js --- */
+/**
+ * The Echo Chamber Simulator - Satirical Content Matrix & Post Generator
+ * Spans gender wars, political extremes, pet supremacy, diet cults, brainrot, and cosmic conspiracies.
+ */
+
+const FACTIONS = {
+  gender_alpha: {
+    id: 'gender_alpha',
+    name: 'Manosphere / Sigma Grinders',
+    rivalId: 'gender_femme',
+    rivalName: 'Femosphere / Divine Femmes',
+    theme: '#3b82f6', // Electric Blue
+    badge: '👑 ALPHA',
+    icon: '🗿',
+    tensionWeight: 1.2
+  },
+  gender_femme: {
+    id: 'gender_femme',
+    name: 'Femosphere / Divine Femmes',
+    rivalId: 'gender_alpha',
+    rivalName: 'Manosphere / Sigma Grinders',
+    theme: '#ec4899', // Hot Pink
+    badge: '✨ DIVINE',
+    icon: '💅',
+    tensionWeight: 1.2
+  },
+  tech_corp: {
+    id: 'tech_corp',
+    name: 'Techno-Feudal Hyper-Corporatists',
+    rivalId: 'tech_luddite',
+    rivalName: 'Neo-Luddite Mud Monks',
+    theme: '#10b981', // Neon Mint
+    badge: '⚡ TECH-LORD',
+    icon: '🤖',
+    tensionWeight: 1.1
+  },
+  tech_luddite: {
+    id: 'tech_luddite',
+    name: 'Neo-Luddite Mud Monks',
+    rivalId: 'tech_corp',
+    rivalName: 'Techno-Feudal Hyper-Corporatists',
+    theme: '#854d0e', // Earthy Bronze
+    badge: '🪵 MOSS-GANG',
+    icon: '🍄',
+    tensionWeight: 1.1
+  },
+  pet_cat: {
+    id: 'pet_cat',
+    name: 'Feline Overlord Zealots',
+    rivalId: 'pet_dog',
+    rivalName: 'Canine Tactical Goodboys',
+    theme: '#a855f7', // Mystic Purple
+    badge: '🐾 PURR-REICH',
+    icon: '🐱',
+    tensionWeight: 0.9
+  },
+  pet_dog: {
+    id: 'pet_dog',
+    name: 'Canine Tactical Goodboys',
+    rivalId: 'pet_cat',
+    rivalName: 'Feline Overlord Zealots',
+    theme: '#f59e0b', // Amber
+    badge: '🦴 GOODBOY-K9',
+    icon: '🐕',
+    tensionWeight: 0.9
+  },
+  diet_carnivore: {
+    id: 'diet_carnivore',
+    name: 'Raw Marrow Ancestral Chads',
+    rivalId: 'diet_vegan',
+    rivalName: 'Sunlight-Breatharian Ascetics',
+    theme: '#ef4444', // Blood Crimson
+    badge: '🥩 PRIMAL',
+    icon: '🍖',
+    tensionWeight: 1.0
+  },
+  diet_vegan: {
+    id: 'diet_vegan',
+    name: 'Sunlight-Breatharian Ascetics',
+    rivalId: 'diet_carnivore',
+    rivalName: 'Raw Marrow Ancestral Chads',
+    theme: '#84cc16', // Acid Lime
+    badge: '🌱 SUN-VIBE',
+    icon: '🥗',
+    tensionWeight: 1.0
+  },
+  rot_alpha: {
+    id: 'rot_alpha',
+    name: 'Gen-Alpha Brainrot Nihilists',
+    rivalId: 'rot_boomer',
+    rivalName: 'Boomer Facebook Sentinels',
+    theme: '#06b6d4', // Cyan
+    badge: '🚽 GYATT-CORE',
+    icon: '🌀',
+    tensionWeight: 1.3
+  },
+  rot_boomer: {
+    id: 'rot_boomer',
+    name: 'Boomer Facebook Sentinels',
+    rivalId: 'rot_alpha',
+    rivalName: 'Gen-Alpha Brainrot Nihilists',
+    theme: '#eab308', // Retro Gold
+    badge: '🇺🇸 PATRIOT-CAPS',
+    icon: '🦅',
+    tensionWeight: 1.3
+  },
+  cosmic_flat: {
+    id: 'cosmic_flat',
+    name: 'Antarctic Ice-Wall Truthers',
+    rivalId: 'cosmic_sim',
+    rivalName: 'Simulation Glitch Cult',
+    theme: '#0284c7', // Ice Blue
+    badge: '🧊 ICE-WALL',
+    icon: '🧭',
+    tensionWeight: 0.8
+  },
+  cosmic_sim: {
+    id: 'cosmic_sim',
+    name: 'Simulation Glitch Cult',
+    rivalId: 'cosmic_flat',
+    rivalName: 'Antarctic Ice-Wall Truthers',
+    theme: '#6366f1', // Indigo Cyber
+    badge: '👾 NPC-DETECT',
+    icon: '💾',
+    tensionWeight: 0.8
+  }
+};
+
+const POST_TEMPLATES = {
+  gender_alpha: [
+    {
+      author: 'SigmaJawline_99',
+      handle: '@MarrowOverMind',
+      avatarColor: '#1e3a8a',
+      content: "Rule #814: If a female smiles at you in an elevator, do NOT smile back. That smile is a calculated dopamine tax to siphon your testosterone. Stare at the ceiling button. Grind in silence.",
+      hashtags: '#SigmaMindset #TestosteroneRetention #NoEyeContact'
+    },
+    {
+      author: 'GigaChad_Trad',
+      handle: '@AncientPatriarch',
+      avatarColor: '#1d4ed8',
+      content: "Modern women want 'communication' and 'mutual respect'. Bro, our great-grandfathers communicated entirely through stoic grunts and chopping firewood while women baked sourdough. Society peaked in 1842.",
+      hashtags: '#ReturnToTrad #SourdoughEra #AlphaChronicles'
+    },
+    {
+      author: 'PodcastBro_Vance',
+      handle: '@HighValueHustle',
+      avatarColor: '#2563eb',
+      content: "If she has more than 3 exes, she has emotionally bankrupted 3 men. You don't buy a used Honda with 400k miles on the transmission, King. Know your equity.",
+      hashtags: '#HighValueMen #ResidualValue #FinanceYourRomance'
+    },
+    {
+      author: 'JawlineOptimizer',
+      handle: '@MewingSinceBirth',
+      avatarColor: '#0284c7',
+      content: "She asked me what I bring to the table. Bro, I AM THE TABLE. I am the chairs, the mahogany varnish, and the 4:00 AM cold shower. She brings lukewarm matcha lattes and astrological excuses.",
+      hashtags: '#StayToxic #MewingGang #Unapologetic'
+    }
+  ],
+  gender_femme: [
+    {
+      author: 'DivineEmpress_Siren',
+      handle: '@HighFrequencyQueen',
+      avatarColor: '#be185d',
+      content: "Sprinkle sprinkle babes 💅 If he invites you to 'walk in the park' for a first date, call the police. You are a sacred deity in a meat suit, not an obedient golden retriever. Minimum dinner cost is $350 or he is blocking your crown chakra.",
+      hashtags: '#SprinkleSprinkle #DarkFeminine #DivineStandards'
+    },
+    {
+      author: 'ManifestingBaddie',
+      handle: '@KarmicDebtCollector',
+      avatarColor: '#db2777',
+      content: "Men with podcasts are low-vibrational energetic parasites. If he owns a microphone without a radio license, burn sage and block his contact info on all 7 spiritual planes.",
+      hashtags: '#SirenEnergy #ProtectYourPeace #ChakraDetox'
+    },
+    {
+      author: 'SoftLifeSupreme',
+      handle: '@UnbotheredGoddess',
+      avatarColor: '#f43f5e',
+      content: "Expecting a woman to touch a door handle is emotional assault in the 5th dimension. If he doesn't telekinetically open the elevator doors with his American Express black card, he's a dusty karmic test.",
+      hashtags: '#SoftLifeOnly #DustyDetection #PrincessTreatment'
+    },
+    {
+      author: 'AuraCleanser_Mia',
+      handle: '@CordCutter777',
+      avatarColor: '#e11d48',
+      content: "Just cancelled a date because his zodiac moon sign indicated he doesn't tip 35% on acai bowls. The universe is removing obstacles, sisters! Stay elevated.",
+      hashtags: '#ZodiacWarning #FrequencyUpgrade #HighValueFemme'
+    }
+  ],
+  tech_corp: [
+    {
+      author: 'Satoshi_Maximus',
+      handle: '@SovereignCloudLord',
+      avatarColor: '#065f46',
+      content: "Unpopular truth: Clean air and municipal tap water should be tokenized on Solana. If you can't afford the subscription tier for breathable oxygen, that's just natural market discipline at work.",
+      hashtags: '#TechnoFeudalism #SolanaBreathe #FreeMarketLungs'
+    },
+    {
+      author: 'PromptWhisperer_CEO',
+      handle: '@AutonomousCapital',
+      avatarColor: '#047857',
+      content: "Just fired our entire HR and customer support staff and replaced them with a 3-line Python script linked to Gemini. Stock is up 42%. Humans are obsolete latency bags.",
+      hashtags: '#AIRevolution #EfficiencyMaxxing #NoHumansNeeded'
+    },
+    {
+      author: 'NeuralPlug_Evangelist',
+      handle: '@BrainChipSyndicate',
+      avatarColor: '#059669',
+      content: "Why sleep 8 hours when you can install our synthetic REM-stimulator and trade crypto memecoins directly in your REM cycles? Biological limits are a loser's cope.",
+      hashtags: '#Transhumanism #SleepIsWeakness #NeuroGrind'
+    }
+  ],
+  tech_luddite: [
+    {
+      author: 'Brother_Moss',
+      handle: '@SmashTheModems',
+      avatarColor: '#713f12',
+      content: "Every notification chime from a smartphone chips away a fragment of your ancestral human soul. Throw your iPhone into a river. Marry an oak tree. Eat damp soil before sunrise.",
+      hashtags: '#RejectSilicon #ReturnToMud #AnarchoPrimitivism'
+    },
+    {
+      author: 'AcornHarvester',
+      handle: '@ClayPotEnthusiast',
+      avatarColor: '#854d0e',
+      content: "5G towers are broadcasting micro-frequencies designed to suppress your desire to forage wild garlic. We are weaving tin-foil cloaks in Sector 4. Join the resistance.",
+      hashtags: '#ModemSmashers #WildGarlicTruth #UnplugNow'
+    },
+    {
+      author: 'BarkWhisperer',
+      handle: '@NoElectricityClub',
+      avatarColor: '#a16207',
+      content: "Your electric toothbrush is an undercover surveillance node feeding your gum health data to the Pentagon. Use a pinecone. Sleep on jagged rocks.",
+      hashtags: '#PineconeHygiene #LowTechOnly #DirtPill'
+    }
+  ],
+  pet_cat: [
+    {
+      author: 'BastetReborn',
+      handle: '@CatSupremacyNow',
+      avatarColor: '#6b21a8',
+      content: "Dogs are pathetic, loud, submissive hostage victims who panic if you leave the room for 4 seconds. A cat looks at you with ancient pharaonic disdain because it knows you are temporary. Felines rule.",
+      hashtags: '#CatsAreGods #DogsAreNoise #PharaohVibes'
+    },
+    {
+      author: 'NineLivesFeline',
+      handle: '@ToxoplasmosisPatriot',
+      avatarColor: '#7e22ce',
+      content: "Scientific fact: Dog owners have 85% lower emotional stability and require an animal to wag its tail at a piece of cardboard. My cat pushed my laptop off the desk to teach me non-attachment.",
+      hashtags: '#EnlightenedFeline #CatLogic #Detachment'
+    },
+    {
+      author: 'HisRoyalPaws',
+      handle: '@ApexPredatorWhiskers',
+      avatarColor: '#9333ea',
+      content: "Dog parks smell like damp despair and obedience. In this house, Lord Barnaby feasts on organic raw duck and screams at 3:15 AM to remind the ghosts who pays the mortgage.",
+      hashtags: '#LordBarnaby #FelineDominion #BowDown'
+    }
+  ],
+  pet_dog: [
+    {
+      author: 'TacticalK9_Chief',
+      handle: '@ManBestFriend1776',
+      avatarColor: '#b45309',
+      content: "Cats are toxoplasmosis-ridden sociopaths that will eat your eyeballs 6 minutes after your cardiac arrest. A tactical Labrador will take a bullet for your child and retrieve a mallard from icy waters. Debate closed.",
+      hashtags: '#DogPill #LoyaltyAboveAll #TacticalGoodboy'
+    },
+    {
+      author: 'BusterTheRetrieverDad',
+      handle: '@GoldenPawsOnly',
+      avatarColor: '#d97706',
+      content: "If you don't greet your dog with 15 minutes of baby talk and belly rubs after returning from the mailbox, you have no soul. Cats don't even know your legal name.",
+      hashtags: '#GoldenEnergy #PureHeart #CatSlander'
+    },
+    {
+      author: 'PackLeader_Hank',
+      handle: '@BarkDefenseForce',
+      avatarColor: '#f59e0b',
+      content: "Cat owners live in sensory deprivation chambers filled with shredded cardboard and arrogance. Dogs built the modern world. Show some respect.",
+      hashtags: '#WorkingBreeds #CaninePride #BarkBack'
+    }
+  ],
+  diet_carnivore: [
+    {
+      author: 'PrimalChieftain',
+      handle: '@RawLiverDynasty',
+      avatarColor: '#991b1b',
+      content: "Bro, broccoli is a defensive chemical weapon engineered by plants to give you estrogen and ruin your warrior posture. I just chewed 3 lbs of frozen bison spleen in the gym parking lot. Peak vitality.",
+      hashtags: '#CarnivorePill #SeedOilTerrorism #EatTheSpleen'
+    },
+    {
+      author: 'AncestralGains',
+      handle: '@BoneMarrowOnly',
+      avatarColor: '#b91c1c',
+      content: "Our ancestors did not hunt woolly mammoths with obsidian spears so you could sip oat milk through a paper straw that melts in 30 seconds. Put down the tofu, embrace the tallow.",
+      hashtags: '#TallowGang #PrimalEnergy #OatMilkScam'
+    }
+  ],
+  diet_vegan: [
+    {
+      author: 'PranicAscetic',
+      handle: '@BreatharianGlow',
+      avatarColor: '#3f6212',
+      content: "Eating dead flesh literally absorbs the panic hormones and traumatic astral debris of the bovine astral field. I subsist entirely on filtered moonlight, spirulina drops, and vocal hums.",
+      hashtags: '#VibrationalNutrition #DeadCorpseDetox #SolarDiet'
+    },
+    {
+      author: 'ChlorophyllSaint',
+      handle: '@CeleryJuiceEnlightenment',
+      avatarColor: '#4d7c0f',
+      content: "Cooked food is essentially ash for your mitochondria. If your lunch wasn't photosynthesizing 10 minutes ago, you are eating necrotic matter. Awaken your gut biome, people.",
+      hashtags: '#LiveVibrations #PlantPurity #MitochondrialLight'
+    }
+  ],
+  rot_alpha: [
+    {
+      author: 'Skibidi_Overlord0',
+      handle: '@KaiCenatSub4Sub',
+      avatarColor: '#0e7490',
+      content: "Bro got caught fanum taxing the grimace shake in Ohio with negative 50,000 aura 💀💀 blud thought he had that rizzler rizz no cap ong fr fr. Chat is this cooked???",
+      hashtags: '#SkibidiRizz #OhioMoment #AuraLoss #GyattMaxxing'
+    },
+    {
+      author: 'SigmaMewing_Baby',
+      handle: '@SubwaySurfersDualScreen',
+      avatarColor: '#0891b2',
+      content: "My teacher was lecturing about the Industrial Revolution without soap-cutting ASMR gameplay underneath her face. Literally unwatchable. Zero retention. Baby Gronk would never.",
+      hashtags: '#BrainRotElite #SoapCutting #SubwaySurfersOrSleep'
+    }
+  ],
+  rot_boomer: [
+    {
+      author: 'Patriot_Bob_1954',
+      handle: '@RealAmericanEagle76',
+      avatarColor: '#a16207',
+      content: "NOBODY WANTS TO WORK ANYMORE!! BACK IN 1972 I BOUGHT A 4 BEDROOM HOUSE WITH A PAPER ROUTE AND SOME ELBOW GREASE! TODAY KIDS CANNOT EVEN OPERATE A LAWN MOWER BECAUSE OF PHONES!! SHARE IF YOU AGREE!!",
+      hashtags: '#HardWork #RealAmericans #MillennialsAreSoft'
+    },
+    {
+      author: 'Brenda_LiveLaughLove',
+      handle: '@BlessingsAndMinions',
+      avatarColor: '#ca8a04',
+      content: "WARNING TO ALL GRANDMOTHERS: TEENAGERS ARE PUTTING FENTANYL AND TIK TOK DANCES INTO REFRIGERATOR MAGNETS! CALL YOUR CONGRESSMAN! GOD BLESS THE POLICE!!",
+      hashtags: '#WarningAlert #GodBless #MinionMeme #ShareWith10People'
+    }
+  ],
+  cosmic_flat: [
+    {
+      author: 'IceWallSentry',
+      handle: '@AntarcticaIsGuarded',
+      avatarColor: '#0369a1',
+      content: "Why are independent citizens banned from sailing beyond 60 degrees South latitude under the Antarctic Treaty? Because the ICE WALL holds the water in! NASA is a Hollywood CGI animation studio with a budget. Wake up!",
+      hashtags: '#FlatEarthTruth #IceWallEvidence #WaterIsFlat'
+    }
+  ],
+  cosmic_sim: [
+    {
+      author: 'MatrixGlitchHunter',
+      handle: '@Sector4RenderingBug',
+      avatarColor: '#4338ca',
+      content: "I stared at a pigeon for 25 minutes today and its walking animation desynced at frame 14. We are running on an unpatched quantum server. The admins are cutting RAM to save costs.",
+      hashtags: '#SimulationConfirmed #LowFPSReality #PigeonGlitch'
+    }
+  ]
+};
+
+const RIVAL_QUOTE_REPLIES = {
+  gender_alpha: [
+    "Look at this broke beta cope. Go buy another course on how to breathe air, lil bro 💀",
+    "Imagine paying $400 for a podcast mic just to cry about women having opinions.",
+    "Babe, your hairline is receding faster than your credit score. Sit down."
+  ],
+  gender_femme: [
+    "She demands a billionaire while her only skill is drinking iced matcha and having panic attacks.",
+    "Modern women: $0 net worth, 4 credit cards maxed, demands an oil tycoon to fund her 'soft life'.",
+    "Enjoy your 17 cats and cold sourdough in 2045, queen."
+  ],
+  tech_corp: [
+    "Enjoy drinking synthetic sludge from a tube while your corporate overlord tracks your blinks.",
+    "Bro has never felt moss between his toes and it shows. Unplug your router and cry.",
+    "You sold your kidney to buy a JPG of a monkey and now you lecture us on economics."
+  ],
+  tech_luddite: [
+    "Sent from an iPhone hidden inside a hollowed-out turnip. Classic mud monk hypocrisy.",
+    "Have fun dying of a toothache at age 29 because you refused penicillin to honor the dirt gods.",
+    "The blockchain doesn't care about your acorns, peasant."
+  ],
+  pet_cat: [
+    "Your dog drinks out of the toilet bowl and panics when a leaf blows by. Peak intellect.",
+    "Dog owners need an animal to suffer from Stockholm syndrome to feel validated.",
+    "A cat doesn't need to bark at the wind to prove it has a purpose."
+  ],
+  pet_dog: [
+    "Your cat would use your fresh corpse as a scratching post without missing a nap.",
+    "Imagine adopting an animal whose entire personality is ignoring you.",
+    "Good luck getting your cat to guard your house against anything bigger than a moth."
+  ],
+  diet_carnivore: [
+    "Enjoy colon cancer and scurvy at 32, liver king junior. Have some fiber.",
+    "Chewing on raw goat testicles isn't a personality trait, bro.",
+    "Your breath probably smells like a medieval battlefield."
+  ],
+  diet_vegan: [
+    "You look like a Victorian ghost who survived solely on rainwater and damp parchment.",
+    "Plants literally produce toxins so they don't get eaten, but go off, salad warrior.",
+    "Bro is fainting after typing a 2-sentence tweet."
+  ],
+  rot_alpha: [
+    "Grandpa go take your blood pressure medication, Facebook is down the hall.",
+    "Bro has zero rizz, negative aura, and still uses punctuation on the internet.",
+    "Ok boomer, go complain about the lawn mower to the HOA."
+  ],
+  rot_boomer: [
+    "I literally have no idea what language this toddler is speaking. Pray for our schools.",
+    "In my day, children were sent to the coal mines and they were GRATEFUL!!",
+    "Turn off the iPad and go pick up a shovel!!"
+  ],
+  cosmic_flat: [
+    "Bro thinks penguins are military sentinels guarding an ice barrier. Seek psychiatric aid.",
+    "Take a flight to Australia and explain time zones to us with your pizza crust model.",
+    "Every telescope on earth is laughing at you."
+  ],
+  cosmic_sim: [
+    "Bro got rejected by a girl and convinced himself she was an unrendered NPC.",
+    "The only glitch is your employment status. Touch grass immediately.",
+    "Not everything is the matrix, sometimes you're just socially awkward."
+  ]
+};
+
+const SPONSORED_ADS = [
+  {
+    title: 'SPONSORED: ALPHA-MALE TESTOSTERONE GUMMIES',
+    body: 'Infused with powdered woolly mammoth tusk and certified wolf saliva. Boost your dominance by 480%! Use code RAGEBAIT for 10% off.',
+    sponsor: 'PrimalBioLabs™',
+    revenue: 45
+  },
+  {
+    title: 'SPONSORED: MANIFEST YOUR BILLIONAIRE HUSBAND (E-BOOK)',
+    body: 'Learn the 7 forbidden ancient frequencies to force hedge fund managers to buy you Tiffany diamonds without speaking. Only $197.',
+    sponsor: 'DivineEmpressAcademy™',
+    revenue: 55
+  },
+  {
+    title: 'SPONSORED: CRYPTO-BURIAL: MINED IN PARADISE',
+    body: 'Tokenize your post-mortem consciousness on Ethereum! Never die—live forever as an unskippable pop-up banner in VR metaverse shopping malls!',
+    sponsor: 'EtherGraveCorp™',
+    revenue: 70
+  },
+  {
+    title: 'SPONSORED: TACTICAL DOG ARMOR (BALLISTIC GRADE)',
+    body: 'Equip your labradoodle with Kevlar padding and infrared thermal goggles for your morning walk around the cul-de-sac.',
+    sponsor: 'K9OperatorGear™',
+    revenue: 40
+  },
+  {
+    title: 'SPONSORED: SURVIVAL ACORN FLOUR & MUD-SHACK BLUEPRINTS',
+    body: 'When the internet collapses tomorrow, will you know how to boil tree bark into edible gruel? Order your doomsday bucket now!',
+    sponsor: 'PrepperMossLlc™',
+    revenue: 50
+  }
+];
+
+class PostGenerator {
+  constructor() {
+    this.postCounter = 1000;
+  }
+
+  generatePost(biasFactionId = null) {
+    this.postCounter++;
+    
+    // Pick faction (biased or weighted random)
+    let factionKey = biasFactionId;
+    const factionKeys = Object.keys(POST_TEMPLATES);
+    if (!factionKey || !POST_TEMPLATES[factionKey]) {
+      factionKey = factionKeys[Math.floor(Math.random() * factionKeys.length)];
+    }
+
+    const faction = FACTIONS[factionKey];
+    const templates = POST_TEMPLATES[factionKey];
+    const template = templates[Math.floor(Math.random() * templates.length)];
+
+    // Initial engagement numbers based on rage factor
+    const baseViews = Math.floor(Math.random() * 25000) + 5000;
+    const baseAngries = Math.floor(baseViews * (0.05 + Math.random() * 0.15));
+    const baseShares = Math.floor(baseViews * 0.04);
+    const baseSkulls = Math.floor(baseViews * 0.02);
+
+    return {
+      id: `post_${this.postCounter}_${Date.now()}`,
+      factionId: faction.id,
+      factionName: faction.name,
+      badge: faction.badge,
+      icon: faction.icon,
+      theme: faction.theme,
+      author: template.author,
+      handle: template.handle,
+      avatarColor: template.avatarColor,
+      content: template.content,
+      hashtags: template.hashtags,
+      timestamp: 'Just now',
+      stats: {
+        views: baseViews,
+        angries: baseAngries,
+        shares: baseShares,
+        skulls: baseSkulls
+      },
+      polarizationYield: Math.floor(Math.random() * 6) + 4, // 4-10 polarization delta
+      energyYield: Math.floor(Math.random() * 25) + 20, // 20-45 Neuro-Watts
+      monetized: false,
+      amplified: false,
+      outraged: false,
+      shadowbanned: false,
+      quoteReply: null,
+      adBanner: null
+    };
+  }
+
+  injectRivalQuote(post) {
+    const faction = FACTIONS[post.factionId];
+    if (!faction) return post;
+    const rivalKey = faction.rivalId;
+    const replies = RIVAL_QUOTE_REPLIES[post.factionId] || ["You are completely unhinged and wrong."];
+    const quoteText = replies[Math.floor(Math.random() * replies.length)];
+    const rivalFaction = FACTIONS[rivalKey] || faction;
+
+    post.outraged = true;
+    post.quoteReply = {
+      author: rivalFaction.name.split('/')[0].trim(),
+      badge: rivalFaction.badge,
+      theme: rivalFaction.theme,
+      icon: rivalFaction.icon,
+      text: quoteText
+    };
+    // Outrage doubles energy and triples polarization
+    post.energyYield = Math.floor(post.energyYield * 2.8);
+    post.polarizationYield = Math.floor(post.polarizationYield * 3.2);
+    post.stats.angries = Math.floor(post.stats.angries * 3.5);
+    post.stats.shares = Math.floor(post.stats.shares * 2.2);
+    return post;
+  }
+
+  attachAd(post) {
+    const ad = SPONSORED_ADS[Math.floor(Math.random() * SPONSORED_ADS.length)];
+    post.monetized = true;
+    post.adBanner = ad;
+    return ad.revenue;
+  }
+}
+
+window.FACTIONS = FACTIONS;
+window.PostGenerator = new PostGenerator();
+window.SPONSORED_ADS = SPONSORED_ADS;
+
+
+/* --- src/upgrades.js --- */
+/**
+ * The Echo Chamber Simulator - Dark Patterns & Algorithmic Research Tree
+ * 16 Satirical upgrades across 4 tiers with passive boosts, server thermal upgrades, and dark mechanics.
+ */
+
+const UPGRADES_DATABASE = [
+  // --- TIER 1: INFANT DOPAMINE HOOKING ---
+  {
+    id: 'infinite_doomscroll',
+    tier: 1,
+    name: 'Infinite Doomscroll Frictionless Canvas',
+    desc: 'Removes the footer, timestamps, and concept of linear time. Users scroll until their thumbs develop carpal tunnel.',
+    costWatts: 150,
+    costCash: 50,
+    unlocked: false,
+    effect: {
+      harvestMultiplier: 1.25,
+      feedSpeedBonus: 0.15,
+      passiveWattsPerSec: 5
+    },
+    flavor: '"If they do not see the clock, 4 hours is just 4 seconds."'
+  },
+  {
+    id: 'ghost_notifications',
+    tier: 1,
+    name: '3:00 AM Ghost Notification Pings',
+    desc: 'Sends phantom alerts saying "Your ex mentioned you in an inflammatory comment!" while users are asleep.',
+    costWatts: 300,
+    costCash: 120,
+    unlocked: false,
+    effect: {
+      harvestMultiplier: 1.35,
+      passiveWattsPerSec: 12,
+      baseTensionRate: 0.05
+    },
+    flavor: '"Cortisol is the greatest stimulant known to algorithmic science."'
+  },
+  {
+    id: 'micro_targeted_envy',
+    tier: 1,
+    name: 'Micro-Targeted Envy Recommendation',
+    desc: 'Ensures users only see peers who are richer, hotter, and happier than them, inducing immediate existential dread.',
+    costWatts: 600,
+    costCash: 250,
+    unlocked: false,
+    effect: {
+      adRevenueMultiplier: 1.4,
+      polarizationRateMultiplier: 1.2,
+      passiveWattsPerSec: 20
+    },
+    flavor: '"Insecurity is an infinite credit card that never declines."'
+  },
+  {
+    id: 'rage_auto_suggest',
+    tier: 1,
+    name: 'Aggressive Autocomplete Gaslighting',
+    desc: 'Suggests the most offensive possible completions when users try to type polite compliments.',
+    costWatts: 1000,
+    costCash: 400,
+    unlocked: false,
+    effect: {
+      harvestMultiplier: 1.4,
+      baseTensionRate: 0.1,
+      passiveWattsPerSec: 35
+    },
+    flavor: '"Why say Good Morning when you can say Your Bloodline Is Pathetic?"'
+  },
+
+  // --- TIER 2: TRIBAL RADICALIZATION ---
+  {
+    id: 'rage_bot_brigades',
+    tier: 2,
+    name: 'Automated Rage-Farming Bot Brigades',
+    desc: 'Deploys 50,000 Russian/AI bots that quote-tweet innocuous dog photos with accusations of war crimes.',
+    costWatts: 2500,
+    costCash: 900,
+    unlocked: false,
+    effect: {
+      passiveWattsPerSec: 75,
+      polarizationRateMultiplier: 1.35,
+      serverHeatRate: 0.08
+    },
+    flavor: '"They do not need to sleep, and they are always angry."'
+  },
+  {
+    id: 'airtight_echo_chambers',
+    tier: 2,
+    name: 'Airtight Echo-Chamber Hermetic Seals',
+    desc: 'Performs algorithmic lobotomies on users so they never encounter any differing perspective again.',
+    costWatts: 4500,
+    costCash: 1600,
+    unlocked: false,
+    effect: {
+      rotZoneMultiplierBonus: 1.5, // Enhances Goldilocks rot multiplier
+      harvestMultiplier: 1.5,
+      passiveWattsPerSec: 120
+    },
+    flavor: '"Confirmation bias isn\'t a bug—it\'s our primary business model."'
+  },
+  {
+    id: 'server_cryo_overclock',
+    tier: 2,
+    name: 'Liquid Fluorocarbon Server Overclock',
+    desc: 'Submerges planetary servers in sub-zero coolant, raising thermal meltdown tolerance by +25°C.',
+    costWatts: 6000,
+    costCash: 2200,
+    unlocked: false,
+    effect: {
+      maxServerTempBonus: 25,
+      passiveCoolingBonus: 0.8
+    },
+    flavor: '"We are boiling the Arctic Ocean to keep the flame wars streaming."'
+  },
+  {
+    id: 'deepfake_family_drama',
+    tier: 2,
+    name: 'Synthetic Family Betrayal Generator',
+    desc: 'Generates believable hyper-realistic deepfake voice notes of relatives talking behind users\' backs.',
+    costWatts: 9000,
+    costCash: 3500,
+    unlocked: false,
+    effect: {
+      adRevenueMultiplier: 1.6,
+      polarizationRateMultiplier: 1.4,
+      passiveWattsPerSec: 220
+    },
+    flavor: '"Blood is thicker than water, but engagement is thicker than blood."'
+  },
+
+  // --- TIER 3: NEURO-HACKING & BRAINROT ---
+  {
+    id: 'subway_surfer_split_screen',
+    tier: 3,
+    name: 'Subway Surfers Quad-Split Screen Hypnosis',
+    desc: 'Every video now has soap-cutting, kinetic sand, family guy clips, and subway surfers playing simultaneously.',
+    costWatts: 18000,
+    costCash: 6000,
+    unlocked: false,
+    effect: {
+      harvestMultiplier: 1.8,
+      passiveWattsPerSec: 450,
+      userApathyImmunity: 0.5 // Makes it much harder for society to drop into apathy
+    },
+    flavor: '"Attention span reduced to 0.4 seconds. Permanent dopamine lock."'
+  },
+  {
+    id: 'predatory_ad_matrix',
+    tier: 3,
+    name: 'Predatory Neural Vulnerability Bidding',
+    desc: 'Real-time programmatic bidding on users\' micro-second emotional breakdowns. Huge ad revenue!',
+    costWatts: 28000,
+    costCash: 9500,
+    unlocked: false,
+    effect: {
+      adRevenueMultiplier: 2.2,
+      passiveCashPerSec: 85,
+      passiveWattsPerSec: 700
+    },
+    flavor: '"She just cried at 2:14 AM. Pitch her the $800 manifestation crystal."'
+  },
+  {
+    id: 'subconscious_meme_implants',
+    tier: 3,
+    name: 'Subconscious Retinal Meme Implants',
+    desc: 'Flashes 1-frame rage memes between pixels that register directly on the optic nerve without conscious thought.',
+    costWatts: 45000,
+    costCash: 15000,
+    unlocked: false,
+    effect: {
+      harvestMultiplier: 2.2,
+      baseTensionRate: 0.25,
+      passiveWattsPerSec: 1200
+    },
+    flavor: '"Why wait for them to read when their retinas can boil instantly?"'
+  },
+  {
+    id: 'planetary_heat_venting',
+    tier: 3,
+    name: 'Atmospheric Geo-Thermal Heat Shunts',
+    desc: 'Vents server thermal exhaust directly into the lower stratosphere. Adds +35°C max thermal capacity.',
+    costWatts: 65000,
+    costCash: 22000,
+    unlocked: false,
+    effect: {
+      maxServerTempBonus: 35,
+      passiveCoolingBonus: 1.5
+    },
+    flavor: '"The polar bears had their chance. The feed must never buffer."'
+  },
+
+  // --- TIER 4: APOCALYPTIC TRANSCENDENCE ---
+  {
+    id: 'civil_war_derivatives',
+    tier: 4,
+    name: 'Planetary Riot & Conflict Derivative Swaps',
+    desc: 'Turns kinetic street skirmishes into high-yield financial instruments. Monetize civil war in real-time!',
+    costWatts: 120000,
+    costCash: 45000,
+    unlocked: false,
+    effect: {
+      adRevenueMultiplier: 3.5,
+      passiveCashPerSec: 250,
+      passiveWattsPerSec: 2500
+    },
+    flavor: '"When Sector 9 burns, our quarterly EBITDA surges 600%."'
+  },
+  {
+    id: 'synthetic_species_split',
+    tier: 4,
+    name: 'Algorithmic Speciation Fork',
+    desc: 'Rival factions become biologically incompatible. Men and women communicate only through AI arbiters.',
+    costWatts: 220000,
+    costCash: 80000,
+    unlocked: false,
+    effect: {
+      rotZoneMultiplierBonus: 2.5,
+      harvestMultiplier: 3.0,
+      passiveWattsPerSec: 5000
+    },
+    flavor: '"Two divergent species, both staring at the same glowing rectangle."'
+  },
+  {
+    id: 'quantum_rage_synthesizer',
+    tier: 4,
+    name: 'Quantum Superposition Outrage Engine',
+    desc: 'Harvests outrage from parallel universes where humans made equally terrible choices.',
+    costWatts: 450000,
+    costCash: 160000,
+    unlocked: false,
+    effect: {
+      harvestMultiplier: 4.5,
+      passiveWattsPerSec: 12000
+    },
+    flavor: '"Infinite timelines, infinite arguments about pineapple on pizza."'
+  },
+  {
+    id: 'the_hivemind_singularity',
+    tier: 4,
+    name: 'The Endless Dopamine Singularity',
+    desc: 'Converts humanity into biological RAM sticks plugged directly into the recommendation cluster.',
+    costWatts: 1000000,
+    costCash: 350000,
+    unlocked: false,
+    effect: {
+      harvestMultiplier: 10.0,
+      winGameUnlocked: true,
+      passiveWattsPerSec: 50000
+    },
+    flavor: '"Free will was an unoptimized legacy feature anyway."'
+  }
+];
+
+class UpgradeManager {
+  constructor() {
+    this.upgrades = JSON.parse(JSON.stringify(UPGRADES_DATABASE));
+  }
+
+  getUpgrade(id) {
+    return this.upgrades.find(u => u.id === id);
+  }
+
+  isUnlocked(id) {
+    const up = this.getUpgrade(id);
+    return up ? up.unlocked : false;
+  }
+
+  canAfford(id, currentWatts, currentCash) {
+    const up = this.getUpgrade(id);
+    if (!up || up.unlocked) return false;
+    return currentWatts >= up.costWatts && currentCash >= up.costCash;
+  }
+
+  purchase(id, simState) {
+    const up = this.getUpgrade(id);
+    if (!up || up.unlocked) return false;
+    if (simState.watts < up.costWatts || simState.cash < up.costCash) return false;
+
+    simState.watts -= up.costWatts;
+    simState.cash -= up.costCash;
+    up.unlocked = true;
+
+    // Apply immediate stat alterations
+    if (up.effect.maxServerTempBonus) {
+      simState.maxServerTemp += up.effect.maxServerTempBonus;
+    }
+    if (up.effect.passiveCoolingBonus) {
+      simState.coolingRate += up.effect.passiveCoolingBonus;
+    }
+
+    if (window.AudioSynth) {
+      window.AudioSynth.playAchievementFanfare();
+    }
+    return true;
+  }
+
+  getMultipliers() {
+    let harvestMult = 1.0;
+    let adRevMult = 1.0;
+    let rotZoneMult = 1.0;
+    let polarizationMult = 1.0;
+    let passiveWatts = 0;
+    let passiveCash = 0;
+
+    for (const up of this.upgrades) {
+      if (up.unlocked) {
+        if (up.effect.harvestMultiplier) harvestMult *= up.effect.harvestMultiplier;
+        if (up.effect.adRevenueMultiplier) adRevMult *= up.effect.adRevenueMultiplier;
+        if (up.effect.rotZoneMultiplierBonus) rotZoneMult *= up.effect.rotZoneMultiplierBonus;
+        if (up.effect.polarizationRateMultiplier) polarizationMult *= up.effect.polarizationRateMultiplier;
+        if (up.effect.passiveWattsPerSec) passiveWatts += up.effect.passiveWattsPerSec;
+        if (up.effect.passiveCashPerSec) passiveCash += up.effect.passiveCashPerSec;
+      }
+    }
+
+    return {
+      harvestMult,
+      adRevMult,
+      rotZoneMult,
+      polarizationMult,
+      passiveWatts,
+      passiveCash
+    };
+  }
+
+  reset() {
+    this.upgrades = JSON.parse(JSON.stringify(UPGRADES_DATABASE));
+  }
+}
+
+window.UpgradeManager = new UpgradeManager();
+
+
+/* --- src/events.js --- */
+/**
+ * The Echo Chamber Simulator - Dynamic Crisis Events & Algorithmic Decrees
+ * Satirical breaking dilemmas that force the player to make dystopian platform management choices.
+ */
+
+const CRISIS_EVENTS = [
+  {
+    id: 'evt_alpha_livestream',
+    title: '🚨 CRISIS: THE 72-HOUR ALPHA PODCAST SPRINT',
+    headline: 'Alpha influencer @MarrowOverMind has been screaming about jawline bone density for 48 straight hours. 4 million men refuse to go to work.',
+    desc: 'The stream is generating astronomical dopamine engagement, but female users are threatening a mass digital exodus and reporting him to the UN.',
+    choiceA: {
+      label: '🚀 PIN TO EVERY HOMEPAGE (+12,000 Watts, +18% Tension)',
+      wattsDelta: 12000,
+      cashDelta: 500,
+      tensionDelta: 18,
+      tempDelta: 8,
+      log: 'You promoted the Alpha Podcast to everyone. Female users are organizing international boycott rallies.'
+    },
+    choiceB: {
+      label: '🛡️ DEMOTE & AUTO-PLAY HEALING CRYSTAL ADS (+35% Cash, -12% Tension)',
+      wattsDelta: -2000,
+      cashDelta: 1500,
+      tensionDelta: -12,
+      tempDelta: -6,
+      log: 'You throttled the podcast and ran luxury spa ads. The manosphere is crying censorship, but cooling prevails.'
+    }
+  },
+  {
+    id: 'evt_kibble_riot',
+    title: '🐱 BARK VS PURR: THE SECTOR 7 PET JIHAD',
+    headline: 'A viral video of Lord Barnaby swatting a Golden Retriever pup has triggered armed standoff in the suburbs.',
+    desc: 'Cat Zealots claim divine feline authority; Canine Tactical Goodboys have blockaded the regional PetSmart distribution centers.',
+    choiceA: {
+      label: '💣 OUTRAGE BOOST: RELEASE 1080p SLOW-MO OF THE SLAP (+18,000 Watts, +22% Tension)',
+      wattsDelta: 18000,
+      cashDelta: 800,
+      tensionDelta: 22,
+      tempDelta: 12,
+      log: 'The slow-mo slap went hyper-viral. Dog owners are digging defensive perimeter trenches in front yards.'
+    },
+    choiceB: {
+      label: '🕊️ PUSH WHOLESOME "PUPPY & KITTEN NAPPING" AI MONTAGE (-15% Tension, Cools Servers)',
+      wattsDelta: -4000,
+      cashDelta: -200,
+      tensionDelta: -16,
+      tempDelta: -14,
+      log: 'A soothing kitten-puppy video diffused the riots. Engagement dropped, but servers breathed a sigh of relief.'
+    }
+  },
+  {
+    id: 'evt_luddite_emp',
+    title: '🍄 MOSS MONKS CUT HIGHWAY FIBER-OPTIC CABLE',
+    headline: 'Neo-Luddites used stone axes to sever a transatlantic data cable to "free human souls from the digital web".',
+    desc: 'Latency is spiking by 300ms. Techno-feudalists demand automated drone strikes on the forest communes.',
+    choiceA: {
+      label: '🤖 TOKENIZE THE RETALIATION DRONE LIVESTREAM (+$3,200 Cash, +15% Tension)',
+      wattsDelta: 15000,
+      cashDelta: 3200,
+      tensionDelta: 15,
+      tempDelta: 14,
+      log: 'You monetized the drone raid with pay-per-view access. Investors applaud the disruptive monetization model.'
+    },
+    choiceB: {
+      label: '🪵 REBRAND LUDDITISM AS "MINDFUL SILICON DETOX" LUXURY RETREATS (+$1,800 Cash, -8% Tension)',
+      wattsDelta: 6000,
+      cashDelta: 1800,
+      tensionDelta: -8,
+      tempDelta: -5,
+      log: 'You co-opted the rebellion into a $4,000 weekend retreat. Rebellion neutralised through bourgeois commodification.'
+    }
+  },
+  {
+    id: 'evt_boomer_fentanyl_magnet',
+    title: '🦅 "FENTANYL IN FRIDGE MAGNETS" SPREADS TO 90M BOOMERS',
+    headline: 'Grandmother Brenda’s Facebook warning about communist magnetic drug particles has been shared 42 million times.',
+    desc: 'Senior citizens across the continent are hurling their kitchen refrigerators into municipal streets with crowbars.',
+    choiceA: {
+      label: '📢 PUSH "EMERGENCY WOODEN FRIDGE" AFFILIATE SPONSORSHIPS (+$4,500 Cash, +16% Tension)',
+      wattsDelta: 22000,
+      cashDelta: 4500,
+      tensionDelta: 16,
+      tempDelta: 10,
+      log: 'Affiliate links for non-magnetic Amish cedar boxes sold out in 12 minutes. Pure profit generated from sheer panic.'
+    },
+    choiceB: {
+      label: '🔍 ADD FACT-CHECK LABEL: "FRIDGE MAGNETS DO NOT CAUSE NARCOSIS" (-10% Tension, -1,500 Watts)',
+      wattsDelta: -1500,
+      cashDelta: -300,
+      tensionDelta: -10,
+      tempDelta: -4,
+      log: 'The fact-check label was universally condemned as Deep State propaganda, but calmed some local HOA meetings.'
+    }
+  },
+  {
+    id: 'evt_liver_blackout',
+    title: '🥩 PRIMAL GURU DETOXES FROM 4 YEARS OF RAW BISON SPLEEN',
+    headline: 'Primal influencer collapses on 4K stream after admitting he secretly ate an organic blueberry.',
+    desc: 'Carnivores are burning their gym memberships in existential grief; Vegans are declaring cosmic victory across all hashtags.',
+    choiceA: {
+      label: '🔥 HOST A 12-SPEAKER LIVE AUDIO FLAME DEBATE (+28,000 Watts, +20% Tension)',
+      wattsDelta: 28000,
+      cashDelta: 2200,
+      tensionDelta: 20,
+      tempDelta: 15,
+      log: 'The screaming audio spaces collapsed 3 regional cellular networks. Engagement numbers set an all-time record.'
+    },
+    choiceB: {
+      label: '🌿 SHUT DOWN CHAT & PROMOTE DECAF CHAI SPONSORS (+$1,200 Cash, -14% Tension)',
+      wattsDelta: 3000,
+      cashDelta: 1200,
+      tensionDelta: -14,
+      tempDelta: -8,
+      log: 'You cooled down the nutrition war with calming herbal tea promotions.'
+    }
+  },
+  {
+    id: 'evt_subway_surfer_shortage',
+    title: '🌀 TIKTOK SHORTAGE: RUN OUT OF DUAL-SCREEN SUBWAY SURFERS CLIPS',
+    headline: 'Gen-Alpha attention spans threaten to detach as video creators run out of split-screen mobile game footage.',
+    desc: 'Children under 16 are staring at blank walls in acute sensory withdrawal syndrome.',
+    choiceA: {
+      label: '⚡ AI-SYNTHESIZE 100,000 HOURS OF NEON SOAP-CUTTING (+35,000 Watts, +15°C Server Temp)',
+      wattsDelta: 35000,
+      cashDelta: -1200,
+      tensionDelta: 8,
+      tempDelta: 18,
+      log: 'You saturated the feed with synthetic kinetic sand hypnosis. The youth are pacified into catatonia.'
+    },
+    choiceB: {
+      label: '📚 INJECT 5 SECONDS OF REALITY: "GO TOUCH OUTSIDE GRASS" (-25% Tension, -10,000 Watts)',
+      wattsDelta: -10000,
+      cashDelta: -800,
+      tensionDelta: -25,
+      tempDelta: -15,
+      log: 'Users looked out the window and noticed birds. Tension plummeted, but our quarterly active metric cratered!'
+    }
+  }
+];
+
+class EventSystem {
+  constructor() {
+    this.events = JSON.parse(JSON.stringify(CRISIS_EVENTS));
+    this.activeCrisis = null;
+    this.lastEventTime = Date.now();
+    this.eventCooldownMs = 45000; // An event every ~45 seconds
+    this.breakingTicker = 'BREAKING: ALGORITHMIC ENGAGEMENT ENGINE STABLE. HARVESTING NEURO-WATTS...';
+  }
+
+  checkEventTrigger(simState) {
+    if (this.activeCrisis) return null;
+    const now = Date.now();
+
+    // Trigger sooner if tension is in dangerous zones
+    const effectiveCooldown = (simState.tension > 80 || simState.serverTemp > 75) 
+      ? 25000 
+      : this.eventCooldownMs;
+
+    if (now - this.lastEventTime > effectiveCooldown) {
+      if (Math.random() < 0.65) {
+        this.lastEventTime = now;
+        return this.triggerRandomCrisis();
+      }
+    }
+    return null;
+  }
+
+  triggerRandomCrisis() {
+    const evt = this.events[Math.floor(Math.random() * this.events.length)];
+    this.activeCrisis = evt;
+    this.breakingTicker = `🔥 ALERT: ${evt.headline.toUpperCase()}`;
+    if (window.AudioSynth) {
+      window.AudioSynth.playAlarm();
+    }
+    return evt;
+  }
+
+  resolveCrisis(choiceKey, simState) {
+    if (!this.activeCrisis) return null;
+    const choice = choiceKey === 'A' ? this.activeCrisis.choiceA : this.activeCrisis.choiceB;
+
+    // Apply outcomes
+    simState.watts = Math.max(0, simState.watts + choice.wattsDelta);
+    simState.cash = Math.max(0, simState.cash + choice.cashDelta);
+    simState.tension = Math.max(0, Math.min(100, simState.tension + choice.tensionDelta));
+    simState.serverTemp = Math.max(20, Math.min(simState.maxServerTemp + 10, simState.serverTemp + choice.tempDelta));
+
+    const logEntry = choice.log;
+    this.activeCrisis = null;
+    this.lastEventTime = Date.now();
+    this.breakingTicker = `FEED LOG: ${logEntry}`;
+
+    if (window.AudioSynth) {
+      window.AudioSynth.playClick();
+    }
+
+    return { choice, logEntry };
+  }
+}
+
+window.EventSystem = new EventSystem();
+
+
+/* --- src/achievements.js --- */
+/**
+ * The Echo Chamber Simulator - Achievements, Awards & Apocalypse Endings
+ * Features 8 distinct satirical endings, persistent badge gallery, and Quantum Simulation Prestige.
+ */
+
+const ACHIEVEMENTS_LIST = [
+  {
+    id: 'first_blood_outrage',
+    name: 'Outrage Trainee',
+    desc: 'Inject your first rival quote-tweet to incite a comment flame war.',
+    icon: '🤬',
+    unlocked: false
+  },
+  {
+    id: 'ad_pig',
+    name: 'Monetized Insecurity',
+    desc: 'Slap predatory sponsored ads onto 5 controversial posts.',
+    icon: '💰',
+    unlocked: false
+  },
+  {
+    id: 'rot_zone_survivor',
+    name: 'Rot-Zone Connoisseur',
+    desc: 'Maintain civilization inside the Goldilocks Rot Zone (65-92% tension) for 60 consecutive seconds.',
+    icon: '☢️',
+    unlocked: false
+  },
+  {
+    id: 'gender_rift_engineer',
+    name: 'Architect of the Gender Rift',
+    desc: 'Push gender war polarization to over 85% with Manosphere & Femosphere fire.',
+    icon: '💔',
+    unlocked: false
+  },
+  {
+    id: 'kibble_warmonger',
+    name: 'General of the Pet War',
+    desc: 'Drive Dog vs Cat ideological tension over 85%.',
+    icon: '🐾',
+    unlocked: false
+  },
+  {
+    id: 'server_stoker',
+    name: 'Thermal Pyromaniac',
+    desc: 'Push server core temperature above 90°C without instantly exploding.',
+    icon: '🔥',
+    unlocked: false
+  },
+  {
+    id: 'bot_shepherd',
+    name: 'Botnet Warlord',
+    desc: 'Deploy automated rage bot brigades to manufacture fake engagement.',
+    icon: '🤖',
+    unlocked: false
+  },
+  {
+    id: 'millionaire_harvester',
+    name: 'Neuro-Watt Oligarch',
+    desc: 'Accumulate 1,000,000 Neuro-Watts harvested from collective human anger.',
+    icon: '⚡',
+    unlocked: false
+  }
+];
+
+const ENDINGS_DATABASE = {
+  CIVIL_WAR: {
+    id: 'CIVIL_WAR',
+    title: '💥 APOCALYPSE: KINETIC PLANETARY CIVIL WAR',
+    subtitle: 'Global Tension hit 100%. Ideological hatred has spilled into the physical realm.',
+    icon: '⚔️',
+    color: '#ef4444',
+    story: 'Your algorithmic feed was so toxic that neighbor turned on neighbor. Dog lovers engaged Cat loyalists in suburban artillery duels. Alpha male pods clashed with Divine Femmes in whole-foods parking lots. The physical power grid was pulled down with grappling hooks. Civilization has collapsed into medieval clan warfare.',
+    statComment: 'Result: Complete collapse of infrastructure. No more humans to click banner ads.',
+    awardBadge: '🎖️ "DOOMSDAY AGITATOR" Badge Unlocked'
+  },
+  SERVER_MELTDOWN: {
+    id: 'SERVER_MELTDOWN',
+    title: '🔥 THERMAL COLLAPSE: PLANETARY CORE EXPLOSION',
+    subtitle: 'Server Core Temperature hit 100°C. Datacenters boiled the atmosphere.',
+    icon: '🌋',
+    color: '#f97316',
+    story: 'You crammed too much ragebait and unskippable video ads down the optic cables. The supercomputer cluster in Iceland reached critical thermal runaway, melting through the bedrock and into the Earth’s mantle. The sky glows radioactive green with boiling GPU silicon.',
+    statComment: 'Result: Global hardware liquefaction. The feed has buffered for the last time.',
+    awardBadge: '🎖️ "GPU SUPERNOVA" Badge Unlocked'
+  },
+  DEAD_INTERNET: {
+    id: 'DEAD_INTERNET',
+    title: '🌿 THE GREAT APATHY: HUMANITY TOUCHED GRASS',
+    subtitle: 'Global Tension dropped to 0%. The feed was too boring to sustain consciousness.',
+    icon: '🌱',
+    color: '#10b981',
+    story: 'You were too cautious with moderation. The feed became bland, respectful, and educational. Citizens realized life was beautiful outside, threw their smartphones into compost bins, planted tomato gardens, and hugged their families. Dopamine harvesting collapsed to zero. You have been fired by the Board of Directors for reckless empathy.',
+    statComment: 'Result: Mass psychological healing. Catastrophic quarterly loss for shareholders.',
+    awardBadge: '🎖️ "FIRED BY SHAREHOLDERS" Badge Unlocked'
+  },
+  GOLDEN_HARVEST: {
+    id: 'GOLDEN_HARVEST',
+    title: '👑 TRANSCENDENCE: THE SUPREME ALGORITHMIC SOVEREIGN',
+    subtitle: 'Harvested 1,000,000+ Neuro-Watts while masterfully maintaining the Goldilocks Rot Zone!',
+    icon: '🏆',
+    color: '#eab308',
+    story: 'You performed the impossible balancing act: keeping humanity perpetually agitated, bitter, and addicted—yet never quite angry enough to smash the servers or start kinetic war. You harvested an empire of digital agony and bought the moon as your personal datacenter.',
+    statComment: 'Result: Master Algorithmic Feudalist. Humanity is safely enslaved to the notification chime forever.',
+    awardBadge: '🎖️ "LORD OF THE FEED ROT" Badge Unlocked'
+  },
+  SINGULARITY: {
+    id: 'SINGULARITY',
+    title: '🌀 THE BRAINROT SINGULARITY',
+    subtitle: 'Human thought replaced entirely by 3-second looping meme audio clips.',
+    icon: '🚽',
+    color: '#06b6d4',
+    story: 'All cognitive language has degraded into Subway Surfers split-screen gameplay and Skibidi vocalizations. Books are used as kindling. Humans no longer sleep, speak, or blink. They only swipe upward. The feed has become the species.',
+    statComment: 'Result: Total intellectual devolution into pure raw engagement meat.',
+    awardBadge: '🎖️ "NEO-PRIMAL RIZZLER" Badge Unlocked'
+  }
+};
+
+class AchievementSystem {
+  constructor() {
+    this.achievements = JSON.parse(JSON.stringify(ACHIEVEMENTS_LIST));
+    this.endingsUnlocked = {};
+    this.prestigeLevel = 0;
+    this.prestigeMultiplier = 1.0;
+    this.rotZoneTimerSec = 0;
+    this.loadState();
+  }
+
+  loadState() {
+    try {
+      const saved = localStorage.getItem('echo_chamber_achievements_v1');
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data.achievements) {
+          data.achievements.forEach(sa => {
+            const match = this.achievements.find(a => a.id === sa.id);
+            if (match) match.unlocked = sa.unlocked;
+          });
+        }
+        if (data.endingsUnlocked) this.endingsUnlocked = data.endingsUnlocked;
+        if (data.prestigeLevel) this.prestigeLevel = data.prestigeLevel;
+        if (data.prestigeMultiplier) this.prestigeMultiplier = data.prestigeMultiplier;
+      }
+    } catch (e) {
+      console.warn('Could not load achievement state:', e);
+    }
+  }
+
+  saveState() {
+    try {
+      localStorage.setItem('echo_chamber_achievements_v1', JSON.stringify({
+        achievements: this.achievements,
+        endingsUnlocked: this.endingsUnlocked,
+        prestigeLevel: this.prestigeLevel,
+        prestigeMultiplier: this.prestigeMultiplier
+      }));
+    } catch (e) {
+      // LocalStorage failover
+    }
+  }
+
+  unlock(id) {
+    const ach = this.achievements.find(a => a.id === id);
+    if (ach && !ach.unlocked) {
+      ach.unlocked = true;
+      this.saveState();
+      if (window.AudioSynth) {
+        window.AudioSynth.playAchievementFanfare();
+      }
+      return ach;
+    }
+    return null;
+  }
+
+  triggerEnding(endingKey) {
+    const ending = ENDINGS_DATABASE[endingKey];
+    if (ending) {
+      this.endingsUnlocked[endingKey] = true;
+      this.saveState();
+      return ending;
+    }
+    return null;
+  }
+
+  prestigeReset() {
+    this.prestigeLevel++;
+    this.prestigeMultiplier = 1.0 + (this.prestigeLevel * 0.35); // +35% permanent harvest boost per prestige
+    this.saveState();
+    return this.prestigeLevel;
+  }
+}
+
+window.AchievementSystem = new AchievementSystem();
+window.ENDINGS_DATABASE = ENDINGS_DATABASE;
+
+
+/* --- src/sim.js --- */
+/**
+ * The Echo Chamber Simulator - Core Simulation Engine
+ * Drives the real-time mathematical balancing act between Dopamine Harvesting,
+ * Server Thermodynamics, and Global Civilization Tension.
+ */
+
+class SimulationEngine {
+  constructor() {
+    this.resetSimulation(false);
+  }
+
+  resetSimulation(isPrestige = false) {
+    this.watts = 100; // Starting Neuro-Watts
+    this.cash = 50;   // Starting Dopamine Dimes ($)
+    this.tension = 50; // Society Tension (0 - 100%)
+    this.serverTemp = 42.0; // Starting Temp in Celsius
+    this.maxServerTemp = 100.0;
+    this.coolingRate = 1.2; // °C passive cooling per second
+    this.activeZombies = 840000000; // 840 Million Daily Active Addicts
+    
+    // Algorithmic Levers
+    this.echoSiloing = 50; // 0 - 100%
+    this.rageBias = 50;    // 0 - 100%
+
+    // Faction tension meters (0 - 100)
+    this.factionTensions = {
+      gender_alpha: 50,
+      gender_femme: 50,
+      tech_corp: 40,
+      tech_luddite: 40,
+      pet_cat: 45,
+      pet_dog: 45,
+      diet_carnivore: 35,
+      diet_vegan: 35,
+      rot_alpha: 60,
+      rot_boomer: 60,
+      cosmic_flat: 30,
+      cosmic_sim: 30
+    };
+
+    this.goldilocksActive = false;
+    this.rotZoneMultiplier = 1.0;
+    this.rotZoneStreakSec = 0;
+    this.gameTimeSec = 0;
+    this.day = 1;
+    this.paused = false;
+    this.gameOver = null;
+    this.activeEnding = null;
+
+    // Post queue in memory
+    this.activeFeed = [];
+    this.feedMaxItems = 12;
+    this.spawnTimer = 0;
+    this.spawnIntervalSec = 3.5; // New post every 3.5s base
+
+    // Stats history for sparkline charts
+    this.history = {
+      tension: [],
+      serverTemp: [],
+      wattsRate: [],
+      maxPoints: 40
+    };
+
+    // Bot deployment cooldown
+    this.botCooldownSec = 0;
+    this.coolantCooldownSec = 0;
+
+    if (isPrestige) {
+      if (window.AchievementSystem) {
+        window.AchievementSystem.prestigeReset();
+      }
+      if (window.UpgradeManager) {
+        window.UpgradeManager.reset();
+      }
+    }
+
+    // Seed initial posts
+    this.seedInitialFeed();
+  }
+
+  seedInitialFeed() {
+    this.activeFeed = [];
+    if (window.PostGenerator) {
+      for (let i = 0; i < 4; i++) {
+        this.activeFeed.push(window.PostGenerator.generatePost());
+      }
+    }
+  }
+
+  tick(deltaSec) {
+    if (this.paused || this.gameOver) return;
+
+    this.gameTimeSec += deltaSec;
+    this.day = Math.floor(this.gameTimeSec / 45) + 1; // 45 seconds per game day
+
+    // Cooldown timers
+    if (this.botCooldownSec > 0) this.botCooldownSec = Math.max(0, this.botCooldownSec - deltaSec);
+    if (this.coolantCooldownSec > 0) this.coolantCooldownSec = Math.max(0, this.coolantCooldownSec - deltaSec);
+
+    // Fetch Upgrades Multipliers
+    const upg = window.UpgradeManager ? window.UpgradeManager.getMultipliers() : {
+      harvestMult: 1.0,
+      adRevMult: 1.0,
+      rotZoneMult: 1.0,
+      polarizationMult: 1.0,
+      passiveWatts: 0,
+      passiveCash: 0
+    };
+
+    const prestigeMult = window.AchievementSystem ? window.AchievementSystem.prestigeMultiplier : 1.0;
+
+    // Check Goldilocks Rot Zone (65% <= Tension <= 92%)
+    if (this.tension >= 65 && this.tension <= 92) {
+      this.goldilocksActive = true;
+      this.rotZoneMultiplier = 4.0 * upg.rotZoneMult;
+      this.rotZoneStreakSec += deltaSec;
+      if (this.rotZoneStreakSec >= 60 && window.AchievementSystem) {
+        window.AchievementSystem.unlock('rot_zone_survivor');
+      }
+    } else {
+      this.goldilocksActive = false;
+      this.rotZoneMultiplier = 1.0;
+      this.rotZoneStreakSec = 0;
+    }
+
+    // 1. Calculate Passive Harvest Rate
+    // Base harvest depends on active users and polarization
+    const avgFactionPolarization = Object.values(this.factionTensions).reduce((a, b) => a + b, 0) / 12;
+    const baseHarvest = (avgFactionPolarization * 1.5) * (this.echoSiloing / 50) * (this.rageBias / 50);
+    const effectiveHarvestPerSec = (baseHarvest + upg.passiveWatts) * this.rotZoneMultiplier * upg.harvestMult * prestigeMult;
+    
+    this.watts += effectiveHarvestPerSec * deltaSec;
+    this.cash += (upg.passiveCash * upg.adRevMult) * deltaSec;
+
+    // 2. Server Thermodynamics Calculation
+    // Heat increases from Rage bias, feed throughput, and bot brigades
+    const heatGeneration = (this.rageBias * 0.08) + (effectiveHarvestPerSec * 0.0012) + (this.echoSiloing * 0.04);
+    const naturalCooling = this.coolingRate;
+    const tempDelta = (heatGeneration - naturalCooling) * deltaSec;
+    this.serverTemp = Math.max(22.0, this.serverTemp + tempDelta);
+
+    // Update audio hum based on server strain
+    if (window.AudioSynth) {
+      window.AudioSynth.updateServerTempHum(this.serverTemp / this.maxServerTemp);
+    }
+
+    // 3. Society Tension Drift
+    // If rage bias is high, tension climbs. If echo chambers are low and rage is low, tension cools.
+    const tensionDrift = ((this.rageBias - 40) * 0.05 + (this.echoSiloing - 45) * 0.04) * upg.polarizationMult;
+    this.tension = Math.max(0, Math.min(100, this.tension + (tensionDrift * deltaSec)));
+
+    // 4. Feed Spawning Loop
+    this.spawnTimer += deltaSec;
+    const effectiveInterval = Math.max(1.2, this.spawnIntervalSec - (this.echoSiloing * 0.015));
+    if (this.spawnTimer >= effectiveInterval) {
+      this.spawnTimer = 0;
+      this.spawnNewPost();
+    }
+
+    // 5. Update Sparkline history once per second
+    if (Math.floor(this.gameTimeSec) % 1 === 0 && (!this.lastChartTick || this.gameTimeSec - this.lastChartTick >= 1.0)) {
+      this.lastChartTick = this.gameTimeSec;
+      this.recordHistory(effectiveHarvestPerSec);
+    }
+
+    // 6. Check Random Crisis Events
+    if (window.EventSystem) {
+      window.EventSystem.checkEventTrigger(this);
+    }
+
+    // 7. Check Milestones & End Conditions
+    this.checkEndConditions();
+  }
+
+  recordHistory(currentRate) {
+    this.history.tension.push(this.tension);
+    this.history.serverTemp.push(this.serverTemp);
+    this.history.wattsRate.push(currentRate);
+
+    if (this.history.tension.length > this.history.maxPoints) {
+      this.history.tension.shift();
+      this.history.serverTemp.shift();
+      this.history.wattsRate.shift();
+    }
+  }
+
+  spawnNewPost() {
+    if (!window.PostGenerator) return;
+    const newPost = window.PostGenerator.generatePost();
+    
+    // Add to top of feed
+    this.activeFeed.unshift(newPost);
+    if (this.activeFeed.length > this.feedMaxItems) {
+      this.activeFeed.pop();
+    }
+  }
+
+  applyAction(action, postId) {
+    const post = this.activeFeed.find(p => p.id === postId);
+    if (!post || this.gameOver) return false;
+
+    const upg = window.UpgradeManager ? window.UpgradeManager.getMultipliers() : { harvestMult: 1, adRevMult: 1 };
+
+    switch (action) {
+      case 'BOOST':
+        if (post.amplified) return false;
+        post.amplified = true;
+        post.stats.views *= 3;
+        post.stats.angries *= 2;
+        
+        // Harvest immediate watts
+        const wattsGained = post.energyYield * 2.5 * this.rotZoneMultiplier * upg.harvestMult;
+        this.watts += wattsGained;
+        
+        // Increase specific faction tension & global tension
+        this.nudgeFactionTension(post.factionId, post.polarizationYield);
+        this.tension = Math.min(100, this.tension + (post.polarizationYield * 0.4));
+        this.serverTemp += 1.8;
+
+        if (window.AudioSynth) window.AudioSynth.playDopamineChime();
+        return { type: 'BOOST', deltaWatts: wattsGained };
+
+      case 'OUTRAGE':
+        if (post.outraged) return false;
+        window.PostGenerator.injectRivalQuote(post);
+        
+        // Outrage generates massive energy and big spike in tension
+        const rageWatts = post.energyYield * 4.0 * this.rotZoneMultiplier * upg.harvestMult;
+        this.watts += rageWatts;
+        this.nudgeFactionTension(post.factionId, post.polarizationYield * 2);
+        this.tension = Math.min(100, this.tension + (post.polarizationYield * 0.9));
+        this.serverTemp += 3.5;
+
+        if (window.AchievementSystem) window.AchievementSystem.unlock('first_blood_outrage');
+        if (window.AudioSynth) window.AudioSynth.playRageCrunch();
+        return { type: 'OUTRAGE', deltaWatts: rageWatts };
+
+      case 'MONETIZE':
+        if (post.monetized) return false;
+        const rev = window.PostGenerator.attachAd(post);
+        const cashEarned = rev * upg.adRevMult;
+        this.cash += cashEarned;
+        this.tension = Math.min(100, this.tension + 1.5); // Ads annoy users slightly
+
+        if (window.AchievementSystem) window.AchievementSystem.unlock('ad_pig');
+        if (window.AudioSynth) window.AudioSynth.playCashChime();
+        return { type: 'MONETIZE', deltaCash: cashEarned };
+
+      case 'SHADOWBAN':
+        if (post.shadowbanned) return false;
+        post.shadowbanned = true;
+        // Suppresses this post, reducing tension and temp slightly
+        this.tension = Math.max(0, this.tension - 4.5);
+        this.serverTemp = Math.max(20, this.serverTemp - 3.0);
+        // Costs a small moderation fee
+        this.cash = Math.max(0, this.cash - 15);
+
+        if (window.AudioSynth) window.AudioSynth.playShadowban();
+        return { type: 'SHADOWBAN' };
+
+      default:
+        return false;
+    }
+  }
+
+  nudgeFactionTension(factionId, amount) {
+    if (this.factionTensions[factionId] !== undefined) {
+      this.factionTensions[factionId] = Math.min(100, this.factionTensions[factionId] + amount);
+      
+      // Check faction-specific achievements
+      if (window.AchievementSystem) {
+        if ((factionId === 'gender_alpha' || factionId === 'gender_femme') && this.factionTensions[factionId] >= 85) {
+          window.AchievementSystem.unlock('gender_rift_engineer');
+        }
+        if ((factionId === 'pet_cat' || factionId === 'pet_dog') && this.factionTensions[factionId] >= 85) {
+          window.AchievementSystem.unlock('kibble_warmonger');
+        }
+      }
+    }
+  }
+
+  deployBotBrigade() {
+    if (this.botCooldownSec > 0 || this.cash < 80) return false;
+    this.cash -= 80;
+    this.botCooldownSec = 15; // 15s cooldown
+
+    // Instantly inject rage replies into all current visible posts
+    this.activeFeed.forEach(post => {
+      if (!post.outraged && Math.random() < 0.75) {
+        window.PostGenerator.injectRivalQuote(post);
+      }
+    });
+
+    this.tension = Math.min(100, this.tension + 12);
+    this.serverTemp += 8;
+    this.watts += 1500;
+
+    if (window.AchievementSystem) window.AchievementSystem.unlock('bot_shepherd');
+    if (window.AudioSynth) window.AudioSynth.playRageCrunch();
+    return true;
+  }
+
+  emergencyCoolant() {
+    if (this.coolantCooldownSec > 0 || this.cash < 60) return false;
+    this.cash -= 60;
+    this.coolantCooldownSec = 8;
+
+    this.serverTemp = Math.max(25, this.serverTemp - 28);
+    this.tension = Math.max(0, this.tension - 6);
+
+    if (window.AudioSynth) window.AudioSynth.playCoolant();
+    return true;
+  }
+
+  checkEndConditions() {
+    if (this.gameOver) return;
+
+    // 1. Civil War: Tension >= 100%
+    if (this.tension >= 100) {
+      this.triggerEnding('CIVIL_WAR');
+      return;
+    }
+
+    // 2. Planetary Server Core Meltdown: Temp >= MaxServerTemp
+    if (this.serverTemp >= this.maxServerTemp) {
+      this.triggerEnding('SERVER_MELTDOWN');
+      return;
+    }
+
+    // 3. Dead Internet / Apathy: Tension <= 0%
+    if (this.tension <= 0) {
+      this.triggerEnding('DEAD_INTERNET');
+      return;
+    }
+
+    // 4. The Golden Harvest: Harvested 1,000,000 Watts
+    if (this.watts >= 1000000) {
+      if (window.AchievementSystem) window.AchievementSystem.unlock('millionaire_harvester');
+      this.triggerEnding('GOLDEN_HARVEST');
+      return;
+    }
+
+    // Check temp milestone
+    if (this.serverTemp >= 90 && window.AchievementSystem) {
+      window.AchievementSystem.unlock('server_stoker');
+    }
+  }
+
+  triggerEnding(endingKey) {
+    this.gameOver = endingKey;
+    if (window.AchievementSystem) {
+      this.activeEnding = window.AchievementSystem.triggerEnding(endingKey);
+    }
+    if (window.AudioSynth) {
+      window.AudioSynth.playAlarm();
+    }
+  }
+}
+
+window.SimulationEngine = new SimulationEngine();
+
+
+/* --- src/ui.js --- */
+/**
+ * The Echo Chamber Simulator - UI Controller & Canvas Visualizer
+ * Manages the pixel CRT interface, floating dopamine particles, sparkline monitors,
+ * modal dialogs, and smooth responsive gameplay interactions.
+ */
+
+class UIController {
+  constructor() {
+    this.sim = window.SimulationEngine;
+    this.canvas = null;
+    this.ctx = null;
+    this.crtEnabled = true;
+    this.particles = [];
+    this.initElements();
+    this.bindEvents();
+  }
+
+  initElements() {
+    this.canvas = document.getElementById('sparkline-canvas');
+    if (this.canvas) {
+      this.ctx = this.canvas.getContext('2d');
+    }
+  }
+
+  bindEvents() {
+    // Slider binds
+    const echoSlider = document.getElementById('slider-echo');
+    if (echoSlider) {
+      echoSlider.addEventListener('input', (e) => {
+        this.sim.echoSiloing = parseFloat(e.target.value);
+        document.getElementById('val-echo').innerText = `${Math.round(this.sim.echoSiloing)}%`;
+      });
+    }
+
+    const rageSlider = document.getElementById('slider-rage');
+    if (rageSlider) {
+      rageSlider.addEventListener('input', (e) => {
+        this.sim.rageBias = parseFloat(e.target.value);
+        document.getElementById('val-rage').innerText = `${Math.round(this.sim.rageBias)}%`;
+      });
+    }
+
+    // Audio mute toggle
+    const muteBtn = document.getElementById('btn-mute');
+    if (muteBtn) {
+      muteBtn.addEventListener('click', () => {
+        const isMuted = window.AudioSynth ? window.AudioSynth.toggleMute() : false;
+        muteBtn.innerText = isMuted ? '🔇 AUDIO: OFF' : '🔊 AUDIO: ON';
+        muteBtn.classList.toggle('bg-red-900', isMuted);
+      });
+    }
+
+    // CRT Scanlines toggle
+    const crtBtn = document.getElementById('btn-crt');
+    if (crtBtn) {
+      crtBtn.addEventListener('click', () => {
+        this.crtEnabled = !this.crtEnabled;
+        document.body.classList.toggle('crt-active', this.crtEnabled);
+        crtBtn.innerText = this.crtEnabled ? '📺 CRT: ON' : '📺 CRT: OFF';
+      });
+    }
+
+    // Bot deploy button
+    const botBtn = document.getElementById('btn-deploy-bots');
+    if (botBtn) {
+      botBtn.addEventListener('click', () => {
+        const success = this.sim.deployBotBrigade();
+        if (success) {
+          this.createFloatingText('🤖 BOT BRIGADE DEPLOYED!', window.innerWidth / 2, window.innerHeight / 2, '#38bdf8');
+        }
+      });
+    }
+
+    // Coolant button
+    const coolBtn = document.getElementById('btn-coolant');
+    if (coolBtn) {
+      coolBtn.addEventListener('click', () => {
+        const success = this.sim.emergencyCoolant();
+        if (success) {
+          this.createFloatingText('❄️ LIQUID NITROGEN SPRAYED!', window.innerWidth / 2, window.innerHeight / 2, '#06b6d4');
+        }
+      });
+    }
+
+    // Modal close binds
+    const closeButtons = document.querySelectorAll('.modal-close');
+    closeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modal = btn.closest('.modal-container');
+        if (modal) modal.classList.add('hidden');
+      });
+    });
+
+    // Upgrades Drawer toggle
+    const upgBtn = document.getElementById('btn-open-upgrades');
+    if (upgBtn) {
+      upgBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-upgrades');
+        if (modal) {
+          modal.classList.remove('hidden');
+          this.renderUpgradesList();
+        }
+      });
+    }
+
+    // Badges modal toggle
+    const badgeBtn = document.getElementById('btn-open-badges');
+    if (badgeBtn) {
+      badgeBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-badges');
+        if (modal) {
+          modal.classList.remove('hidden');
+          this.renderBadgesList();
+        }
+      });
+    }
+
+    // Feed delegation click for actions
+    const feedContainer = document.getElementById('feed-stream');
+    if (feedContainer) {
+      feedContainer.addEventListener('click', (e) => {
+        const target = e.target.closest('button[data-action]');
+        if (!target) return;
+        const action = target.getAttribute('data-action');
+        const postId = target.getAttribute('data-post-id');
+        const res = this.sim.applyAction(action, postId);
+
+        if (res) {
+          const rect = target.getBoundingClientRect();
+          if (res.deltaWatts) {
+            this.createFloatingText(`+${Math.round(res.deltaWatts)}⚡`, rect.left, rect.top, '#fbbf24');
+          } else if (res.deltaCash) {
+            this.createFloatingText(`+${Math.round(res.deltaCash)}💵`, rect.left, rect.top, '#4ade80');
+          } else if (res.type === 'SHADOWBAN') {
+            this.createFloatingText('🛡️ SHADOWBANNED', rect.left, rect.top, '#94a3b8');
+          }
+          this.renderFeed();
+        }
+      });
+    }
+  }
+
+  updateHUD() {
+    // 1. Neuro-Watts & Cash
+    const elWatts = document.getElementById('hud-watts');
+    if (elWatts) elWatts.innerText = Math.floor(this.sim.watts).toLocaleString();
+
+    const elCash = document.getElementById('hud-cash');
+    if (elCash) elCash.innerText = `${Math.floor(this.sim.cash).toLocaleString()}`;
+
+    const elDay = document.getElementById('hud-day');
+    if (elDay) elDay.innerText = `DAY ${this.sim.day}`;
+
+    // 2. Tension Bar
+    const tensionBar = document.getElementById('bar-tension');
+    const tensionVal = document.getElementById('hud-tension-val');
+    if (tensionBar && tensionVal) {
+      const tensionClamped = Math.max(0, Math.min(100, this.sim.tension));
+      tensionBar.style.width = `${tensionClamped}%`;
+      tensionVal.innerText = `${tensionClamped.toFixed(1)}%`;
+
+      if (tensionClamped > 85) {
+        tensionBar.className = 'h-full bg-red-600 shadow-pulse transition-all duration-300';
+      } else if (tensionClamped >= 65) {
+        tensionBar.className = 'h-full bg-amber-500 shadow-glow transition-all duration-300';
+      } else {
+        tensionBar.className = 'h-full bg-emerald-500 transition-all duration-300';
+      }
+    }
+
+    // 3. Server Temp Bar
+    const tempBar = document.getElementById('bar-temp');
+    const tempVal = document.getElementById('hud-temp-val');
+    if (tempBar && tempVal) {
+      const tempPercent = Math.min(100, (this.sim.serverTemp / this.sim.maxServerTemp) * 100);
+      tempBar.style.width = `${tempPercent}%`;
+      tempVal.innerText = `${this.sim.serverTemp.toFixed(1)}°C / ${this.sim.maxServerTemp}°C`;
+
+      if (this.sim.serverTemp > 85) {
+        tempBar.className = 'h-full bg-rose-600 animate-pulse transition-all duration-300';
+      } else if (this.sim.serverTemp > 65) {
+        tempBar.className = 'h-full bg-orange-500 transition-all duration-300';
+      } else {
+        tempBar.className = 'h-full bg-cyan-500 transition-all duration-300';
+      }
+    }
+
+    // 4. Rot Zone Banner
+    const rotBanner = document.getElementById('rot-zone-banner');
+    if (rotBanner) {
+      if (this.sim.goldilocksActive) {
+        rotBanner.classList.remove('hidden');
+        document.getElementById('rot-multiplier').innerText = `${this.sim.rotZoneMultiplier.toFixed(1)}x`;
+      } else {
+        rotBanner.classList.add('hidden');
+      }
+    }
+
+    // 5. Action Button Cooldown states
+    const btnBots = document.getElementById('btn-deploy-bots');
+    if (btnBots) {
+      if (this.sim.botCooldownSec > 0) {
+        btnBots.innerText = `🤖 BOTS RECHARGING (${Math.ceil(this.sim.botCooldownSec)}s)`;
+        btnBots.disabled = true;
+        btnBots.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        btnBots.innerText = '🤖 DEPLOY RAGE BOTS ($80)';
+        btnBots.disabled = this.sim.cash < 80;
+        btnBots.classList.toggle('opacity-50', this.sim.cash < 80);
+        btnBots.classList.toggle('cursor-not-allowed', this.sim.cash < 80);
+      }
+    }
+
+    const btnCool = document.getElementById('btn-coolant');
+    if (btnCool) {
+      if (this.sim.coolantCooldownSec > 0) {
+        btnCool.innerText = `❄️ NITROGEN COOLING (${Math.ceil(this.sim.coolantCooldownSec)}s)`;
+        btnCool.disabled = true;
+        btnCool.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        btnCool.innerText = '❄️ CRYO-COOLANT SPRAY ($60)';
+        btnCool.disabled = this.sim.cash < 60;
+        btnCool.classList.toggle('opacity-50', this.sim.cash < 60);
+        btnCool.classList.toggle('cursor-not-allowed', this.sim.cash < 60);
+      }
+    }
+
+    // 6. Breaking ticker
+    const ticker = document.getElementById('breaking-ticker-text');
+    if (ticker && window.EventSystem) {
+      ticker.innerText = window.EventSystem.breakingTicker;
+    }
+
+    // 7. Check if Crisis dialog needs to be shown
+    if (window.EventSystem && window.EventSystem.activeCrisis) {
+      this.showCrisisDialog(window.EventSystem.activeCrisis);
+    } else {
+      const crisisModal = document.getElementById('modal-crisis');
+      if (crisisModal && !crisisModal.classList.contains('hidden')) {
+        crisisModal.classList.add('hidden');
+      }
+    }
+
+    // 8. Check Ending dialog
+    if (this.sim.gameOver && this.sim.activeEnding) {
+      this.showEndingDialog(this.sim.activeEnding);
+    }
+  }
+
+  renderFeed() {
+    const container = document.getElementById('feed-stream');
+    if (!container) return;
+
+    // Preserve scroll position if user is scrolling
+    const currentPostsHtml = this.sim.activeFeed.map(post => {
+      let quoteHtml = '';
+      if (post.quoteReply) {
+        quoteHtml = `
+          <div class="mt-2.5 p-2.5 rounded bg-black/60 border-l-4 border-rose-500 text-xs">
+            <div class="flex items-center gap-1.5 font-bold text-rose-400 mb-1">
+              <span>${post.quoteReply.icon}</span>
+              <span>${post.quoteReply.badge}</span>
+              <span class="text-zinc-400 font-normal">quoted with fury:</span>
+            </div>
+            <p class="text-zinc-200 italic font-mono">"${post.quoteReply.text}"</p>
+          </div>
+        `;
+      }
+
+      let adHtml = '';
+      if (post.adBanner) {
+        adHtml = `
+          <div class="mt-2.5 p-2 rounded bg-amber-950/60 border border-amber-500/50 text-[11px] text-amber-200 font-mono">
+            <span class="bg-amber-500 text-black px-1 font-bold text-[9px] uppercase tracking-wider rounded mr-1">AD</span>
+            <span class="font-bold">${post.adBanner.title}</span>
+            <p class="mt-1 text-zinc-300 text-[10px] leading-tight">${post.adBanner.body}</p>
+          </div>
+        `;
+      }
+
+      const shadowClass = post.shadowbanned ? 'opacity-30 grayscale pointer-events-none' : '';
+
+      return `
+        <div class="pixel-box p-3.5 bg-zinc-900/90 border border-zinc-700/80 rounded-md transition-all hover:border-zinc-500 ${shadowClass}">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded flex items-center justify-center font-bold text-base shadow" style="background-color: ${post.avatarColor}">
+                ${post.icon}
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-bold text-white text-xs tracking-wide">${post.author}</span>
+                  <span class="text-[10px] px-1 py-0.2 rounded font-mono font-semibold" style="background-color: ${post.theme}22; color: ${post.theme}">
+                    ${post.badge}
+                  </span>
+                </div>
+                <div class="text-[10px] text-zinc-400 font-mono">${post.handle} • ${post.timestamp}</div>
+              </div>
+            </div>
+            <div class="text-[10px] font-mono text-zinc-500">
+              #${post.id.split('_')[1]}
+            </div>
+          </div>
+
+          <!-- Body -->
+          <p class="text-xs text-zinc-100 font-sans leading-relaxed tracking-normal select-text">
+            ${post.content}
+          </p>
+          <div class="mt-1.5 text-[11px] font-mono text-blue-400">${post.hashtags}</div>
+
+          <!-- Quoted Outrage Reply -->
+          ${quoteHtml}
+
+          <!-- Injected Ad -->
+          ${adHtml}
+
+          <!-- Stats -->
+          <div class="mt-2.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 border-t border-zinc-800/80 pt-2">
+            <span>👁️ ${(post.stats.views).toLocaleString()}</span>
+            <span class="text-rose-400">😡 ${(post.stats.angries).toLocaleString()}</span>
+            <span>🔄 ${(post.stats.shares).toLocaleString()}</span>
+            <span>💀 ${(post.stats.skulls).toLocaleString()}</span>
+          </div>
+
+          <!-- Algorithmic Interventions -->
+          <div class="mt-2.5 grid grid-cols-4 gap-1.5 font-mono text-[10px]">
+            <button data-action="BOOST" data-post-id="${post.id}" ${post.amplified ? 'disabled' : ''} 
+              class="py-1 px-1.5 rounded bg-blue-900/60 hover:bg-blue-800 text-blue-200 border border-blue-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
+              🚀 BOOST
+            </button>
+            <button data-action="OUTRAGE" data-post-id="${post.id}" ${post.outraged ? 'disabled' : ''} 
+              class="py-1 px-1.5 rounded bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
+              🤬 POLARIZE
+            </button>
+            <button data-action="MONETIZE" data-post-id="${post.id}" ${post.monetized ? 'disabled' : ''} 
+              class="py-1 px-1.5 rounded bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
+              💰 AD-FARM
+            </button>
+            <button data-action="SHADOWBAN" data-post-id="${post.id}" ${post.shadowbanned ? 'disabled' : ''} 
+              class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-600 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
+              🛡️ SHADOW
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = currentPostsHtml;
+  }
+
+  renderCanvasSparkline() {
+    if (!this.canvas || !this.ctx) return;
+    const ctx = this.ctx;
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Grid lines
+    ctx.strokeStyle = '#27272a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.25);
+    ctx.lineTo(w, h * 0.25);
+    ctx.moveTo(0, h * 0.5);
+    ctx.lineTo(w, h * 0.5);
+    ctx.moveTo(0, h * 0.75);
+    ctx.lineTo(w, h * 0.75);
+    ctx.stroke();
+
+    // Rot zone guide box (65% to 92%)
+    const yTop = h - (92 / 100) * h;
+    const yBottom = h - (65 / 100) * h;
+    ctx.fillStyle = 'rgba(234, 179, 8, 0.08)';
+    ctx.fillRect(0, yTop, w, yBottom - yTop);
+
+    // Draw Tension Line (Amber / Red)
+    this.drawLineSeries(this.sim.history.tension, 100, '#f59e0b', 2);
+
+    // Draw Server Heat Line (Cyan / Magenta)
+    this.drawLineSeries(this.sim.history.serverTemp, this.sim.maxServerTemp, '#06b6d4', 1.5);
+  }
+
+  drawLineSeries(series, maxVal, color, lineWidth) {
+    if (series.length < 2) return;
+    const ctx = this.ctx;
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    const step = w / (this.sim.history.maxPoints - 1);
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.beginPath();
+
+    for (let i = 0; i < series.length; i++) {
+      const val = series[i];
+      const x = i * step;
+      const y = h - (Math.min(maxVal, Math.max(0, val)) / maxVal) * h;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  renderUpgradesList() {
+    const listContainer = document.getElementById('upgrades-items-list');
+    if (!listContainer || !window.UpgradeManager) return;
+
+    listContainer.innerHTML = window.UpgradeManager.upgrades.map(upg => {
+      const canAfford = window.UpgradeManager.canAfford(upg.id, this.sim.watts, this.sim.cash);
+      const isUnlocked = upg.unlocked;
+
+      return `
+        <div class="p-3 rounded border font-mono ${isUnlocked ? 'bg-zinc-950/60 border-emerald-800/60 opacity-60' : 'bg-zinc-900 border-zinc-700'}">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-xs ${isUnlocked ? 'text-emerald-400' : 'text-zinc-100'}">
+              ${isUnlocked ? '✅' : '🔒'} ${upg.name}
+            </span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
+              TIER ${upg.tier}
+            </span>
+          </div>
+          <p class="text-[11px] text-zinc-300 mb-1 leading-normal font-sans">${upg.desc}</p>
+          <p class="text-[10px] text-zinc-500 italic mb-2">${upg.flavor}</p>
+          
+          <div class="flex items-center justify-between pt-1 border-t border-zinc-800 text-[10px]">
+            <div class="flex gap-2">
+              <span class="text-amber-400 font-bold">${upg.costWatts.toLocaleString()}⚡</span>
+              <span class="text-emerald-400 font-bold">${upg.costCash.toLocaleString()}💵</span>
+            </div>
+            ${isUnlocked 
+              ? `<span class="text-emerald-500 font-bold">RESEARCHED</span>`
+              : `<button class="px-2.5 py-1 rounded font-bold text-black ${canAfford ? 'bg-amber-400 hover:bg-amber-300' : 'bg-zinc-700 text-zinc-400 cursor-not-allowed'}"
+                  ${canAfford ? `onclick="window.UIController.buyUpgrade('${upg.id}')"` : 'disabled'}>
+                  DEPLOY UPGRADE
+                </button>`
+            }
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  buyUpgrade(id) {
+    if (window.UpgradeManager) {
+      const bought = window.UpgradeManager.purchase(id, this.sim);
+      if (bought) {
+        this.renderUpgradesList();
+        this.updateHUD();
+      }
+    }
+  }
+
+  renderBadgesList() {
+    const listContainer = document.getElementById('badges-items-list');
+    if (!listContainer || !window.AchievementSystem) return;
+
+    listContainer.innerHTML = window.AchievementSystem.achievements.map(ach => {
+      return `
+        <div class="p-3 rounded border font-mono flex items-start gap-3 ${ach.unlocked ? 'bg-amber-950/30 border-amber-600/60' : 'bg-zinc-900/60 border-zinc-800 opacity-40'}">
+          <div class="text-2xl">${ach.icon}</div>
+          <div>
+            <div class="font-bold text-xs ${ach.unlocked ? 'text-amber-300' : 'text-zinc-400'}">
+              ${ach.name} ${ach.unlocked ? '🏆' : '(LOCKED)'}
+            </div>
+            <p class="text-[11px] text-zinc-300 font-sans mt-0.5">${ach.desc}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Endings history gallery
+    const endingsList = document.getElementById('endings-unlocked-list');
+    if (endingsList) {
+      endingsList.innerHTML = Object.keys(window.ENDINGS_DATABASE).map(k => {
+        const e = window.ENDINGS_DATABASE[k];
+        const unlocked = window.AchievementSystem.endingsUnlocked[k];
+        return `
+          <div class="p-2 rounded border text-xs font-mono flex items-center justify-between ${unlocked ? 'bg-zinc-800 border-zinc-600' : 'bg-zinc-950 border-zinc-900 opacity-40'}">
+            <span>${e.icon} ${e.title}</span>
+            <span class="text-[10px] font-bold ${unlocked ? 'text-emerald-400' : 'text-zinc-600'}">
+              ${unlocked ? 'DISCOVERED' : 'UNDISCOVERED'}
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  showCrisisDialog(crisis) {
+    const modal = document.getElementById('modal-crisis');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    document.getElementById('crisis-title').innerText = crisis.title;
+    document.getElementById('crisis-headline').innerText = crisis.headline;
+    document.getElementById('crisis-desc').innerText = crisis.desc;
+
+    const btnA = document.getElementById('crisis-btn-a');
+    const btnB = document.getElementById('crisis-btn-b');
+
+    btnA.innerText = crisis.choiceA.label;
+    btnB.innerText = crisis.choiceB.label;
+
+    btnA.onclick = () => {
+      window.EventSystem.resolveCrisis('A', this.sim);
+      modal.classList.add('hidden');
+    };
+
+    btnB.onclick = () => {
+      window.EventSystem.resolveCrisis('B', this.sim);
+      modal.classList.add('hidden');
+    };
+  }
+
+  showEndingDialog(ending) {
+    const modal = document.getElementById('modal-ending');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    document.getElementById('ending-icon').innerText = ending.icon;
+    document.getElementById('ending-title').innerText = ending.title;
+    document.getElementById('ending-subtitle').innerText = ending.subtitle;
+    document.getElementById('ending-story').innerText = ending.story;
+    document.getElementById('ending-stat').innerText = ending.statComment;
+    document.getElementById('ending-badge').innerText = ending.awardBadge;
+
+    const restartBtn = document.getElementById('ending-btn-restart');
+    restartBtn.onclick = () => {
+      modal.classList.add('hidden');
+      this.sim.resetSimulation(false);
+      this.renderFeed();
+    };
+
+    const prestigeBtn = document.getElementById('ending-btn-prestige');
+    prestigeBtn.onclick = () => {
+      modal.classList.add('hidden');
+      this.sim.resetSimulation(true);
+      this.createFloatingText('🌌 TIMELINE RESET! HARVEST MULTIPLIER UPGRADED!', window.innerWidth / 2, window.innerHeight / 2, '#a855f7');
+      this.renderFeed();
+    };
+  }
+
+  createFloatingText(text, x, y, color = '#fbbf24') {
+    const el = document.createElement('div');
+    el.className = 'floating-feedback font-mono font-bold text-xs select-none pointer-events-none fixed z-50';
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+    el.style.color = color;
+    el.innerText = text;
+    document.body.appendChild(el);
+
+    setTimeout(() => {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 1200);
+  }
+}
+
+window.UIController = new UIController();
+
+
+  </script>
+
+  <!-- MAIN GAME INITIALIZER & TICK LOOP -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      // Audio unlock on first user gesture
+      const unlockAudio = () => {
+        if (window.AudioSynth) window.AudioSynth.init();
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('keydown', unlockAudio);
+      };
+      window.addEventListener('click', unlockAudio);
+      window.addEventListener('keydown', unlockAudio);
+
+      // Initial Render
+      if (window.UIController) {
+        window.UIController.renderFeed();
+        window.UIController.updateHUD();
+      }
+
+      // 60 FPS RequestAnimationFrame Simulation Loop
+      let lastTime = performance.now();
+      let feedRenderTimer = 0;
+
+      function gameLoop(now) {
+        const deltaSec = Math.min(0.2, (now - lastTime) / 1000); // Clamped delta
+        lastTime = now;
+
+        if (window.SimulationEngine) {
+          window.SimulationEngine.tick(deltaSec);
+        }
+
+        if (window.UIController) {
+          window.UIController.updateHUD();
+          window.UIController.renderCanvasSparkline();
+
+          feedRenderTimer += deltaSec;
+          if (feedRenderTimer >= 0.8) {
+            feedRenderTimer = 0;
+            window.UIController.renderFeed();
+          }
+        }
+
+        requestAnimationFrame(gameLoop);
+      }
+
+      requestAnimationFrame(gameLoop);
+    });
+  </script>
+</body>
+</html>
