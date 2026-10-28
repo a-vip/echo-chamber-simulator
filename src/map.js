@@ -179,3 +179,4 @@ class RiotRadarMap {
 }
 
 window.RiotRadarMap = new RiotRadarMap();
+

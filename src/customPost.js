@@ -67,3 +67,4 @@ class CustomPostCreator {
 }
 
 window.CustomPostCreator = new CustomPostCreator();
+

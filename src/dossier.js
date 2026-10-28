@@ -150,3 +150,4 @@ https://a-vip.github.io/echo-chamber-simulator/`;
 }
 
 window.DossierGenerator = new DossierGenerator();
+

@@ -47,6 +47,12 @@ The algorithmic stream dynamically generates hundreds of satirical posts across 
 * **Tactical Interventions & Controls:**
   * 🤖 **Deploy Rage Bot Brigades ($80):** Injects 50,000 synthetic bot accounts to re-ignite dying arguments.
   * ❄️ **Cryo-Coolant Spray ($60):** Sprays liquid nitrogen into server racks to avert immediate thermal meltdown.
+  * 🎭 **32-Bit Faction Street Arena:** Animated pixel avatars (Alpha Bros, Divine Femmes, Lord Cat, Tactical Dogs, Tech-Lords, Mud-Monks) argue, flex, and rally as tensions escalate.
+  * 🎬 **Animated Consequence Cutscenes:** Rich visual aftermath windows showing riot skirmishes, money rains, or server freezes following crisis decrees and boss counters.
+  * ⚠️ **Echo Chamber Critical Mass Alerts:** Real-time toast warnings and sprite mob rallies when factions pass 75%, 85%, and 95% radicalization.
+  * 🎯 **Visual Spotlight Tutorial:** High-visibility neon focus brackets that walk new players through interface components with automatic game pausing.
+  * ♾️ **Sandbox / Endless Play Mode:** Play beyond any apocalypse ending with the "Continue Experiment" option!
+  * 🔔 **Reader-Friendly Feed Controls:** Hover-to-freeze scrolling and pending post tray to prevent abrupt layout shifts while reading.
   * ⏸ **Pace Controls:** Instant pause (`⏸`), normal speed (`▶ 1x`), and fast-forward (`⏩ 2x`).
   * 📻 **Procedural Synth Radio:** Switch between `104.2 CHILL FM` and `99.8 RAGECORE` procedural 8-bit chip tracks.
   * ✍️ **Craft Ragebait:** Write and inject your own custom parody posts directly into the live feed!

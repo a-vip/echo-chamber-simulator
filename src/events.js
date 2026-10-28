@@ -186,9 +186,49 @@ class EventSystem {
     simState.serverTemp = Math.max(20, Math.min(simState.maxServerTemp + 10, simState.serverTemp + choice.tempDelta));
 
     const logEntry = choice.log;
+    const prevCrisis = this.activeCrisis;
     this.activeCrisis = null;
     this.lastEventTime = Date.now();
     this.breakingTicker = `FEED LOG: ${logEntry}`;
+
+    // Play Animated Consequence Cutscene
+    if (window.ConsequencePlayer) {
+      const isRiot = choice.tensionDelta > 0 || choice.tempDelta > 0;
+      const isMoney = choice.cashDelta >= 500;
+      const isCool = choice.tempDelta < 0;
+      let animType = 'riot';
+      if (isMoney) animType = 'money_rain';
+      else if (isCool) animType = 'freeze';
+      else if (choice.tensionDelta < 0) animType = 'peace';
+
+      const statDeltas = [];
+      if (choice.wattsDelta !== 0) {
+        statDeltas.push({
+          text: `${choice.wattsDelta > 0 ? '+' : ''}${choice.wattsDelta.toLocaleString()}⚡`,
+          colorClass: choice.wattsDelta > 0 ? 'bg-amber-900/60 text-amber-300' : 'bg-zinc-800 text-zinc-400'
+        });
+      }
+      if (choice.cashDelta !== 0) {
+        statDeltas.push({
+          text: `${choice.cashDelta > 0 ? '+' : ''}$${choice.cashDelta.toLocaleString()}💵`,
+          colorClass: choice.cashDelta > 0 ? 'bg-emerald-900/60 text-emerald-300' : 'bg-red-900/60 text-red-300'
+        });
+      }
+      if (choice.tensionDelta !== 0) {
+        statDeltas.push({
+          text: `${choice.tensionDelta > 0 ? '+' : ''}${choice.tensionDelta}% Tension`,
+          colorClass: choice.tensionDelta > 0 ? 'bg-rose-900/60 text-rose-300' : 'bg-emerald-900/60 text-emerald-300'
+        });
+      }
+
+      window.ConsequencePlayer.show({
+        title: '⚠️ ALGORITHMIC DECREE CONSEQUENCE',
+        headline: prevCrisis.title,
+        story: logEntry,
+        statDeltas,
+        animType
+      });
+    }
 
     if (window.AudioSynth) {
       window.AudioSynth.playClick();

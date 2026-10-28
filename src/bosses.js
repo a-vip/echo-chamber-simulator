@@ -147,7 +147,22 @@ class BossManager {
     simState.serverTemp = Math.max(30, simState.serverTemp - 4.0);
 
     const bossName = this.activeBoss.name;
+    const netCash = this.activeBoss.bribeRewardCash - this.activeBoss.bribeCost;
     this.resolveBoss('BRIBED', simState);
+
+    if (window.ConsequencePlayer) {
+      window.ConsequencePlayer.show({
+        title: '💰 INFLUENCER SPONSORSHIP SIGNED',
+        headline: `${bossName} Accepted Brand Sponsorship!`,
+        story: `${bossName} immediately stopped screaming about riots and began pitching organic manifestation crypto bundles to their disciples. Tension cools rapidly as money floods the server treasury.`,
+        statDeltas: [
+          { text: `+$${netCash} Net Cash💵`, colorClass: 'bg-emerald-900/60 text-emerald-300' },
+          { text: `-6.0% Tension🌿`, colorClass: 'bg-emerald-900/60 text-emerald-300' },
+          { text: `-4.0°C Heat❄️`, colorClass: 'bg-cyan-900/60 text-cyan-300' }
+        ],
+        animType: 'money_rain'
+      });
+    }
 
     if (window.AudioSynth) window.AudioSynth.playCashChime();
     if (window.EventSystem) {
@@ -164,7 +179,22 @@ class BossManager {
     simState.serverTemp += 2.0;
 
     const bossName = this.activeBoss.name;
+    const netWatts = this.activeBoss.swarmRewardWatts - this.activeBoss.swarmCostWatts;
     this.resolveBoss('SWARMED', simState);
+
+    if (window.ConsequencePlayer) {
+      window.ConsequencePlayer.show({
+        title: '💣 MEME QUOTE-BOMB VICTORY',
+        headline: `Counter-Meme Army Overwhelmed ${bossName}!`,
+        story: `Over 40,000 algorithmic quote-tweets and savage reaction memes flooded the influencer's live comments. Outrage engagement broke records, producing an avalanche of pure Neuro-Watts!`,
+        statDeltas: [
+          { text: `+${netWatts.toLocaleString()}⚡ Net Watts`, colorClass: 'bg-amber-900/60 text-amber-300' },
+          { text: `+3.0% Tension⚔️`, colorClass: 'bg-rose-900/60 text-rose-300' },
+          { text: `+2.0°C Heat🔥`, colorClass: 'bg-orange-900/60 text-orange-300' }
+        ],
+        animType: 'riot'
+      });
+    }
 
     if (window.AudioSynth) window.AudioSynth.playRageCrunch();
     if (window.EventSystem) {
@@ -182,6 +212,20 @@ class BossManager {
     const bossName = this.activeBoss.name;
     this.resolveBoss('SHADOWBANNED', simState);
 
+    if (window.ConsequencePlayer) {
+      window.ConsequencePlayer.show({
+        title: '🛡️ SUPER-SHADOWBAN EXECUTION',
+        headline: `${bossName} Throttled to 0 Visibility!`,
+        story: `The influencer was silently routed to an empty sandbox server. They continue to broadcast their unhinged monologue to zero actual viewers. Server temperatures drop dramatically.`,
+        statDeltas: [
+          { text: `-10.0% Tension🌿`, colorClass: 'bg-emerald-900/60 text-emerald-300' },
+          { text: `-12.0°C Heat❄️`, colorClass: 'bg-cyan-900/60 text-cyan-300' },
+          { text: `-$40 Moderation Fee`, colorClass: 'bg-zinc-800 text-zinc-400' }
+        ],
+        animType: 'freeze'
+      });
+    }
+
     if (window.AudioSynth) window.AudioSynth.playShadowban();
     if (window.EventSystem) {
       window.EventSystem.breakingTicker = `FEED LOG: Super-Shadowban deployed! ${bossName} throttled to oblivion.`;
@@ -197,3 +241,4 @@ class BossManager {
 
 window.BossManager = new BossManager();
 window.BOSS_PROFILES = BOSS_PROFILES;
+

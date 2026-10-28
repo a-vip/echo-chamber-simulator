@@ -82,14 +82,25 @@ class UIController {
       });
     }
 
-    // Modal close binds
+    // Modal close binds (with auto-resume)
     const closeButtons = document.querySelectorAll('.modal-close');
     closeButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const modal = btn.closest('.modal-container');
         if (modal) modal.classList.add('hidden');
+        if (this.sim && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
+          this.sim.paused = false;
+        }
       });
     });
+
+    // Consequence modal close button
+    const csqClose = document.getElementById('csq-btn-close');
+    if (csqClose) {
+      csqClose.addEventListener('click', () => {
+        if (window.ConsequencePlayer) window.ConsequencePlayer.close();
+      });
+    }
 
     // Upgrades Drawer toggle
     const upgBtn = document.getElementById('btn-open-upgrades');
@@ -97,6 +108,7 @@ class UIController {
       upgBtn.addEventListener('click', () => {
         const modal = document.getElementById('modal-upgrades');
         if (modal) {
+          this.sim.paused = true; // Auto-pause
           modal.classList.remove('hidden');
           this.renderUpgradesList();
         }
@@ -109,6 +121,7 @@ class UIController {
       badgeBtn.addEventListener('click', () => {
         const modal = document.getElementById('modal-badges');
         if (modal) {
+          this.sim.paused = true; // Auto-pause
           modal.classList.remove('hidden');
           this.renderBadgesList();
         }
@@ -184,6 +197,7 @@ class UIController {
     const craftBtn = document.getElementById('btn-open-craft');
     if (craftBtn) {
       craftBtn.addEventListener('click', () => {
+        this.sim.paused = true; // Auto-pause
         const modal = document.getElementById('modal-craft');
         if (modal) modal.classList.remove('hidden');
       });
@@ -207,6 +221,7 @@ class UIController {
 
         const modal = document.getElementById('modal-craft');
         if (modal) modal.classList.add('hidden');
+        if (this.sim.gameSpeed > 0) this.sim.paused = false;
         craftForm.reset();
       });
     }
@@ -215,6 +230,7 @@ class UIController {
     const dossierBtn = document.getElementById('btn-open-dossier');
     if (dossierBtn) {
       dossierBtn.addEventListener('click', () => {
+        this.sim.paused = true; // Auto-pause
         this.openDossierModal();
       });
     }
@@ -222,7 +238,30 @@ class UIController {
     const endingDossierBtn = document.getElementById('ending-btn-dossier');
     if (endingDossierBtn) {
       endingDossierBtn.addEventListener('click', () => {
+        this.sim.paused = true; // Auto-pause
         this.openDossierModal();
+      });
+    }
+
+    // Feed hover pause detection (Prevents feed jumping while user reads!)
+    const feedContainerEl = document.getElementById('feed-stream');
+    if (feedContainerEl) {
+      feedContainerEl.addEventListener('mouseenter', () => {
+        this.sim.isFeedHovered = true;
+      });
+      feedContainerEl.addEventListener('mouseleave', () => {
+        this.sim.isFeedHovered = false;
+      });
+    }
+
+    // Reveal pending posts pill button
+    const revealPendingBtn = document.getElementById('feed-pending-indicator');
+    if (revealPendingBtn) {
+      revealPendingBtn.addEventListener('click', () => {
+        if (this.sim.revealPendingPosts()) {
+          this.renderFeed();
+          if (window.AudioSynth) window.AudioSynth.playClick();
+        }
       });
     }
 
@@ -384,6 +423,18 @@ class UIController {
     const ticker = document.getElementById('breaking-ticker-text');
     if (ticker && window.EventSystem) {
       ticker.innerText = window.EventSystem.breakingTicker;
+    }
+
+    // Pending posts indicator
+    const pendingPill = document.getElementById('feed-pending-indicator');
+    if (pendingPill) {
+      if (this.sim.pendingPosts && this.sim.pendingPosts.length > 0) {
+        pendingPill.classList.remove('hidden');
+        const countEl = document.getElementById('pending-count-text');
+        if (countEl) countEl.innerText = `🔔 ${this.sim.pendingPosts.length} New Posts (Click to reveal)`;
+      } else {
+        pendingPill.classList.add('hidden');
+      }
     }
 
     // 7. Check if Crisis dialog needs to be shown
@@ -708,6 +759,7 @@ class UIController {
   showCrisisDialog(crisis) {
     const modal = document.getElementById('modal-crisis');
     if (!modal) return;
+    this.sim.paused = true; // Auto-pause during crisis
     modal.classList.remove('hidden');
 
     document.getElementById('crisis-title').innerText = crisis.title;
@@ -734,6 +786,7 @@ class UIController {
   showEndingDialog(ending) {
     const modal = document.getElementById('modal-ending');
     if (!modal) return;
+    this.sim.paused = true;
     modal.classList.remove('hidden');
 
     document.getElementById('ending-icon').innerText = ending.icon;
@@ -742,6 +795,16 @@ class UIController {
     document.getElementById('ending-story').innerText = ending.story;
     document.getElementById('ending-stat').innerText = ending.statComment;
     document.getElementById('ending-badge').innerText = ending.awardBadge;
+
+    const continueBtn = document.getElementById('ending-btn-continue');
+    if (continueBtn) {
+      continueBtn.onclick = () => {
+        modal.classList.add('hidden');
+        this.sim.continuePlaying();
+        this.createFloatingText('🌌 CONTINUING IN SANDBOX / ENDLESS MODE!', window.innerWidth / 2, window.innerHeight / 2, '#34d399');
+        this.renderFeed();
+      };
+    }
 
     const restartBtn = document.getElementById('ending-btn-restart');
     restartBtn.onclick = () => {

@@ -51,12 +51,15 @@ class SimulationEngine {
     this.paused = false;
     this.gameOver = null;
     this.activeEnding = null;
+    this.endlessMode = false;
 
-    // Post queue in memory
+    // Post queue & reader friendliness
     this.activeFeed = [];
+    this.pendingPosts = [];
+    this.isFeedHovered = false;
     this.feedMaxItems = 12;
     this.spawnTimer = 0;
-    this.spawnIntervalSec = 8.0; // New post every 8.0s base (gives plenty of time to read)
+    this.spawnIntervalSec = 16.0; // Relaxed 16.0s base interval (plenty of time to read)
 
     // Stats history for sparkline charts
     this.history = {
@@ -183,6 +186,9 @@ class SimulationEngine {
     if (window.BossManager) {
       window.BossManager.tick(deltaSec, this);
     }
+    if (window.CriticalAlertSystem) {
+      window.CriticalAlertSystem.check(this);
+    }
 
     // 7. Check Milestones & End Conditions
     this.checkEndConditions();
@@ -204,11 +210,38 @@ class SimulationEngine {
     if (!window.PostGenerator) return;
     const newPost = window.PostGenerator.generatePost();
     
-    // Add to top of feed
-    this.activeFeed.unshift(newPost);
-    if (this.activeFeed.length > this.feedMaxItems) {
-      this.activeFeed.pop();
+    // If user is hovering/reading the feed, hold in buffer to avoid jarring scroll jumps!
+    if (this.isFeedHovered) {
+      this.pendingPosts.unshift(newPost);
+      if (this.pendingPosts.length > 8) this.pendingPosts.pop();
+    } else {
+      this.activeFeed.unshift(newPost);
+      if (this.activeFeed.length > this.feedMaxItems) {
+        this.activeFeed.pop();
+      }
     }
+  }
+
+  revealPendingPosts() {
+    if (!this.pendingPosts || !this.pendingPosts.length) return false;
+    while (this.pendingPosts.length) {
+      const p = this.pendingPosts.pop();
+      this.activeFeed.unshift(p);
+      if (this.activeFeed.length > this.feedMaxItems) {
+        this.activeFeed.pop();
+      }
+    }
+    return true;
+  }
+
+  continuePlaying() {
+    this.gameOver = null;
+    this.activeEnding = null;
+    this.endlessMode = true;
+    this.tension = 80.0;
+    this.serverTemp = 55.0;
+    this.paused = false;
+    if (window.AudioSynth) window.AudioSynth.playAchievementFanfare();
   }
 
   applyAction(action, postId) {
@@ -216,6 +249,11 @@ class SimulationEngine {
     if (!post || this.gameOver) return false;
 
     const upg = window.UpgradeManager ? window.UpgradeManager.getMultipliers() : { harvestMult: 1, adRevMult: 1 };
+
+    // Trigger visual sprite reaction on street arena
+    if (window.StreetArena) {
+      window.StreetArena.triggerRally(post.factionId);
+    }
 
     switch (action) {
       case 'BOOST':
@@ -326,6 +364,13 @@ class SimulationEngine {
   }
 
   checkEndConditions() {
+    if (this.endlessMode) {
+      // In Endless / Sandbox Mode, clamp rather than hard terminating so player can continue indefinitely!
+      if (this.tension >= 100) this.tension = 97.5;
+      if (this.serverTemp >= this.maxServerTemp) this.serverTemp = this.maxServerTemp - 2.5;
+      return;
+    }
+
     if (this.gameOver) return;
 
     // 1. Civil War: Tension >= 100%
