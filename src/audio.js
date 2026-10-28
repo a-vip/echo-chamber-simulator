@@ -267,3 +267,4 @@ class SoundEngine {
 
 // Export singleton to window
 window.AudioSynth = new SoundEngine();
+

@@ -191,3 +191,4 @@ class AchievementSystem {
 
 window.AchievementSystem = new AchievementSystem();
 window.ENDINGS_DATABASE = ENDINGS_DATABASE;
+

@@ -115,6 +115,55 @@ class UIController {
       });
     }
 
+    // Tutorial open toggle
+    const tutBtn = document.getElementById('btn-open-tutorial');
+    if (tutBtn) {
+      tutBtn.addEventListener('click', () => {
+        if (window.TutorialSystem) window.TutorialSystem.start();
+      });
+    }
+
+    // Tutorial step navigation
+    const tutNext = document.getElementById('tut-btn-next');
+    if (tutNext) {
+      tutNext.addEventListener('click', () => {
+        if (window.TutorialSystem) window.TutorialSystem.next();
+      });
+    }
+
+    const tutPrev = document.getElementById('tut-btn-prev');
+    if (tutPrev) {
+      tutPrev.addEventListener('click', () => {
+        if (window.TutorialSystem) window.TutorialSystem.prev();
+      });
+    }
+
+    const tutSkip = document.getElementById('tut-btn-skip');
+    if (tutSkip) {
+      tutSkip.addEventListener('click', () => {
+        if (window.TutorialSystem) window.TutorialSystem.close();
+      });
+    }
+
+    // Game Speed Buttons
+    const speedButtons = document.querySelectorAll('.btn-speed');
+    speedButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const speed = parseFloat(btn.getAttribute('data-speed'));
+        this.sim.setGameSpeed(speed);
+
+        speedButtons.forEach(b => {
+          b.classList.remove('bg-amber-400', 'text-black', 'font-bold');
+          b.classList.add('bg-zinc-800', 'text-zinc-300');
+        });
+
+        btn.classList.remove('bg-zinc-800', 'text-zinc-300');
+        btn.classList.add('bg-amber-400', 'text-black', 'font-bold');
+
+        if (window.AudioSynth) window.AudioSynth.playClick();
+      });
+    });
+
     // Feed delegation click for actions
     const feedContainer = document.getElementById('feed-stream');
     if (feedContainer) {
@@ -558,3 +607,4 @@ class UIController {
 }
 
 window.UIController = new UIController();
+

@@ -549,3 +549,4 @@ class PostGenerator {
 window.FACTIONS = FACTIONS;
 window.PostGenerator = new PostGenerator();
 window.SPONSORED_ADS = SPONSORED_ADS;
+

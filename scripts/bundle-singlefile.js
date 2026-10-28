@@ -19,6 +19,7 @@ const scripts = [
   'src/upgrades.js',
   'src/events.js',
   'src/achievements.js',
+  'src/tutorial.js',
   'src/sim.js',
   'src/ui.js'
 ];
@@ -39,3 +40,4 @@ const bundledHtml = html.replace(scriptTagsRegex, replacement);
 
 fs.writeFileSync(distPath, bundledHtml, 'utf8');
 console.log(`[SUCCESS] Bundled standalone file generated: ${distPath} (${(bundledHtml.length / 1024).toFixed(1)} KB)`);
+

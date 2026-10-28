@@ -1,7 +1,10 @@
 /**
- * The Echo Chamber Simulator - Core Simulation Engine
- * Drives the real-time mathematical balancing act between Dopamine Harvesting,
+ * The Echo Chamber Simulator - Core Simulation Engine (Balanced Pacing)
+ * Real-time mathematical balancing act between Dopamine Harvesting,
  * Server Thermodynamics, and Global Civilization Tension.
+ * 
+ * Re-calibrated for deliberate, strategic pacing so players have ample time
+ * to read satirical posts and observe systemic consequences.
  */
 
 class SimulationEngine {
@@ -10,15 +13,15 @@ class SimulationEngine {
   }
 
   resetSimulation(isPrestige = false) {
-    this.watts = 100; // Starting Neuro-Watts
-    this.cash = 50;   // Starting Dopamine Dimes ($)
-    this.tension = 50; // Society Tension (0 - 100%)
-    this.serverTemp = 42.0; // Starting Temp in Celsius
+    this.watts = 250; // Starting Neuro-Watts
+    this.cash = 150;  // Starting Dopamine Dimes ($)
+    this.tension = 55.0; // Society Tension (0 - 100%) - Near Goldilocks Zone (65-92%)
+    this.serverTemp = 36.0; // Starting Temp in Celsius
     this.maxServerTemp = 100.0;
-    this.coolingRate = 1.2; // °C passive cooling per second
+    this.coolingRate = 2.4; // °C natural cooling per second
     this.activeZombies = 840000000; // 840 Million Daily Active Addicts
     
-    // Algorithmic Levers
+    // Algorithmic Levers (Balanced defaults)
     this.echoSiloing = 50; // 0 - 100%
     this.rageBias = 50;    // 0 - 100%
 
@@ -32,8 +35,8 @@ class SimulationEngine {
       pet_dog: 45,
       diet_carnivore: 35,
       diet_vegan: 35,
-      rot_alpha: 60,
-      rot_boomer: 60,
+      rot_alpha: 55,
+      rot_boomer: 55,
       cosmic_flat: 30,
       cosmic_sim: 30
     };
@@ -43,6 +46,8 @@ class SimulationEngine {
     this.rotZoneStreakSec = 0;
     this.gameTimeSec = 0;
     this.day = 1;
+    this.dayLengthSec = 90; // 90 seconds per game day
+    this.gameSpeed = 1.0; // 0 = Pause, 0.5 = Chill, 1.0 = Normal, 2.0 = Fast
     this.paused = false;
     this.gameOver = null;
     this.activeEnding = null;
@@ -51,7 +56,7 @@ class SimulationEngine {
     this.activeFeed = [];
     this.feedMaxItems = 12;
     this.spawnTimer = 0;
-    this.spawnIntervalSec = 3.5; // New post every 3.5s base
+    this.spawnIntervalSec = 8.0; // New post every 8.0s base (gives plenty of time to read)
 
     // Stats history for sparkline charts
     this.history = {
@@ -87,11 +92,20 @@ class SimulationEngine {
     }
   }
 
-  tick(deltaSec) {
+  setGameSpeed(speed) {
+    this.gameSpeed = Math.max(0, Math.min(3.0, speed));
+    this.paused = (this.gameSpeed === 0);
+  }
+
+  tick(rawDeltaSec) {
     if (this.paused || this.gameOver) return;
 
+    // Apply game speed factor
+    const deltaSec = rawDeltaSec * this.gameSpeed;
+    if (deltaSec <= 0) return;
+
     this.gameTimeSec += deltaSec;
-    this.day = Math.floor(this.gameTimeSec / 45) + 1; // 45 seconds per game day
+    this.day = Math.floor(this.gameTimeSec / this.dayLengthSec) + 1;
 
     // Cooldown timers
     if (this.botCooldownSec > 0) this.botCooldownSec = Math.max(0, this.botCooldownSec - deltaSec);
@@ -112,9 +126,9 @@ class SimulationEngine {
     // Check Goldilocks Rot Zone (65% <= Tension <= 92%)
     if (this.tension >= 65 && this.tension <= 92) {
       this.goldilocksActive = true;
-      this.rotZoneMultiplier = 4.0 * upg.rotZoneMult;
+      this.rotZoneMultiplier = 5.0 * upg.rotZoneMult;
       this.rotZoneStreakSec += deltaSec;
-      if (this.rotZoneStreakSec >= 60 && window.AchievementSystem) {
+      if (this.rotZoneStreakSec >= 45 && window.AchievementSystem) {
         window.AchievementSystem.unlock('rot_zone_survivor');
       }
     } else {
@@ -124,34 +138,33 @@ class SimulationEngine {
     }
 
     // 1. Calculate Passive Harvest Rate
-    // Base harvest depends on active users and polarization
     const avgFactionPolarization = Object.values(this.factionTensions).reduce((a, b) => a + b, 0) / 12;
-    const baseHarvest = (avgFactionPolarization * 1.5) * (this.echoSiloing / 50) * (this.rageBias / 50);
+    const baseHarvest = (avgFactionPolarization * 0.8) * (this.echoSiloing / 50) * (this.rageBias / 50);
     const effectiveHarvestPerSec = (baseHarvest + upg.passiveWatts) * this.rotZoneMultiplier * upg.harvestMult * prestigeMult;
     
     this.watts += effectiveHarvestPerSec * deltaSec;
     this.cash += (upg.passiveCash * upg.adRevMult) * deltaSec;
 
-    // 2. Server Thermodynamics Calculation
-    // Heat increases from Rage bias, feed throughput, and bot brigades
-    const heatGeneration = (this.rageBias * 0.08) + (effectiveHarvestPerSec * 0.0012) + (this.echoSiloing * 0.04);
+    // 2. Server Thermodynamics Calculation (Balanced)
+    // At default 50% rage & 50% siloing: heatGen = 1.8 + 0.4 = 2.2°C/s
+    // Natural cooling = 2.4°C/s -> Temp stays at cool baseline (35-38°C)!
+    const heatGeneration = ((this.rageBias / 50) * 1.8) + ((this.echoSiloing / 50) * 0.4) + (effectiveHarvestPerSec * 0.0001);
     const naturalCooling = this.coolingRate;
     const tempDelta = (heatGeneration - naturalCooling) * deltaSec;
-    this.serverTemp = Math.max(22.0, this.serverTemp + tempDelta);
+    this.serverTemp = Math.max(30.0, this.serverTemp + tempDelta);
 
     // Update audio hum based on server strain
     if (window.AudioSynth) {
       window.AudioSynth.updateServerTempHum(this.serverTemp / this.maxServerTemp);
     }
 
-    // 3. Society Tension Drift
-    // If rage bias is high, tension climbs. If echo chambers are low and rage is low, tension cools.
-    const tensionDrift = ((this.rageBias - 40) * 0.05 + (this.echoSiloing - 45) * 0.04) * upg.polarizationMult;
+    // 3. Society Tension Drift (Gentle, stable at 50/50)
+    const tensionDrift = (((this.rageBias - 50) * 0.016) + ((this.echoSiloing - 50) * 0.012)) * upg.polarizationMult;
     this.tension = Math.max(0, Math.min(100, this.tension + (tensionDrift * deltaSec)));
 
-    // 4. Feed Spawning Loop
+    // 4. Feed Spawning Loop (Gentle 8-second interval, adjusted slightly by siloing)
     this.spawnTimer += deltaSec;
-    const effectiveInterval = Math.max(1.2, this.spawnIntervalSec - (this.echoSiloing * 0.015));
+    const effectiveInterval = Math.max(4.0, this.spawnIntervalSec - (this.echoSiloing * 0.03));
     if (this.spawnTimer >= effectiveInterval) {
       this.spawnTimer = 0;
       this.spawnNewPost();
@@ -163,7 +176,7 @@ class SimulationEngine {
       this.recordHistory(effectiveHarvestPerSec);
     }
 
-    // 6. Check Random Crisis Events
+    // 6. Check Random Crisis Events (Relaxed cooldown)
     if (window.EventSystem) {
       window.EventSystem.checkEventTrigger(this);
     }
@@ -209,13 +222,13 @@ class SimulationEngine {
         post.stats.angries *= 2;
         
         // Harvest immediate watts
-        const wattsGained = post.energyYield * 2.5 * this.rotZoneMultiplier * upg.harvestMult;
+        const wattsGained = post.energyYield * 2.2 * this.rotZoneMultiplier * upg.harvestMult;
         this.watts += wattsGained;
         
-        // Increase specific faction tension & global tension
-        this.nudgeFactionTension(post.factionId, post.polarizationYield);
-        this.tension = Math.min(100, this.tension + (post.polarizationYield * 0.4));
-        this.serverTemp += 1.8;
+        // Gentle tension & temp nudges
+        this.nudgeFactionTension(post.factionId, post.polarizationYield * 0.4);
+        this.tension = Math.min(100, this.tension + (post.polarizationYield * 0.12));
+        this.serverTemp += 0.4;
 
         if (window.AudioSynth) window.AudioSynth.playDopamineChime();
         return { type: 'BOOST', deltaWatts: wattsGained };
@@ -224,12 +237,12 @@ class SimulationEngine {
         if (post.outraged) return false;
         window.PostGenerator.injectRivalQuote(post);
         
-        // Outrage generates massive energy and big spike in tension
-        const rageWatts = post.energyYield * 4.0 * this.rotZoneMultiplier * upg.harvestMult;
+        // Outrage generates high energy with controlled tension increase
+        const rageWatts = post.energyYield * 3.5 * this.rotZoneMultiplier * upg.harvestMult;
         this.watts += rageWatts;
-        this.nudgeFactionTension(post.factionId, post.polarizationYield * 2);
-        this.tension = Math.min(100, this.tension + (post.polarizationYield * 0.9));
-        this.serverTemp += 3.5;
+        this.nudgeFactionTension(post.factionId, post.polarizationYield * 0.8);
+        this.tension = Math.min(100, this.tension + (post.polarizationYield * 0.25));
+        this.serverTemp += 0.9;
 
         if (window.AchievementSystem) window.AchievementSystem.unlock('first_blood_outrage');
         if (window.AudioSynth) window.AudioSynth.playRageCrunch();
@@ -240,7 +253,7 @@ class SimulationEngine {
         const rev = window.PostGenerator.attachAd(post);
         const cashEarned = rev * upg.adRevMult;
         this.cash += cashEarned;
-        this.tension = Math.min(100, this.tension + 1.5); // Ads annoy users slightly
+        this.tension = Math.min(100, this.tension + 0.3); // Slight annoyance
 
         if (window.AchievementSystem) window.AchievementSystem.unlock('ad_pig');
         if (window.AudioSynth) window.AudioSynth.playCashChime();
@@ -249,11 +262,10 @@ class SimulationEngine {
       case 'SHADOWBAN':
         if (post.shadowbanned) return false;
         post.shadowbanned = true;
-        // Suppresses this post, reducing tension and temp slightly
-        this.tension = Math.max(0, this.tension - 4.5);
-        this.serverTemp = Math.max(20, this.serverTemp - 3.0);
-        // Costs a small moderation fee
-        this.cash = Math.max(0, this.cash - 15);
+        // Suppresses this post, gently reducing tension and temp
+        this.tension = Math.max(0, this.tension - 1.8);
+        this.serverTemp = Math.max(30, this.serverTemp - 1.5);
+        this.cash = Math.max(0, this.cash - 5); // $5 moderation fee
 
         if (window.AudioSynth) window.AudioSynth.playShadowban();
         return { type: 'SHADOWBAN' };
@@ -267,7 +279,6 @@ class SimulationEngine {
     if (this.factionTensions[factionId] !== undefined) {
       this.factionTensions[factionId] = Math.min(100, this.factionTensions[factionId] + amount);
       
-      // Check faction-specific achievements
       if (window.AchievementSystem) {
         if ((factionId === 'gender_alpha' || factionId === 'gender_femme') && this.factionTensions[factionId] >= 85) {
           window.AchievementSystem.unlock('gender_rift_engineer');
@@ -282,18 +293,17 @@ class SimulationEngine {
   deployBotBrigade() {
     if (this.botCooldownSec > 0 || this.cash < 80) return false;
     this.cash -= 80;
-    this.botCooldownSec = 15; // 15s cooldown
+    this.botCooldownSec = 20; // 20s cooldown
 
-    // Instantly inject rage replies into all current visible posts
     this.activeFeed.forEach(post => {
-      if (!post.outraged && Math.random() < 0.75) {
+      if (!post.outraged && Math.random() < 0.6) {
         window.PostGenerator.injectRivalQuote(post);
       }
     });
 
-    this.tension = Math.min(100, this.tension + 12);
-    this.serverTemp += 8;
-    this.watts += 1500;
+    this.tension = Math.min(100, this.tension + 4.5);
+    this.serverTemp += 3.0;
+    this.watts += 1200;
 
     if (window.AchievementSystem) window.AchievementSystem.unlock('bot_shepherd');
     if (window.AudioSynth) window.AudioSynth.playRageCrunch();
@@ -303,10 +313,10 @@ class SimulationEngine {
   emergencyCoolant() {
     if (this.coolantCooldownSec > 0 || this.cash < 60) return false;
     this.cash -= 60;
-    this.coolantCooldownSec = 8;
+    this.coolantCooldownSec = 10;
 
-    this.serverTemp = Math.max(25, this.serverTemp - 28);
-    this.tension = Math.max(0, this.tension - 6);
+    this.serverTemp = Math.max(30, this.serverTemp - 22);
+    this.tension = Math.max(0, this.tension - 2.5);
 
     if (window.AudioSynth) window.AudioSynth.playCoolant();
     return true;

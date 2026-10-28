@@ -11,3 +11,4 @@ if %ERRORLEVEL% NEQ 0 (
     start "" "%~dp0index.html"
 )
 pause
+

@@ -328,3 +328,4 @@ class UpgradeManager {
 }
 
 window.UpgradeManager = new UpgradeManager();
+

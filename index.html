@@ -95,6 +95,19 @@
       </span>
     </div>
     <div class="flex items-center gap-3 shrink-0 ml-2">
+      <!-- Speed / Pace Controls -->
+      <div class="flex items-center bg-black/60 rounded p-0.5 border border-zinc-800">
+        <button data-speed="0" class="btn-speed px-1.5 py-0.5 rounded text-[10px] bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-all" title="Pause simulation">
+          ⏸ PAUSE
+        </button>
+        <button data-speed="1.0" class="btn-speed px-1.5 py-0.5 rounded text-[10px] bg-amber-400 text-black font-bold hover:bg-amber-300 transition-all" title="Normal Pace (1x)">
+          ▶ 1x
+        </button>
+        <button data-speed="2.0" class="btn-speed px-1.5 py-0.5 rounded text-[10px] bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-all" title="Fast Forward (2x)">
+          ⏩ 2x
+        </button>
+      </div>
+
       <span id="hud-day" class="text-amber-400 font-bold text-xs">DAY 1</span>
       <button id="btn-crt" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all">
         📺 CRT: ON
@@ -154,6 +167,9 @@
 
       <!-- Action Modals Buttons -->
       <div class="flex items-center gap-2">
+        <button id="btn-open-tutorial" class="px-3 py-1.5 rounded bg-amber-950/60 hover:bg-amber-900 border border-amber-600/80 font-mono text-xs font-bold text-amber-200 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
+          🎓 HOW TO PLAY
+        </button>
         <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
           🔬 DARK PATTERNS
         </button>
@@ -424,12 +440,55 @@
     </div>
   </div>
 
+  <!-- MODAL: Interactive Tutorial / How to Play -->
+  <div id="modal-tutorial" class="modal-container hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="bg-zinc-950 border-2 border-amber-500/80 rounded-xl max-w-xl w-full p-6 shadow-2xl font-mono flex flex-col gap-4 text-zinc-100">
+      
+      <!-- Tutorial Header -->
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div id="tut-icon" class="text-3xl bg-amber-500/20 p-2 rounded-lg border border-amber-500/40">⚡</div>
+          <div>
+            <h2 id="tut-title" class="text-sm font-extrabold text-white tracking-wider uppercase">TUTORIAL TITLE</h2>
+            <p id="tut-subtitle" class="text-xs text-amber-400 font-sans mt-0.5">Tutorial Subtitle</p>
+          </div>
+        </div>
+        <span id="tut-progress" class="text-[10px] font-bold text-zinc-400 bg-zinc-900 px-2 py-1 rounded border border-zinc-800">
+          STEP 1 OF 6
+        </span>
+      </div>
+
+      <!-- Tutorial Body -->
+      <div id="tut-body" class="text-xs text-zinc-200 font-sans leading-relaxed min-h-[160px] py-1">
+        <!-- Rendered dynamically by TutorialSystem.render() -->
+      </div>
+
+      <!-- Tutorial Footer Controls -->
+      <div class="flex items-center justify-between border-t border-zinc-800 pt-3">
+        <button id="tut-btn-skip" class="text-xs text-zinc-400 hover:text-zinc-200 font-mono py-1 px-2 rounded hover:bg-zinc-900 transition-all">
+          SKIP TUTORIAL
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button id="tut-btn-prev" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all">
+            ⮜ PREV
+          </button>
+          <button id="tut-btn-next" class="px-4 py-1.5 rounded bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold transition-all">
+            NEXT ➔
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- CORE GAME SCRIPTS -->
   <script src="src/audio.js"></script>
   <script src="src/posts.js"></script>
   <script src="src/upgrades.js"></script>
   <script src="src/events.js"></script>
   <script src="src/achievements.js"></script>
+  <script src="src/tutorial.js"></script>
   <script src="src/sim.js"></script>
   <script src="src/ui.js"></script>
 
@@ -444,6 +503,11 @@
       };
       window.addEventListener('click', unlockAudio);
       window.addEventListener('keydown', unlockAudio);
+
+      // Initialize Tutorial System
+      if (window.TutorialSystem) {
+        window.TutorialSystem.init();
+      }
 
       // Initial Render
       if (window.UIController) {
@@ -482,3 +546,4 @@
   </script>
 </body>
 </html>
+
