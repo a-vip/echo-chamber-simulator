@@ -14,9 +14,9 @@ const BOSS_PROFILES = [
     theme: '#3b82f6',
     title: '👑 APEX INFLUENCER: 96-HOUR JAWLINE STREAM',
     dialogue: 'IF YOU ARE NOT SWALLOWING UNPASTEURIZED YAK TALLOW AT 3:45 AM, YOU ARE AN NPC IN MY MATRIX. BENCH PRESS PROGRESSION IS LAW.',
-    durationSec: 25,
-    passiveTensionPerSec: 0.6,
-    passiveTempPerSec: 0.5,
+    durationSec: 50,
+    passiveTensionPerSec: 0.25,
+    passiveTempPerSec: 0.20,
     bribeCost: 100,
     bribeRewardCash: 350,
     swarmCostWatts: 500,
@@ -31,9 +31,9 @@ const BOSS_PROFILES = [
     theme: '#ec4899',
     title: '✨ CELESTIAL SIREN: $1,200 FIRST DATE DECREE',
     dialogue: 'Sprinkle sprinkle! Any male who does not wire his quarterly earnings directly to my manifestation crystal fund will have his root chakra blocked for 3 reincarnations.',
-    durationSec: 25,
-    passiveTensionPerSec: 0.7,
-    passiveTempPerSec: 0.4,
+    durationSec: 50,
+    passiveTensionPerSec: 0.28,
+    passiveTempPerSec: 0.18,
     bribeCost: 120,
     bribeRewardCash: 420,
     swarmCostWatts: 600,
@@ -48,9 +48,9 @@ const BOSS_PROFILES = [
     theme: '#06b6d4',
     title: '🌀 BRAINROT MONARCH: GLOBAL AURA FORECLOSURE',
     dialogue: 'CHAT IS THIS REAL? BABY GRONK JUST FANUM TAXED THE SUN. SUBWAY SURFERS QUAD SCREEN BROADCASTING TO EVERY TV ON EARTH NO CAP ONG FR FR.',
-    durationSec: 22,
-    passiveTensionPerSec: 0.5,
-    passiveTempPerSec: 0.8,
+    durationSec: 45,
+    passiveTensionPerSec: 0.22,
+    passiveTempPerSec: 0.30,
     bribeCost: 90,
     bribeRewardCash: 300,
     swarmCostWatts: 450,
@@ -65,9 +65,9 @@ const BOSS_PROFILES = [
     theme: '#a855f7',
     title: '🐾 SUPREME FELINE: SUBURBAN KIBBLE EMBARGO',
     dialogue: 'CANINES ARE PROHIBITED WITHIN 500 METERS OF CARDINAL FURNITURE. ALL MUNICIPAL TUNA FACTORIES ARE NOW UNDER FELINE REQUISITION.',
-    durationSec: 24,
-    passiveTensionPerSec: 0.6,
-    passiveTempPerSec: 0.4,
+    durationSec: 50,
+    passiveTensionPerSec: 0.25,
+    passiveTempPerSec: 0.18,
     bribeCost: 110,
     bribeRewardCash: 380,
     swarmCostWatts: 550,
@@ -82,9 +82,9 @@ const BOSS_PROFILES = [
     theme: '#10b981',
     title: '⚡ TECHNO-FEUDAL EMPEROR: AIR SUBSCRIPTION TIER',
     dialogue: 'Starting tomorrow, Earth atmospheric nitrogen is gated behind our $19.99/mo verified premium badge. Unverified breathers will be throttled at 480p.',
-    durationSec: 26,
-    passiveTensionPerSec: 0.7,
-    passiveTempPerSec: 0.6,
+    durationSec: 55,
+    passiveTensionPerSec: 0.30,
+    passiveTempPerSec: 0.24,
     bribeCost: 130,
     bribeRewardCash: 500,
     swarmCostWatts: 650,
@@ -96,15 +96,21 @@ class BossManager {
   constructor() {
     this.activeBoss = null;
     this.bossTimer = 0;
-    this.nextBossSpawnTime = Date.now() + 65000; // First boss after 65s
+    this.isMinimized = false;
+    this.nextBossSpawnTime = Date.now() + 240000; // First boss after 4 full minutes!
     this.bossHistory = [];
+  }
+
+  toggleMinimize() {
+    this.isMinimized = !this.isMinimized;
+    return this.isMinimized;
   }
 
   tick(deltaSec, simState) {
     if (this.activeBoss) {
       this.bossTimer -= deltaSec;
 
-      // Passive boss effects
+      // Passive boss effects (gentle, manageable pacing)
       simState.tension = Math.min(100, simState.tension + (this.activeBoss.passiveTensionPerSec * deltaSec));
       simState.serverTemp = Math.min(simState.maxServerTemp + 5, simState.serverTemp + (this.activeBoss.passiveTempPerSec * deltaSec));
 
@@ -126,8 +132,9 @@ class BossManager {
     
     this.activeBoss = JSON.parse(JSON.stringify(boss));
     this.bossTimer = boss.durationSec;
+    this.isMinimized = false;
     this.bossHistory.push(boss.id);
-    this.nextBossSpawnTime = Date.now() + 75000 + (Math.random() * 30000); // 75-105s cooldown
+    this.nextBossSpawnTime = Date.now() + 240000 + (Math.random() * 60000); // 4 - 5 minute cooldown!
 
     if (window.AudioSynth) {
       window.AudioSynth.playAlarm();

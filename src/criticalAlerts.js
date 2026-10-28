@@ -9,12 +9,18 @@ class CriticalAlertSystem {
     this.triggeredMilestones = new Set();
     this.activeToast = null;
     this.toastTimer = 0;
+    this.lastAlertTime = 0;
   }
 
   check(simState) {
     if (!simState || simState.paused || simState.gameOver) return;
 
-    const thresholds = [75, 85, 95];
+    // Minimum 90 seconds cooldown between toast alerts to prevent notification fatigue
+    const now = Date.now();
+    if (now - this.lastAlertTime < 90000) return;
+
+    // Only alert for extreme thresholds to keep the screen uncluttered
+    const thresholds = [88, 96];
     const factions = Object.keys(simState.factionTensions);
 
     for (const fId of factions) {
@@ -23,6 +29,7 @@ class CriticalAlertSystem {
         const key = `${fId}_${t}`;
         if (val >= t && !this.triggeredMilestones.has(key)) {
           this.triggeredMilestones.add(key);
+          this.lastAlertTime = now;
           this.triggerAlert(fId, t, simState);
           return; // Trigger one at a time
         }
@@ -53,7 +60,7 @@ class CriticalAlertSystem {
       icon,
       title: `⚡ ECHO CHAMBER AT ${threshold}% CRITICAL MASS`,
       body: text,
-      color: threshold >= 85 ? '#ef4444' : '#f59e0b'
+      color: threshold >= 95 ? '#ef4444' : '#f59e0b'
     });
 
     // Animate sprite street arena
@@ -62,7 +69,11 @@ class CriticalAlertSystem {
     }
 
     if (window.AudioSynth) {
-      window.AudioSynth.playAlarm();
+      if (threshold >= 95) {
+        window.AudioSynth.playAlarm();
+      } else {
+        window.AudioSynth.playWarningBeep();
+      }
     }
   }
 
@@ -87,3 +98,4 @@ class CriticalAlertSystem {
 }
 
 window.CriticalAlertSystem = new CriticalAlertSystem();
+

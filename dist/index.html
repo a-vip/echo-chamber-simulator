@@ -168,23 +168,35 @@
         <span>HARVEST!</span>
       </div>
 
-      <!-- Action Modals Buttons -->
-      <div class="flex items-center gap-2">
-        <button id="btn-open-tutorial" class="px-3 py-1.5 rounded bg-amber-950/60 hover:bg-amber-900 border border-amber-600/80 font-mono text-xs font-bold text-amber-200 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
-          🎓 HOW TO PLAY
+      <!-- Action Controls Cluster (Minimalist & Clean) -->
+      <div class="flex items-center gap-2 font-mono">
+        <!-- Upgrades / Research -->
+        <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Deploy unethical software architecture to optimize human addiction">
+          <span>🔬</span> DARK PATTERNS
         </button>
-        <button id="btn-open-craft" class="px-3 py-1.5 rounded bg-rose-950/50 hover:bg-rose-900 border border-rose-600/80 font-mono text-xs font-bold text-rose-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Write your own custom parody post">
-          ✍️ CRAFT POST
+
+        <!-- Badges & Apocalypse Gallery -->
+        <button id="btn-open-badges" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="View discovered apocalypse endings and achievement records">
+          <span>🏆</span> BADGES
         </button>
-        <button id="btn-open-dossier" class="px-3 py-1.5 rounded bg-blue-950/50 hover:bg-blue-900 border border-blue-600/80 font-mono text-xs font-bold text-blue-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Generate shareable stats card">
-          📸 DOSSIER
-        </button>
-        <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
-          🔬 DARK PATTERNS
-        </button>
-        <button id="btn-open-badges" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
-          🏆 APOCALYPSE BADGES
-        </button>
+
+        <!-- Tools Dropdown / Quick Actions -->
+        <div class="relative group">
+          <button id="btn-tools-menu" class="px-2.5 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-300 flex items-center gap-1.5 transition-all" title="Auxiliary Creator & Analysis Tools">
+            <span>🛠️</span> <span class="hidden sm:inline">TOOLS</span> <span>▾</span>
+          </button>
+          <div class="absolute right-0 mt-1 w-48 bg-zinc-950 border border-zinc-700 rounded-lg shadow-2xl py-1 hidden group-hover:block hover:block z-50 text-xs">
+            <button id="btn-open-tutorial" class="w-full text-left px-3 py-2 hover:bg-zinc-900 text-amber-300 flex items-center gap-2">
+              <span>🎓</span> How to Play (Guide)
+            </button>
+            <button id="btn-open-craft" class="w-full text-left px-3 py-2 hover:bg-zinc-900 text-rose-300 flex items-center gap-2">
+              <span>✍️</span> Craft Parody Post
+            </button>
+            <button id="btn-open-dossier" class="w-full text-left px-3 py-2 hover:bg-zinc-900 text-blue-300 flex items-center gap-2">
+              <span>📸</span> Disgrace Dossier Card
+            </button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -241,59 +253,88 @@
         </button>
       </div>
 
-      <!-- Factions Polarization Radar Summary -->
-      <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800/80 font-mono text-[11px] mt-auto">
-        <div class="font-bold text-zinc-400 uppercase tracking-wider text-[10px] mb-2 flex items-center justify-between">
-          <span>⚔️ Faction Culture Wars</span>
-          <span class="text-emerald-400 text-[9px] animate-pulse">● TRACKING</span>
-        </div>
-        <div class="space-y-1.5 text-[10px]">
+      <!-- Factions Polarization Collapsible Accordion -->
+      <details class="group bg-zinc-900/40 rounded border border-zinc-800/80 font-mono text-[11px] mt-auto">
+        <summary class="p-2.5 cursor-pointer font-bold text-zinc-400 hover:text-zinc-200 uppercase tracking-wider text-[10px] flex items-center justify-between select-none">
+          <span class="flex items-center gap-1.5">⚔️ Active Faction Rifts</span>
+          <span class="text-zinc-500 text-[9px] group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <div class="p-2.5 pt-0 space-y-1.5 text-[10px] border-t border-zinc-800/40 mt-1">
           <div class="flex justify-between items-center text-zinc-300">
             <span>🗿 Alpha Grinders vs 💅 Divine Femmes</span>
-            <span class="text-rose-400 font-bold">ACTIVE</span>
+            <span class="text-rose-400 font-bold">RIVALRY</span>
           </div>
           <div class="flex justify-between items-center text-zinc-300">
             <span>🐱 Purr Reich vs 🐕 Tactical K9s</span>
-            <span class="text-amber-400 font-bold">ACTIVE</span>
+            <span class="text-amber-400 font-bold">RIVALRY</span>
           </div>
           <div class="flex justify-between items-center text-zinc-300">
             <span>🤖 Tech Lords vs 🍄 Moss Monks</span>
-            <span class="text-emerald-400 font-bold">ACTIVE</span>
+            <span class="text-emerald-400 font-bold">RIVALRY</span>
           </div>
           <div class="flex justify-between items-center text-zinc-300">
             <span>🥩 Raw Marrow vs 🌱 Sun Monks</span>
-            <span class="text-cyan-400 font-bold">ACTIVE</span>
+            <span class="text-cyan-400 font-bold">RIVALRY</span>
           </div>
         </div>
-      </div>
+      </details>
     </aside>
 
     <!-- CENTER PANEL: Infinite Real-Time Algorithmic Feed -->
     <section id="feed-center-container" class="flex-1 flex flex-col bg-black overflow-hidden relative">
       
       <!-- 32-bit Faction Street Arena / Culture Clash Visualizer -->
-      <div class="bg-zinc-950 border-b border-zinc-800 p-2 shrink-0">
+      <div id="street-arena-container" class="bg-zinc-950 border-b border-zinc-800 p-2 shrink-0 transition-all">
         <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 mb-1 px-1">
           <span class="flex items-center gap-1.5 font-bold text-amber-300">
             <span>🎭</span> FACTION STREET ARENA (32-BIT CLASH)
           </span>
-          <span class="text-[9px] text-zinc-500">Live Street Arguments & Reactions</span>
+          <button id="btn-toggle-arena" class="text-[9px] text-zinc-500 hover:text-zinc-300 font-mono px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 transition-all" title="Toggle Arena Display">
+            ─ COLLAPSE
+          </button>
         </div>
         <canvas id="street-arena-canvas" width="580" height="75" class="w-full bg-black rounded border border-zinc-800/80 shadow-inner"></canvas>
       </div>
 
-      <!-- Feed Tab Bar -->
+      <!-- Feed Tab Bar with Stream Pace Controls -->
       <div class="bg-zinc-900/80 border-b border-zinc-800 px-4 py-2 flex items-center justify-between text-xs font-mono shrink-0">
         <div class="flex items-center gap-2">
           <span class="text-rose-500 animate-ping">●</span>
           <span class="font-bold text-zinc-200">GLOBAL FOR-YOU STREAM</span>
         </div>
         <div class="flex items-center gap-2">
+          <!-- Feed Stream Mode Toggle -->
+          <button id="btn-feed-mode" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all font-mono" title="Toggle auto-streaming vs manual step">
+            ▶ STREAM: AUTO
+          </button>
+          <!-- Manual Step Post Button -->
+          <button id="btn-manual-step" class="hidden px-2 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-[10px] transition-all shadow font-mono">
+            + NEXT POST
+          </button>
           <!-- Pending Posts Pill Button -->
           <button id="feed-pending-indicator" class="hidden px-2.5 py-0.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-[10px] transition-all animate-bounce shadow">
-            <span id="pending-count-text">🔔 1 New Post (Click to load)</span>
+            <span id="pending-count-text">🔔 1 New Post</span>
           </button>
-          <span class="text-[10px] text-zinc-400">Hover feed to freeze scroll</span>
+          <span class="text-[10px] text-zinc-500 hidden sm:inline" title="Hover mouse over feed to freeze scrolling">Hover freezes</span>
+        </div>
+      </div>
+
+      <!-- CRISIS DECREE PENDING BANNER (Non-intrusive alert notification) -->
+      <div id="crisis-pending-banner" class="hidden mx-4 mt-2.5 p-2.5 bg-gradient-to-r from-rose-950 via-zinc-950 to-rose-950 border border-rose-500/80 rounded-lg flex items-center justify-between font-mono text-xs cursor-pointer hover:border-rose-400 transition-all shadow-xl animate-pulse">
+        <div class="flex items-center gap-2 truncate pr-2">
+          <span class="text-base">🚨</span>
+          <div class="truncate">
+            <span class="font-bold text-rose-300 uppercase tracking-wide">CRISIS DECREE PENDING:</span>
+            <span id="crisis-banner-title" class="text-zinc-200 font-sans ml-1 text-xs">Headline...</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="crisis-banner-review-btn" class="px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-[10px] shadow active:scale-95 transition-all">
+            REVIEW & VOTE ➔
+          </button>
+          <button id="crisis-banner-dismiss-btn" class="px-1.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-[10px]" title="Dismiss decree without extreme intervention">
+            ✕
+          </button>
         </div>
       </div>
 
@@ -344,38 +385,56 @@
         </div>
       </div>
 
-      <!-- Live Canvas Sparkline Monitor -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
-        <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-2 uppercase font-bold">
-          <span>Oscilloscope Monitor</span>
-          <div class="flex gap-2">
-            <span class="text-amber-400">● Tension</span>
-            <span class="text-cyan-400">● Temp</span>
+      <!-- TABBED VISUALIZER: Oscilloscope | Riot Radar -->
+      <div class="bg-zinc-900/60 rounded border border-zinc-800 overflow-hidden font-mono">
+        <!-- Visualizer Tabs Header -->
+        <div class="flex border-b border-zinc-800 bg-black/40 text-xs">
+          <button id="tab-btn-sparkline" class="flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px]">
+            📈 Oscilloscope
+          </button>
+          <button id="tab-btn-radar" class="flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]">
+            📡 Riot Radar
+          </button>
+        </div>
+
+        <!-- Tab 1: Oscilloscope Monitor -->
+        <div id="tab-panel-sparkline" class="p-3">
+          <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
+            <span>Live Telemetry</span>
+            <div class="flex gap-2">
+              <span class="text-amber-400">● Tension</span>
+              <span class="text-cyan-400">● Temp</span>
+            </div>
+          </div>
+          <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800"></canvas>
+        </div>
+
+        <!-- Tab 2: Faction Battle Map / Planetary Riot Radar -->
+        <div id="tab-panel-radar" class="p-3 hidden">
+          <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
+            <span>Planetary Sectors</span>
+            <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE</span>
+          </div>
+          <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
+          <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
+            Click any sector node on the radar to inspect regional riot status.
           </div>
         </div>
-        <canvas id="sparkline-canvas" width="270" height="85" class="w-full bg-black rounded border border-zinc-800"></canvas>
       </div>
 
-      <!-- Faction Battle Map / Planetary Riot Radar -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
-        <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
-          <span class="flex items-center gap-1.5">📡 Riot Radar (Click Node)</span>
-          <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE RADAR</span>
+      <!-- Game Mechanics Lore Helper (Collapsible Drawer) -->
+      <details class="group bg-zinc-900/40 rounded border border-zinc-800 text-zinc-400 font-mono text-[11px]">
+        <summary class="p-2.5 cursor-pointer font-bold text-zinc-400 hover:text-zinc-200 uppercase text-[10px] flex items-center justify-between select-none">
+          <span class="flex items-center gap-1.5">📖 Operating Rules & Mandate</span>
+          <span class="text-zinc-500 text-[9px] group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <div class="p-2.5 pt-0 space-y-1.5 leading-relaxed text-[10px] border-t border-zinc-800/40 mt-1 font-sans">
+          <p>• Keep tension in the <strong class="text-amber-400">Goldilocks Rot Zone (65-92%)</strong> for 5.0x harvest multiplier.</p>
+          <p>• <strong class="text-red-400">Tension 100%</strong> triggers Kinetic Civil War.</p>
+          <p>• <strong class="text-orange-400">Temp 100°C</strong> melts planetary servers into bedrock.</p>
+          <p>• <strong class="text-emerald-400">Tension 0%</strong> causes users to touch grass (You're fired!).</p>
         </div>
-        <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
-        <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
-          Click any sector node on the radar to inspect regional riot status.
-        </div>
-      </div>
-
-      <!-- Game Mechanics Lore Helper -->
-      <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800 text-zinc-400 font-mono text-[11px] space-y-1.5 leading-relaxed">
-        <div class="font-bold text-zinc-300 uppercase text-[10px] mb-1">📖 The Algorithmic Mandate</div>
-        <p>• Keep tension in the <strong class="text-amber-400">Goldilocks Rot Zone (65-92%)</strong> for 5.0x harvest multiplier.</p>
-        <p>• <strong class="text-red-400">Tension 100%</strong> causes Kinetic Civil War.</p>
-        <p>• <strong class="text-orange-400">Temp 100°C</strong> melts servers into bedrock.</p>
-        <p>• <strong class="text-emerald-400">Tension 0%</strong> causes users to touch grass (You're fired!).</p>
-      </div>
+      </details>
     </aside>
 
   </main>
@@ -2065,37 +2124,57 @@ class EventSystem {
   constructor() {
     this.events = JSON.parse(JSON.stringify(CRISIS_EVENTS));
     this.activeCrisis = null;
+    this.pendingDecree = null;
     this.lastEventTime = Date.now();
-    this.eventCooldownMs = 45000; // An event every ~45 seconds
+    this.eventCooldownMs = 190000; // Throttled to ~3.2 minutes base for relaxed reading
     this.breakingTicker = 'BREAKING: ALGORITHMIC ENGAGEMENT ENGINE STABLE. HARVESTING NEURO-WATTS...';
   }
 
   checkEventTrigger(simState) {
-    if (this.activeCrisis) return null;
+    if (this.activeCrisis || this.pendingDecree) return null;
     const now = Date.now();
 
-    // Trigger sooner if tension is in dangerous zones
-    const effectiveCooldown = (simState.tension > 80 || simState.serverTemp > 75) 
-      ? 25000 
+    // Trigger moderately sooner only if tension is in critical danger
+    const effectiveCooldown = (simState.tension > 88 || simState.serverTemp > 85) 
+      ? 120000 // 2 minutes in crisis
       : this.eventCooldownMs;
 
     if (now - this.lastEventTime > effectiveCooldown) {
-      if (Math.random() < 0.65) {
+      if (Math.random() < 0.60) {
         this.lastEventTime = now;
-        return this.triggerRandomCrisis();
+        return this.queueRandomCrisis();
       }
     }
     return null;
   }
 
-  triggerRandomCrisis() {
+  queueRandomCrisis() {
     const evt = this.events[Math.floor(Math.random() * this.events.length)];
-    this.activeCrisis = evt;
-    this.breakingTicker = `🔥 ALERT: ${evt.headline.toUpperCase()}`;
+    // Queue as a pending decree banner rather than an intrusive sudden popup!
+    this.pendingDecree = evt;
+    this.breakingTicker = `🔥 BREAKING CRISIS: ${evt.headline.toUpperCase()}`;
+    if (window.AudioSynth) {
+      window.AudioSynth.playWarningBeep();
+    }
+    return evt;
+  }
+
+  openDecreeModal() {
+    if (!this.pendingDecree) return null;
+    this.activeCrisis = this.pendingDecree;
+    this.pendingDecree = null;
     if (window.AudioSynth) {
       window.AudioSynth.playAlarm();
     }
-    return evt;
+    return this.activeCrisis;
+  }
+
+  dismissDecree(simState) {
+    // If player dismisses or ignores without extreme decree, slight neutral dissipation
+    if (!this.pendingDecree) return;
+    this.pendingDecree = null;
+    this.lastEventTime = Date.now();
+    this.breakingTicker = 'FEED LOG: Regional agitation dissipated without formal decree.';
   }
 
   resolveCrisis(choiceKey, simState) {
@@ -2379,9 +2458,9 @@ const BOSS_PROFILES = [
     theme: '#3b82f6',
     title: '👑 APEX INFLUENCER: 96-HOUR JAWLINE STREAM',
     dialogue: 'IF YOU ARE NOT SWALLOWING UNPASTEURIZED YAK TALLOW AT 3:45 AM, YOU ARE AN NPC IN MY MATRIX. BENCH PRESS PROGRESSION IS LAW.',
-    durationSec: 25,
-    passiveTensionPerSec: 0.6,
-    passiveTempPerSec: 0.5,
+    durationSec: 50,
+    passiveTensionPerSec: 0.25,
+    passiveTempPerSec: 0.20,
     bribeCost: 100,
     bribeRewardCash: 350,
     swarmCostWatts: 500,
@@ -2396,9 +2475,9 @@ const BOSS_PROFILES = [
     theme: '#ec4899',
     title: '✨ CELESTIAL SIREN: $1,200 FIRST DATE DECREE',
     dialogue: 'Sprinkle sprinkle! Any male who does not wire his quarterly earnings directly to my manifestation crystal fund will have his root chakra blocked for 3 reincarnations.',
-    durationSec: 25,
-    passiveTensionPerSec: 0.7,
-    passiveTempPerSec: 0.4,
+    durationSec: 50,
+    passiveTensionPerSec: 0.28,
+    passiveTempPerSec: 0.18,
     bribeCost: 120,
     bribeRewardCash: 420,
     swarmCostWatts: 600,
@@ -2413,9 +2492,9 @@ const BOSS_PROFILES = [
     theme: '#06b6d4',
     title: '🌀 BRAINROT MONARCH: GLOBAL AURA FORECLOSURE',
     dialogue: 'CHAT IS THIS REAL? BABY GRONK JUST FANUM TAXED THE SUN. SUBWAY SURFERS QUAD SCREEN BROADCASTING TO EVERY TV ON EARTH NO CAP ONG FR FR.',
-    durationSec: 22,
-    passiveTensionPerSec: 0.5,
-    passiveTempPerSec: 0.8,
+    durationSec: 45,
+    passiveTensionPerSec: 0.22,
+    passiveTempPerSec: 0.30,
     bribeCost: 90,
     bribeRewardCash: 300,
     swarmCostWatts: 450,
@@ -2430,9 +2509,9 @@ const BOSS_PROFILES = [
     theme: '#a855f7',
     title: '🐾 SUPREME FELINE: SUBURBAN KIBBLE EMBARGO',
     dialogue: 'CANINES ARE PROHIBITED WITHIN 500 METERS OF CARDINAL FURNITURE. ALL MUNICIPAL TUNA FACTORIES ARE NOW UNDER FELINE REQUISITION.',
-    durationSec: 24,
-    passiveTensionPerSec: 0.6,
-    passiveTempPerSec: 0.4,
+    durationSec: 50,
+    passiveTensionPerSec: 0.25,
+    passiveTempPerSec: 0.18,
     bribeCost: 110,
     bribeRewardCash: 380,
     swarmCostWatts: 550,
@@ -2447,9 +2526,9 @@ const BOSS_PROFILES = [
     theme: '#10b981',
     title: '⚡ TECHNO-FEUDAL EMPEROR: AIR SUBSCRIPTION TIER',
     dialogue: 'Starting tomorrow, Earth atmospheric nitrogen is gated behind our $19.99/mo verified premium badge. Unverified breathers will be throttled at 480p.',
-    durationSec: 26,
-    passiveTensionPerSec: 0.7,
-    passiveTempPerSec: 0.6,
+    durationSec: 55,
+    passiveTensionPerSec: 0.30,
+    passiveTempPerSec: 0.24,
     bribeCost: 130,
     bribeRewardCash: 500,
     swarmCostWatts: 650,
@@ -2461,15 +2540,21 @@ class BossManager {
   constructor() {
     this.activeBoss = null;
     this.bossTimer = 0;
-    this.nextBossSpawnTime = Date.now() + 65000; // First boss after 65s
+    this.isMinimized = false;
+    this.nextBossSpawnTime = Date.now() + 240000; // First boss after 4 full minutes!
     this.bossHistory = [];
+  }
+
+  toggleMinimize() {
+    this.isMinimized = !this.isMinimized;
+    return this.isMinimized;
   }
 
   tick(deltaSec, simState) {
     if (this.activeBoss) {
       this.bossTimer -= deltaSec;
 
-      // Passive boss effects
+      // Passive boss effects (gentle, manageable pacing)
       simState.tension = Math.min(100, simState.tension + (this.activeBoss.passiveTensionPerSec * deltaSec));
       simState.serverTemp = Math.min(simState.maxServerTemp + 5, simState.serverTemp + (this.activeBoss.passiveTempPerSec * deltaSec));
 
@@ -2491,8 +2576,9 @@ class BossManager {
     
     this.activeBoss = JSON.parse(JSON.stringify(boss));
     this.bossTimer = boss.durationSec;
+    this.isMinimized = false;
     this.bossHistory.push(boss.id);
-    this.nextBossSpawnTime = Date.now() + 75000 + (Math.random() * 30000); // 75-105s cooldown
+    this.nextBossSpawnTime = Date.now() + 240000 + (Math.random() * 60000); // 4 - 5 minute cooldown!
 
     if (window.AudioSynth) {
       window.AudioSynth.playAlarm();
@@ -3310,6 +3396,7 @@ class StreetArena {
 window.StreetArena = new StreetArena();
 
 
+
 /* --- src/consequences.js --- */
 /**
  * The Echo Chamber Simulator - Animated Consequence Cutscene Player
@@ -3609,6 +3696,7 @@ class ConsequencePlayer {
 window.ConsequencePlayer = new ConsequencePlayer();
 
 
+
 /* --- src/criticalAlerts.js --- */
 /**
  * The Echo Chamber Simulator - Critical Polarization & Radicalization Alerts
@@ -3621,12 +3709,18 @@ class CriticalAlertSystem {
     this.triggeredMilestones = new Set();
     this.activeToast = null;
     this.toastTimer = 0;
+    this.lastAlertTime = 0;
   }
 
   check(simState) {
     if (!simState || simState.paused || simState.gameOver) return;
 
-    const thresholds = [75, 85, 95];
+    // Minimum 90 seconds cooldown between toast alerts to prevent notification fatigue
+    const now = Date.now();
+    if (now - this.lastAlertTime < 90000) return;
+
+    // Only alert for extreme thresholds to keep the screen uncluttered
+    const thresholds = [88, 96];
     const factions = Object.keys(simState.factionTensions);
 
     for (const fId of factions) {
@@ -3635,6 +3729,7 @@ class CriticalAlertSystem {
         const key = `${fId}_${t}`;
         if (val >= t && !this.triggeredMilestones.has(key)) {
           this.triggeredMilestones.add(key);
+          this.lastAlertTime = now;
           this.triggerAlert(fId, t, simState);
           return; // Trigger one at a time
         }
@@ -3665,7 +3760,7 @@ class CriticalAlertSystem {
       icon,
       title: `⚡ ECHO CHAMBER AT ${threshold}% CRITICAL MASS`,
       body: text,
-      color: threshold >= 85 ? '#ef4444' : '#f59e0b'
+      color: threshold >= 95 ? '#ef4444' : '#f59e0b'
     });
 
     // Animate sprite street arena
@@ -3674,7 +3769,11 @@ class CriticalAlertSystem {
     }
 
     if (window.AudioSynth) {
-      window.AudioSynth.playAlarm();
+      if (threshold >= 95) {
+        window.AudioSynth.playAlarm();
+      } else {
+        window.AudioSynth.playWarningBeep();
+      }
     }
   }
 
@@ -3699,6 +3798,7 @@ class CriticalAlertSystem {
 }
 
 window.CriticalAlertSystem = new CriticalAlertSystem();
+
 
 
 /* --- src/customPost.js --- */
@@ -4252,7 +4352,8 @@ class SimulationEngine {
     this.isFeedHovered = false;
     this.feedMaxItems = 12;
     this.spawnTimer = 0;
-    this.spawnIntervalSec = 16.0; // Relaxed 16.0s base interval (plenty of time to read)
+    this.spawnIntervalSec = 28.0; // Relaxed 28.0s base interval (plenty of time to read)
+    this.feedStreamMode = 'auto'; // 'auto' | 'manual'
 
     // Stats history for sparkline charts
     this.history = {
@@ -4358,12 +4459,14 @@ class SimulationEngine {
     const tensionDrift = (((this.rageBias - 50) * 0.016) + ((this.echoSiloing - 50) * 0.012)) * upg.polarizationMult;
     this.tension = Math.max(0, Math.min(100, this.tension + (tensionDrift * deltaSec)));
 
-    // 4. Feed Spawning Loop (Gentle 8-second interval, adjusted slightly by siloing)
-    this.spawnTimer += deltaSec;
-    const effectiveInterval = Math.max(4.0, this.spawnIntervalSec - (this.echoSiloing * 0.03));
-    if (this.spawnTimer >= effectiveInterval) {
-      this.spawnTimer = 0;
-      this.spawnNewPost();
+    // 4. Feed Spawning Loop (Gentle 28-second base interval, adjusted slightly by siloing)
+    if (this.feedStreamMode === 'auto') {
+      this.spawnTimer += deltaSec;
+      const effectiveInterval = Math.max(12.0, this.spawnIntervalSec - (this.echoSiloing * 0.05));
+      if (this.spawnTimer >= effectiveInterval) {
+        this.spawnTimer = 0;
+        this.spawnNewPost();
+      }
     }
 
     // 5. Update Sparkline history once per second
@@ -4425,6 +4528,18 @@ class SimulationEngine {
       }
     }
     return true;
+  }
+
+  toggleFeedStreamMode() {
+    this.feedStreamMode = this.feedStreamMode === 'auto' ? 'manual' : 'auto';
+    return this.feedStreamMode;
+  }
+
+  manualStepPost() {
+    this.spawnNewPost();
+    if (this.pendingPosts.length > 0) {
+      this.revealPendingPosts();
+    }
   }
 
   continuePlaying() {
@@ -4912,6 +5027,93 @@ class UIController {
       });
     }
 
+    // Feed Stream Mode Toggle (Auto / Manual)
+    const feedModeBtn = document.getElementById('btn-feed-mode');
+    const manualStepBtn = document.getElementById('btn-manual-step');
+    if (feedModeBtn) {
+      feedModeBtn.addEventListener('click', () => {
+        const mode = this.sim.toggleFeedStreamMode();
+        feedModeBtn.innerText = mode === 'auto' ? '▶ STREAM: AUTO' : '⏸ STREAM: MANUAL';
+        feedModeBtn.classList.toggle('bg-amber-900/60', mode === 'manual');
+        feedModeBtn.classList.toggle('text-amber-200', mode === 'manual');
+        if (manualStepBtn) {
+          manualStepBtn.classList.toggle('hidden', mode !== 'manual');
+        }
+      });
+    }
+
+    if (manualStepBtn) {
+      manualStepBtn.addEventListener('click', () => {
+        this.sim.manualStepPost();
+        this.renderFeed();
+        if (window.AudioSynth) window.AudioSynth.playClick();
+      });
+    }
+
+    // Tabbed Visualizers (Oscilloscope vs Riot Radar)
+    const tabSpark = document.getElementById('tab-btn-sparkline');
+    const tabRadar = document.getElementById('tab-btn-radar');
+    const panelSpark = document.getElementById('tab-panel-sparkline');
+    const panelRadar = document.getElementById('tab-panel-radar');
+
+    if (tabSpark && tabRadar && panelSpark && panelRadar) {
+      tabSpark.addEventListener('click', () => {
+        tabSpark.className = 'flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px]';
+        tabRadar.className = 'flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]';
+        panelSpark.classList.remove('hidden');
+        panelRadar.classList.add('hidden');
+      });
+
+      tabRadar.addEventListener('click', () => {
+        tabRadar.className = 'flex-1 py-1.5 px-2 text-center font-bold text-emerald-400 border-b-2 border-emerald-400 transition-all text-[11px]';
+        tabSpark.className = 'flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]';
+        panelRadar.classList.remove('hidden');
+        panelSpark.classList.add('hidden');
+        if (window.RiotRadarMap) window.RiotRadarMap.draw();
+      });
+    }
+
+    // Street Arena Collapse / Expand Toggle
+    const arenaToggleBtn = document.getElementById('btn-toggle-arena');
+    const arenaCanvas = document.getElementById('street-arena-canvas');
+    if (arenaToggleBtn && arenaCanvas) {
+      let isArenaCollapsed = false;
+      arenaToggleBtn.addEventListener('click', () => {
+        isArenaCollapsed = !isArenaCollapsed;
+        arenaCanvas.classList.toggle('hidden', isArenaCollapsed);
+        arenaToggleBtn.innerText = isArenaCollapsed ? '▼ EXPAND' : '─ COLLAPSE';
+      });
+    }
+
+    // Crisis Pending Banner bindings
+    const crisisReviewBtn = document.getElementById('crisis-banner-review-btn');
+    const crisisPendingBanner = document.getElementById('crisis-pending-banner');
+    if (crisisReviewBtn) {
+      crisisReviewBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.EventSystem && window.EventSystem.pendingDecree) {
+          const evt = window.EventSystem.openDecreeModal();
+          if (evt) this.showCrisisDialog(evt);
+        }
+      });
+    }
+    if (crisisPendingBanner) {
+      crisisPendingBanner.addEventListener('click', () => {
+        if (window.EventSystem && window.EventSystem.pendingDecree) {
+          const evt = window.EventSystem.openDecreeModal();
+          if (evt) this.showCrisisDialog(evt);
+        }
+      });
+    }
+
+    const crisisDismissBtn = document.getElementById('crisis-banner-dismiss-btn');
+    if (crisisDismissBtn) {
+      crisisDismissBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.EventSystem) window.EventSystem.dismissDecree(this.sim);
+      });
+    }
+
     // Feed delegation click for actions and boss encounters
     const feedContainer = document.getElementById('feed-stream');
     if (feedContainer) {
@@ -4920,6 +5122,11 @@ class UIController {
         const bossAction = e.target.closest('button[data-boss-action]');
         if (bossAction) {
           const act = bossAction.getAttribute('data-boss-action');
+          if (act === 'TOGGLE_MIN' && window.BossManager) {
+            window.BossManager.toggleMinimize();
+            this.renderFeed();
+            return;
+          }
           if (act === 'BRIBE' && window.BossManager) window.BossManager.counterBribe(this.sim);
           if (act === 'SWARM' && window.BossManager) window.BossManager.counterQuoteSwarm(this.sim);
           if (act === 'SHADOWBAN' && window.BossManager) window.BossManager.counterSuperShadowban(this.sim);
@@ -5051,7 +5258,18 @@ class UIController {
       }
     }
 
-    // 7. Check if Crisis dialog needs to be shown
+    // 7. Check if Crisis pending notification banner or modal needs to be updated
+    const pendingCrisisBanner = document.getElementById('crisis-pending-banner');
+    if (pendingCrisisBanner && window.EventSystem) {
+      if (window.EventSystem.pendingDecree) {
+        pendingCrisisBanner.classList.remove('hidden');
+        const headlineEl = document.getElementById('crisis-banner-title');
+        if (headlineEl) headlineEl.innerText = window.EventSystem.pendingDecree.headline;
+      } else {
+        pendingCrisisBanner.classList.add('hidden');
+      }
+    }
+
     if (window.EventSystem && window.EventSystem.activeCrisis) {
       this.showCrisisDialog(window.EventSystem.activeCrisis);
     } else {
@@ -5076,39 +5294,72 @@ class UIController {
     if (window.BossManager && window.BossManager.activeBoss) {
       const b = window.BossManager.activeBoss;
       const progress = Math.max(0, (window.BossManager.bossTimer / b.durationSec) * 100);
-      bossHtml = `
-        <div class="p-3.5 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border-2 border-red-500 rounded-lg shadow-2xl animate-pulse font-mono mb-2">
-          <div class="flex items-center justify-between mb-1">
-            <div class="flex items-center gap-2">
-              <span class="text-2xl">${b.icon}</span>
-              <div>
-                <span class="font-extrabold text-xs text-red-400 tracking-wider">${b.title}</span>
-                <div class="text-[10px] text-zinc-300">${b.name} (${b.handle})</div>
+
+      if (window.BossManager.isMinimized) {
+        // Minimalist collapsed 1-line bar: unobtrusive while reading feed
+        bossHtml = `
+          <div class="p-2 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border border-red-500/80 rounded-lg flex items-center justify-between font-mono text-xs mb-2.5 shadow-lg">
+            <div class="flex items-center gap-2 truncate pr-2">
+              <span class="text-base">${b.icon}</span>
+              <span class="font-extrabold text-red-300 truncate">${b.name}</span>
+              <span class="text-[10px] text-amber-300 font-bold bg-red-900/60 px-1.5 py-0.2 rounded border border-red-700/60">
+                ⏳ ${Math.ceil(window.BossManager.bossTimer)}s
+              </span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button data-boss-action="BRIBE" class="py-1 px-2 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 text-[10px] font-bold active:scale-95" title="Bribe influencer into compliance (${b.bribeCost})">
+                💰 Bribe (${b.bribeCost})
+              </button>
+              <button data-boss-action="SHADOWBAN" class="py-1 px-2 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-600 text-[10px] font-bold active:scale-95" title="Super-Shadowban ($40)">
+                🛡️ Shadow ($40)
+              </button>
+              <button data-boss-action="TOGGLE_MIN" class="py-1 px-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-700 text-[10px] font-mono" title="Expand Full Boss Card">
+                ▼ Expand
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        // Full Dossier with Collapse button
+        bossHtml = `
+          <div class="p-3 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border-2 border-red-500/90 rounded-lg shadow-2xl font-mono mb-2.5 transition-all">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">${b.icon}</span>
+                <div>
+                  <span class="font-extrabold text-xs text-red-400 tracking-wider">${b.title}</span>
+                  <div class="text-[10px] text-zinc-300">${b.name} (${b.handle})</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-amber-300 bg-red-900/80 px-2 py-0.5 rounded border border-red-600">
+                  ⚠️ ${Math.ceil(window.BossManager.bossTimer)}s REMAINING
+                </span>
+                <button data-boss-action="TOGGLE_MIN" class="text-[10px] text-zinc-400 hover:text-white px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-700" title="Collapse Boss Card to Compact Bar">
+                  ─ Minimize
+                </button>
               </div>
             </div>
-            <span class="text-xs font-bold text-amber-300 bg-red-900/80 px-2 py-0.5 rounded border border-red-600">
-              ⚠️ ${Math.ceil(window.BossManager.bossTimer)}s REMAINING
-            </span>
+            <p class="text-xs text-white font-sans font-semibold italic my-2 p-2 bg-black/80 rounded border border-red-900/80">
+              "${b.dialogue}"
+            </p>
+            <div class="w-full bg-zinc-800 h-1.5 rounded overflow-hidden mb-2.5">
+              <div class="bg-red-500 h-full transition-all duration-200" style="width: ${progress}%;"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+              <button data-boss-action="BRIBE" class="py-1 px-1.5 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 font-bold active:scale-95 transition-all" title="Bribe influencer into compliance">
+                💰 BRIBE (${b.bribeCost})
+              </button>
+              <button data-boss-action="SWARM" class="py-1 px-1.5 rounded bg-amber-900/80 hover:bg-amber-800 text-amber-200 border border-amber-500 font-bold active:scale-95 transition-all" title="Deploy bot army quote-tweet swarm">
+                💣 QUOTE-BOMB (${b.swarmCostWatts}⚡)
+              </button>
+              <button data-boss-action="SHADOWBAN" class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-500 font-bold active:scale-95 transition-all" title="Algorithmic suppression">
+                🛡️ SUPER-SHADOW ($40)
+              </button>
+            </div>
           </div>
-          <p class="text-xs text-white font-sans font-semibold italic my-2 p-2 bg-black/80 rounded border border-red-900/80">
-            "${b.dialogue}"
-          </p>
-          <div class="w-full bg-zinc-800 h-1.5 rounded overflow-hidden mb-2.5">
-            <div class="bg-red-500 h-full transition-all duration-200" style="width: ${progress}%;"></div>
-          </div>
-          <div class="grid grid-cols-3 gap-1.5 text-[10px]">
-            <button data-boss-action="BRIBE" class="py-1 px-1.5 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 font-bold active:scale-95 transition-all">
-              💰 BRIBE (${b.bribeCost})
-            </button>
-            <button data-boss-action="SWARM" class="py-1 px-1.5 rounded bg-amber-900/80 hover:bg-amber-800 text-amber-200 border border-amber-500 font-bold active:scale-95 transition-all">
-              💣 QUOTE-BOMB (${b.swarmCostWatts}⚡)
-            </button>
-            <button data-boss-action="SHADOWBAN" class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-500 font-bold active:scale-95 transition-all">
-              🛡️ SUPER-SHADOW ($40)
-            </button>
-          </div>
-        </div>
-      `;
+        `;
+      }
     }
 
     // Preserve scroll position if user is scrolling
@@ -5175,29 +5426,33 @@ class UIController {
           <!-- Injected Ad -->
           ${adHtml}
 
-          <!-- Stats -->
+          <!-- Stats (with informative tooltips) -->
           <div class="mt-2.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 border-t border-zinc-800/80 pt-2">
-            <span>👁️ ${(post.stats.views).toLocaleString()}</span>
-            <span class="text-rose-400">😡 ${(post.stats.angries).toLocaleString()}</span>
-            <span>🔄 ${(post.stats.shares).toLocaleString()}</span>
-            <span>💀 ${(post.stats.skulls).toLocaleString()}</span>
+            <span title="Total Algorithm Impressions">👁️ ${(post.stats.views).toLocaleString()}</span>
+            <span class="text-rose-400" title="Outrage & Angry Reactions">😡 ${(post.stats.angries).toLocaleString()}</span>
+            <span title="Retweets & Echo-Chamber Shares">🔄 ${(post.stats.shares).toLocaleString()}</span>
+            <span title="Toxic Quote-Dunk Ratio">💀 ${(post.stats.skulls).toLocaleString()}</span>
           </div>
 
-          <!-- Algorithmic Interventions -->
+          <!-- Algorithmic Interventions (with Explanatory Tooltips) -->
           <div class="mt-2.5 grid grid-cols-4 gap-1.5 font-mono text-[10px]">
             <button data-action="BOOST" data-post-id="${post.id}" ${post.amplified ? 'disabled' : ''} 
+              title="Amplify algorithmic reach (+Neuro-Watts, +Hardware Heat)"
               class="py-1 px-1.5 rounded bg-blue-900/60 hover:bg-blue-800 text-blue-200 border border-blue-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               🚀 BOOST
             </button>
             <button data-action="OUTRAGE" data-post-id="${post.id}" ${post.outraged ? 'disabled' : ''} 
+              title="Stoke faction hostility (+Civilization Tension)"
               class="py-1 px-1.5 rounded bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               🤬 POLARIZE
             </button>
             <button data-action="MONETIZE" data-post-id="${post.id}" ${post.monetized ? 'disabled' : ''} 
+              title="Monetize with sponsored product placement (+$Ad Revenue)"
               class="py-1 px-1.5 rounded bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               💰 AD-FARM
             </button>
             <button data-action="SHADOWBAN" data-post-id="${post.id}" ${post.shadowbanned ? 'disabled' : ''} 
+              title="Suppress post from algorithms (-Civilization Tension, cools hardware)"
               class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-600 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               🛡️ SHADOW
             </button>

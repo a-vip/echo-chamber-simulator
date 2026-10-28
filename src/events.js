@@ -142,37 +142,57 @@ class EventSystem {
   constructor() {
     this.events = JSON.parse(JSON.stringify(CRISIS_EVENTS));
     this.activeCrisis = null;
+    this.pendingDecree = null;
     this.lastEventTime = Date.now();
-    this.eventCooldownMs = 45000; // An event every ~45 seconds
+    this.eventCooldownMs = 190000; // Throttled to ~3.2 minutes base for relaxed reading
     this.breakingTicker = 'BREAKING: ALGORITHMIC ENGAGEMENT ENGINE STABLE. HARVESTING NEURO-WATTS...';
   }
 
   checkEventTrigger(simState) {
-    if (this.activeCrisis) return null;
+    if (this.activeCrisis || this.pendingDecree) return null;
     const now = Date.now();
 
-    // Trigger sooner if tension is in dangerous zones
-    const effectiveCooldown = (simState.tension > 80 || simState.serverTemp > 75) 
-      ? 25000 
+    // Trigger moderately sooner only if tension is in critical danger
+    const effectiveCooldown = (simState.tension > 88 || simState.serverTemp > 85) 
+      ? 120000 // 2 minutes in crisis
       : this.eventCooldownMs;
 
     if (now - this.lastEventTime > effectiveCooldown) {
-      if (Math.random() < 0.65) {
+      if (Math.random() < 0.60) {
         this.lastEventTime = now;
-        return this.triggerRandomCrisis();
+        return this.queueRandomCrisis();
       }
     }
     return null;
   }
 
-  triggerRandomCrisis() {
+  queueRandomCrisis() {
     const evt = this.events[Math.floor(Math.random() * this.events.length)];
-    this.activeCrisis = evt;
-    this.breakingTicker = `🔥 ALERT: ${evt.headline.toUpperCase()}`;
+    // Queue as a pending decree banner rather than an intrusive sudden popup!
+    this.pendingDecree = evt;
+    this.breakingTicker = `🔥 BREAKING CRISIS: ${evt.headline.toUpperCase()}`;
+    if (window.AudioSynth) {
+      window.AudioSynth.playWarningBeep();
+    }
+    return evt;
+  }
+
+  openDecreeModal() {
+    if (!this.pendingDecree) return null;
+    this.activeCrisis = this.pendingDecree;
+    this.pendingDecree = null;
     if (window.AudioSynth) {
       window.AudioSynth.playAlarm();
     }
-    return evt;
+    return this.activeCrisis;
+  }
+
+  dismissDecree(simState) {
+    // If player dismisses or ignores without extreme decree, slight neutral dissipation
+    if (!this.pendingDecree) return;
+    this.pendingDecree = null;
+    this.lastEventTime = Date.now();
+    this.breakingTicker = 'FEED LOG: Regional agitation dissipated without formal decree.';
   }
 
   resolveCrisis(choiceKey, simState) {

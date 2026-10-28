@@ -229,3 +229,4 @@ class ConsequencePlayer {
 }
 
 window.ConsequencePlayer = new ConsequencePlayer();
+

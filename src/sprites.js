@@ -511,3 +511,4 @@ class StreetArena {
 }
 
 window.StreetArena = new StreetArena();
+

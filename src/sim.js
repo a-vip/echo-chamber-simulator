@@ -59,7 +59,8 @@ class SimulationEngine {
     this.isFeedHovered = false;
     this.feedMaxItems = 12;
     this.spawnTimer = 0;
-    this.spawnIntervalSec = 16.0; // Relaxed 16.0s base interval (plenty of time to read)
+    this.spawnIntervalSec = 28.0; // Relaxed 28.0s base interval (plenty of time to read)
+    this.feedStreamMode = 'auto'; // 'auto' | 'manual'
 
     // Stats history for sparkline charts
     this.history = {
@@ -165,12 +166,14 @@ class SimulationEngine {
     const tensionDrift = (((this.rageBias - 50) * 0.016) + ((this.echoSiloing - 50) * 0.012)) * upg.polarizationMult;
     this.tension = Math.max(0, Math.min(100, this.tension + (tensionDrift * deltaSec)));
 
-    // 4. Feed Spawning Loop (Gentle 8-second interval, adjusted slightly by siloing)
-    this.spawnTimer += deltaSec;
-    const effectiveInterval = Math.max(4.0, this.spawnIntervalSec - (this.echoSiloing * 0.03));
-    if (this.spawnTimer >= effectiveInterval) {
-      this.spawnTimer = 0;
-      this.spawnNewPost();
+    // 4. Feed Spawning Loop (Gentle 28-second base interval, adjusted slightly by siloing)
+    if (this.feedStreamMode === 'auto') {
+      this.spawnTimer += deltaSec;
+      const effectiveInterval = Math.max(12.0, this.spawnIntervalSec - (this.echoSiloing * 0.05));
+      if (this.spawnTimer >= effectiveInterval) {
+        this.spawnTimer = 0;
+        this.spawnNewPost();
+      }
     }
 
     // 5. Update Sparkline history once per second
@@ -232,6 +235,18 @@ class SimulationEngine {
       }
     }
     return true;
+  }
+
+  toggleFeedStreamMode() {
+    this.feedStreamMode = this.feedStreamMode === 'auto' ? 'manual' : 'auto';
+    return this.feedStreamMode;
+  }
+
+  manualStepPost() {
+    this.spawnNewPost();
+    if (this.pendingPosts.length > 0) {
+      this.revealPendingPosts();
+    }
   }
 
   continuePlaying() {

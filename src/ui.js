@@ -298,6 +298,93 @@ class UIController {
       });
     }
 
+    // Feed Stream Mode Toggle (Auto / Manual)
+    const feedModeBtn = document.getElementById('btn-feed-mode');
+    const manualStepBtn = document.getElementById('btn-manual-step');
+    if (feedModeBtn) {
+      feedModeBtn.addEventListener('click', () => {
+        const mode = this.sim.toggleFeedStreamMode();
+        feedModeBtn.innerText = mode === 'auto' ? '▶ STREAM: AUTO' : '⏸ STREAM: MANUAL';
+        feedModeBtn.classList.toggle('bg-amber-900/60', mode === 'manual');
+        feedModeBtn.classList.toggle('text-amber-200', mode === 'manual');
+        if (manualStepBtn) {
+          manualStepBtn.classList.toggle('hidden', mode !== 'manual');
+        }
+      });
+    }
+
+    if (manualStepBtn) {
+      manualStepBtn.addEventListener('click', () => {
+        this.sim.manualStepPost();
+        this.renderFeed();
+        if (window.AudioSynth) window.AudioSynth.playClick();
+      });
+    }
+
+    // Tabbed Visualizers (Oscilloscope vs Riot Radar)
+    const tabSpark = document.getElementById('tab-btn-sparkline');
+    const tabRadar = document.getElementById('tab-btn-radar');
+    const panelSpark = document.getElementById('tab-panel-sparkline');
+    const panelRadar = document.getElementById('tab-panel-radar');
+
+    if (tabSpark && tabRadar && panelSpark && panelRadar) {
+      tabSpark.addEventListener('click', () => {
+        tabSpark.className = 'flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px]';
+        tabRadar.className = 'flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]';
+        panelSpark.classList.remove('hidden');
+        panelRadar.classList.add('hidden');
+      });
+
+      tabRadar.addEventListener('click', () => {
+        tabRadar.className = 'flex-1 py-1.5 px-2 text-center font-bold text-emerald-400 border-b-2 border-emerald-400 transition-all text-[11px]';
+        tabSpark.className = 'flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]';
+        panelRadar.classList.remove('hidden');
+        panelSpark.classList.add('hidden');
+        if (window.RiotRadarMap) window.RiotRadarMap.draw();
+      });
+    }
+
+    // Street Arena Collapse / Expand Toggle
+    const arenaToggleBtn = document.getElementById('btn-toggle-arena');
+    const arenaCanvas = document.getElementById('street-arena-canvas');
+    if (arenaToggleBtn && arenaCanvas) {
+      let isArenaCollapsed = false;
+      arenaToggleBtn.addEventListener('click', () => {
+        isArenaCollapsed = !isArenaCollapsed;
+        arenaCanvas.classList.toggle('hidden', isArenaCollapsed);
+        arenaToggleBtn.innerText = isArenaCollapsed ? '▼ EXPAND' : '─ COLLAPSE';
+      });
+    }
+
+    // Crisis Pending Banner bindings
+    const crisisReviewBtn = document.getElementById('crisis-banner-review-btn');
+    const crisisPendingBanner = document.getElementById('crisis-pending-banner');
+    if (crisisReviewBtn) {
+      crisisReviewBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.EventSystem && window.EventSystem.pendingDecree) {
+          const evt = window.EventSystem.openDecreeModal();
+          if (evt) this.showCrisisDialog(evt);
+        }
+      });
+    }
+    if (crisisPendingBanner) {
+      crisisPendingBanner.addEventListener('click', () => {
+        if (window.EventSystem && window.EventSystem.pendingDecree) {
+          const evt = window.EventSystem.openDecreeModal();
+          if (evt) this.showCrisisDialog(evt);
+        }
+      });
+    }
+
+    const crisisDismissBtn = document.getElementById('crisis-banner-dismiss-btn');
+    if (crisisDismissBtn) {
+      crisisDismissBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.EventSystem) window.EventSystem.dismissDecree(this.sim);
+      });
+    }
+
     // Feed delegation click for actions and boss encounters
     const feedContainer = document.getElementById('feed-stream');
     if (feedContainer) {
@@ -306,6 +393,11 @@ class UIController {
         const bossAction = e.target.closest('button[data-boss-action]');
         if (bossAction) {
           const act = bossAction.getAttribute('data-boss-action');
+          if (act === 'TOGGLE_MIN' && window.BossManager) {
+            window.BossManager.toggleMinimize();
+            this.renderFeed();
+            return;
+          }
           if (act === 'BRIBE' && window.BossManager) window.BossManager.counterBribe(this.sim);
           if (act === 'SWARM' && window.BossManager) window.BossManager.counterQuoteSwarm(this.sim);
           if (act === 'SHADOWBAN' && window.BossManager) window.BossManager.counterSuperShadowban(this.sim);
@@ -437,7 +529,18 @@ class UIController {
       }
     }
 
-    // 7. Check if Crisis dialog needs to be shown
+    // 7. Check if Crisis pending notification banner or modal needs to be updated
+    const pendingCrisisBanner = document.getElementById('crisis-pending-banner');
+    if (pendingCrisisBanner && window.EventSystem) {
+      if (window.EventSystem.pendingDecree) {
+        pendingCrisisBanner.classList.remove('hidden');
+        const headlineEl = document.getElementById('crisis-banner-title');
+        if (headlineEl) headlineEl.innerText = window.EventSystem.pendingDecree.headline;
+      } else {
+        pendingCrisisBanner.classList.add('hidden');
+      }
+    }
+
     if (window.EventSystem && window.EventSystem.activeCrisis) {
       this.showCrisisDialog(window.EventSystem.activeCrisis);
     } else {
@@ -462,39 +565,72 @@ class UIController {
     if (window.BossManager && window.BossManager.activeBoss) {
       const b = window.BossManager.activeBoss;
       const progress = Math.max(0, (window.BossManager.bossTimer / b.durationSec) * 100);
-      bossHtml = `
-        <div class="p-3.5 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border-2 border-red-500 rounded-lg shadow-2xl animate-pulse font-mono mb-2">
-          <div class="flex items-center justify-between mb-1">
-            <div class="flex items-center gap-2">
-              <span class="text-2xl">${b.icon}</span>
-              <div>
-                <span class="font-extrabold text-xs text-red-400 tracking-wider">${b.title}</span>
-                <div class="text-[10px] text-zinc-300">${b.name} (${b.handle})</div>
+
+      if (window.BossManager.isMinimized) {
+        // Minimalist collapsed 1-line bar: unobtrusive while reading feed
+        bossHtml = `
+          <div class="p-2 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border border-red-500/80 rounded-lg flex items-center justify-between font-mono text-xs mb-2.5 shadow-lg">
+            <div class="flex items-center gap-2 truncate pr-2">
+              <span class="text-base">${b.icon}</span>
+              <span class="font-extrabold text-red-300 truncate">${b.name}</span>
+              <span class="text-[10px] text-amber-300 font-bold bg-red-900/60 px-1.5 py-0.2 rounded border border-red-700/60">
+                ⏳ ${Math.ceil(window.BossManager.bossTimer)}s
+              </span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button data-boss-action="BRIBE" class="py-1 px-2 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 text-[10px] font-bold active:scale-95" title="Bribe influencer into compliance ($${b.bribeCost})">
+                💰 Bribe ($${b.bribeCost})
+              </button>
+              <button data-boss-action="SHADOWBAN" class="py-1 px-2 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-600 text-[10px] font-bold active:scale-95" title="Super-Shadowban ($40)">
+                🛡️ Shadow ($40)
+              </button>
+              <button data-boss-action="TOGGLE_MIN" class="py-1 px-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-700 text-[10px] font-mono" title="Expand Full Boss Card">
+                ▼ Expand
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        // Full Dossier with Collapse button
+        bossHtml = `
+          <div class="p-3 bg-gradient-to-r from-red-950 via-zinc-950 to-red-950 border-2 border-red-500/90 rounded-lg shadow-2xl font-mono mb-2.5 transition-all">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">${b.icon}</span>
+                <div>
+                  <span class="font-extrabold text-xs text-red-400 tracking-wider">${b.title}</span>
+                  <div class="text-[10px] text-zinc-300">${b.name} (${b.handle})</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-amber-300 bg-red-900/80 px-2 py-0.5 rounded border border-red-600">
+                  ⚠️ ${Math.ceil(window.BossManager.bossTimer)}s REMAINING
+                </span>
+                <button data-boss-action="TOGGLE_MIN" class="text-[10px] text-zinc-400 hover:text-white px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-700" title="Collapse Boss Card to Compact Bar">
+                  ─ Minimize
+                </button>
               </div>
             </div>
-            <span class="text-xs font-bold text-amber-300 bg-red-900/80 px-2 py-0.5 rounded border border-red-600">
-              ⚠️ ${Math.ceil(window.BossManager.bossTimer)}s REMAINING
-            </span>
+            <p class="text-xs text-white font-sans font-semibold italic my-2 p-2 bg-black/80 rounded border border-red-900/80">
+              "${b.dialogue}"
+            </p>
+            <div class="w-full bg-zinc-800 h-1.5 rounded overflow-hidden mb-2.5">
+              <div class="bg-red-500 h-full transition-all duration-200" style="width: ${progress}%;"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+              <button data-boss-action="BRIBE" class="py-1 px-1.5 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 font-bold active:scale-95 transition-all" title="Bribe influencer into compliance">
+                💰 BRIBE ($${b.bribeCost})
+              </button>
+              <button data-boss-action="SWARM" class="py-1 px-1.5 rounded bg-amber-900/80 hover:bg-amber-800 text-amber-200 border border-amber-500 font-bold active:scale-95 transition-all" title="Deploy bot army quote-tweet swarm">
+                💣 QUOTE-BOMB (${b.swarmCostWatts}⚡)
+              </button>
+              <button data-boss-action="SHADOWBAN" class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-500 font-bold active:scale-95 transition-all" title="Algorithmic suppression">
+                🛡️ SUPER-SHADOW ($40)
+              </button>
+            </div>
           </div>
-          <p class="text-xs text-white font-sans font-semibold italic my-2 p-2 bg-black/80 rounded border border-red-900/80">
-            "${b.dialogue}"
-          </p>
-          <div class="w-full bg-zinc-800 h-1.5 rounded overflow-hidden mb-2.5">
-            <div class="bg-red-500 h-full transition-all duration-200" style="width: ${progress}%;"></div>
-          </div>
-          <div class="grid grid-cols-3 gap-1.5 text-[10px]">
-            <button data-boss-action="BRIBE" class="py-1 px-1.5 rounded bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 border border-emerald-500 font-bold active:scale-95 transition-all">
-              💰 BRIBE ($${b.bribeCost})
-            </button>
-            <button data-boss-action="SWARM" class="py-1 px-1.5 rounded bg-amber-900/80 hover:bg-amber-800 text-amber-200 border border-amber-500 font-bold active:scale-95 transition-all">
-              💣 QUOTE-BOMB (${b.swarmCostWatts}⚡)
-            </button>
-            <button data-boss-action="SHADOWBAN" class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-500 font-bold active:scale-95 transition-all">
-              🛡️ SUPER-SHADOW ($40)
-            </button>
-          </div>
-        </div>
-      `;
+        `;
+      }
     }
 
     // Preserve scroll position if user is scrolling
@@ -561,29 +697,33 @@ class UIController {
           <!-- Injected Ad -->
           ${adHtml}
 
-          <!-- Stats -->
+          <!-- Stats (with informative tooltips) -->
           <div class="mt-2.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 border-t border-zinc-800/80 pt-2">
-            <span>👁️ ${(post.stats.views).toLocaleString()}</span>
-            <span class="text-rose-400">😡 ${(post.stats.angries).toLocaleString()}</span>
-            <span>🔄 ${(post.stats.shares).toLocaleString()}</span>
-            <span>💀 ${(post.stats.skulls).toLocaleString()}</span>
+            <span title="Total Algorithm Impressions">👁️ ${(post.stats.views).toLocaleString()}</span>
+            <span class="text-rose-400" title="Outrage & Angry Reactions">😡 ${(post.stats.angries).toLocaleString()}</span>
+            <span title="Retweets & Echo-Chamber Shares">🔄 ${(post.stats.shares).toLocaleString()}</span>
+            <span title="Toxic Quote-Dunk Ratio">💀 ${(post.stats.skulls).toLocaleString()}</span>
           </div>
 
-          <!-- Algorithmic Interventions -->
+          <!-- Algorithmic Interventions (with Explanatory Tooltips) -->
           <div class="mt-2.5 grid grid-cols-4 gap-1.5 font-mono text-[10px]">
             <button data-action="BOOST" data-post-id="${post.id}" ${post.amplified ? 'disabled' : ''} 
+              title="Amplify algorithmic reach (+Neuro-Watts, +Hardware Heat)"
               class="py-1 px-1.5 rounded bg-blue-900/60 hover:bg-blue-800 text-blue-200 border border-blue-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               🚀 BOOST
             </button>
             <button data-action="OUTRAGE" data-post-id="${post.id}" ${post.outraged ? 'disabled' : ''} 
+              title="Stoke faction hostility (+Civilization Tension)"
               class="py-1 px-1.5 rounded bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               🤬 POLARIZE
             </button>
             <button data-action="MONETIZE" data-post-id="${post.id}" ${post.monetized ? 'disabled' : ''} 
+              title="Monetize with sponsored product placement (+$Ad Revenue)"
               class="py-1 px-1.5 rounded bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/60 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               💰 AD-FARM
             </button>
             <button data-action="SHADOWBAN" data-post-id="${post.id}" ${post.shadowbanned ? 'disabled' : ''} 
+              title="Suppress post from algorithms (-Civilization Tension, cools hardware)"
               class="py-1 px-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-600 font-semibold transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95">
               🛡️ SHADOW
             </button>

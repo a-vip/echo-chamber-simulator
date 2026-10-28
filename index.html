@@ -168,23 +168,35 @@
         <span>HARVEST!</span>
       </div>
 
-      <!-- Action Modals Buttons -->
-      <div class="flex items-center gap-2">
-        <button id="btn-open-tutorial" class="px-3 py-1.5 rounded bg-amber-950/60 hover:bg-amber-900 border border-amber-600/80 font-mono text-xs font-bold text-amber-200 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
-          🎓 HOW TO PLAY
+      <!-- Action Controls Cluster (Minimalist & Clean) -->
+      <div class="flex items-center gap-2 font-mono">
+        <!-- Upgrades / Research -->
+        <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Deploy unethical software architecture to optimize human addiction">
+          <span>🔬</span> DARK PATTERNS
         </button>
-        <button id="btn-open-craft" class="px-3 py-1.5 rounded bg-rose-950/50 hover:bg-rose-900 border border-rose-600/80 font-mono text-xs font-bold text-rose-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Write your own custom parody post">
-          ✍️ CRAFT POST
+
+        <!-- Badges & Apocalypse Gallery -->
+        <button id="btn-open-badges" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="View discovered apocalypse endings and achievement records">
+          <span>🏆</span> BADGES
         </button>
-        <button id="btn-open-dossier" class="px-3 py-1.5 rounded bg-blue-950/50 hover:bg-blue-900 border border-blue-600/80 font-mono text-xs font-bold text-blue-300 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Generate shareable stats card">
-          📸 DOSSIER
-        </button>
-        <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
-          🔬 DARK PATTERNS
-        </button>
-        <button id="btn-open-badges" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 font-mono text-xs font-bold text-zinc-200 flex items-center gap-1.5 transition-all active:scale-95">
-          🏆 APOCALYPSE BADGES
-        </button>
+
+        <!-- Tools Dropdown / Quick Actions -->
+        <div class="relative group">
+          <button id="btn-tools-menu" class="px-2.5 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-300 flex items-center gap-1.5 transition-all" title="Auxiliary Creator & Analysis Tools">
+            <span>🛠️</span> <span class="hidden sm:inline">TOOLS</span> <span>▾</span>
+          </button>
+          <div class="absolute right-0 mt-1 w-48 bg-zinc-950 border border-zinc-700 rounded-lg shadow-2xl py-1 hidden group-hover:block hover:block z-50 text-xs">
+            <button id="btn-open-tutorial" class="w-full text-left px-3 py-2 hover:bg-zinc-900 text-amber-300 flex items-center gap-2">
+              <span>🎓</span> How to Play (Guide)
+            </button>
+            <button id="btn-open-craft" class="w-full text-left px-3 py-2 hover:bg-zinc-900 text-rose-300 flex items-center gap-2">
+              <span>✍️</span> Craft Parody Post
+            </button>
+            <button id="btn-open-dossier" class="w-full text-left px-3 py-2 hover:bg-zinc-900 text-blue-300 flex items-center gap-2">
+              <span>📸</span> Disgrace Dossier Card
+            </button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -241,59 +253,88 @@
         </button>
       </div>
 
-      <!-- Factions Polarization Radar Summary -->
-      <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800/80 font-mono text-[11px] mt-auto">
-        <div class="font-bold text-zinc-400 uppercase tracking-wider text-[10px] mb-2 flex items-center justify-between">
-          <span>⚔️ Faction Culture Wars</span>
-          <span class="text-emerald-400 text-[9px] animate-pulse">● TRACKING</span>
-        </div>
-        <div class="space-y-1.5 text-[10px]">
+      <!-- Factions Polarization Collapsible Accordion -->
+      <details class="group bg-zinc-900/40 rounded border border-zinc-800/80 font-mono text-[11px] mt-auto">
+        <summary class="p-2.5 cursor-pointer font-bold text-zinc-400 hover:text-zinc-200 uppercase tracking-wider text-[10px] flex items-center justify-between select-none">
+          <span class="flex items-center gap-1.5">⚔️ Active Faction Rifts</span>
+          <span class="text-zinc-500 text-[9px] group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <div class="p-2.5 pt-0 space-y-1.5 text-[10px] border-t border-zinc-800/40 mt-1">
           <div class="flex justify-between items-center text-zinc-300">
             <span>🗿 Alpha Grinders vs 💅 Divine Femmes</span>
-            <span class="text-rose-400 font-bold">ACTIVE</span>
+            <span class="text-rose-400 font-bold">RIVALRY</span>
           </div>
           <div class="flex justify-between items-center text-zinc-300">
             <span>🐱 Purr Reich vs 🐕 Tactical K9s</span>
-            <span class="text-amber-400 font-bold">ACTIVE</span>
+            <span class="text-amber-400 font-bold">RIVALRY</span>
           </div>
           <div class="flex justify-between items-center text-zinc-300">
             <span>🤖 Tech Lords vs 🍄 Moss Monks</span>
-            <span class="text-emerald-400 font-bold">ACTIVE</span>
+            <span class="text-emerald-400 font-bold">RIVALRY</span>
           </div>
           <div class="flex justify-between items-center text-zinc-300">
             <span>🥩 Raw Marrow vs 🌱 Sun Monks</span>
-            <span class="text-cyan-400 font-bold">ACTIVE</span>
+            <span class="text-cyan-400 font-bold">RIVALRY</span>
           </div>
         </div>
-      </div>
+      </details>
     </aside>
 
     <!-- CENTER PANEL: Infinite Real-Time Algorithmic Feed -->
     <section id="feed-center-container" class="flex-1 flex flex-col bg-black overflow-hidden relative">
       
       <!-- 32-bit Faction Street Arena / Culture Clash Visualizer -->
-      <div class="bg-zinc-950 border-b border-zinc-800 p-2 shrink-0">
+      <div id="street-arena-container" class="bg-zinc-950 border-b border-zinc-800 p-2 shrink-0 transition-all">
         <div class="flex items-center justify-between text-[10px] font-mono text-zinc-400 mb-1 px-1">
           <span class="flex items-center gap-1.5 font-bold text-amber-300">
             <span>🎭</span> FACTION STREET ARENA (32-BIT CLASH)
           </span>
-          <span class="text-[9px] text-zinc-500">Live Street Arguments & Reactions</span>
+          <button id="btn-toggle-arena" class="text-[9px] text-zinc-500 hover:text-zinc-300 font-mono px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 transition-all" title="Toggle Arena Display">
+            ─ COLLAPSE
+          </button>
         </div>
         <canvas id="street-arena-canvas" width="580" height="75" class="w-full bg-black rounded border border-zinc-800/80 shadow-inner"></canvas>
       </div>
 
-      <!-- Feed Tab Bar -->
+      <!-- Feed Tab Bar with Stream Pace Controls -->
       <div class="bg-zinc-900/80 border-b border-zinc-800 px-4 py-2 flex items-center justify-between text-xs font-mono shrink-0">
         <div class="flex items-center gap-2">
           <span class="text-rose-500 animate-ping">●</span>
           <span class="font-bold text-zinc-200">GLOBAL FOR-YOU STREAM</span>
         </div>
         <div class="flex items-center gap-2">
+          <!-- Feed Stream Mode Toggle -->
+          <button id="btn-feed-mode" class="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] transition-all font-mono" title="Toggle auto-streaming vs manual step">
+            ▶ STREAM: AUTO
+          </button>
+          <!-- Manual Step Post Button -->
+          <button id="btn-manual-step" class="hidden px-2 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-[10px] transition-all shadow font-mono">
+            + NEXT POST
+          </button>
           <!-- Pending Posts Pill Button -->
           <button id="feed-pending-indicator" class="hidden px-2.5 py-0.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-[10px] transition-all animate-bounce shadow">
-            <span id="pending-count-text">🔔 1 New Post (Click to load)</span>
+            <span id="pending-count-text">🔔 1 New Post</span>
           </button>
-          <span class="text-[10px] text-zinc-400">Hover feed to freeze scroll</span>
+          <span class="text-[10px] text-zinc-500 hidden sm:inline" title="Hover mouse over feed to freeze scrolling">Hover freezes</span>
+        </div>
+      </div>
+
+      <!-- CRISIS DECREE PENDING BANNER (Non-intrusive alert notification) -->
+      <div id="crisis-pending-banner" class="hidden mx-4 mt-2.5 p-2.5 bg-gradient-to-r from-rose-950 via-zinc-950 to-rose-950 border border-rose-500/80 rounded-lg flex items-center justify-between font-mono text-xs cursor-pointer hover:border-rose-400 transition-all shadow-xl animate-pulse">
+        <div class="flex items-center gap-2 truncate pr-2">
+          <span class="text-base">🚨</span>
+          <div class="truncate">
+            <span class="font-bold text-rose-300 uppercase tracking-wide">CRISIS DECREE PENDING:</span>
+            <span id="crisis-banner-title" class="text-zinc-200 font-sans ml-1 text-xs">Headline...</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="crisis-banner-review-btn" class="px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-[10px] shadow active:scale-95 transition-all">
+            REVIEW & VOTE ➔
+          </button>
+          <button id="crisis-banner-dismiss-btn" class="px-1.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-400 text-[10px]" title="Dismiss decree without extreme intervention">
+            ✕
+          </button>
         </div>
       </div>
 
@@ -344,38 +385,56 @@
         </div>
       </div>
 
-      <!-- Live Canvas Sparkline Monitor -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
-        <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-2 uppercase font-bold">
-          <span>Oscilloscope Monitor</span>
-          <div class="flex gap-2">
-            <span class="text-amber-400">● Tension</span>
-            <span class="text-cyan-400">● Temp</span>
+      <!-- TABBED VISUALIZER: Oscilloscope | Riot Radar -->
+      <div class="bg-zinc-900/60 rounded border border-zinc-800 overflow-hidden font-mono">
+        <!-- Visualizer Tabs Header -->
+        <div class="flex border-b border-zinc-800 bg-black/40 text-xs">
+          <button id="tab-btn-sparkline" class="flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px]">
+            📈 Oscilloscope
+          </button>
+          <button id="tab-btn-radar" class="flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]">
+            📡 Riot Radar
+          </button>
+        </div>
+
+        <!-- Tab 1: Oscilloscope Monitor -->
+        <div id="tab-panel-sparkline" class="p-3">
+          <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
+            <span>Live Telemetry</span>
+            <div class="flex gap-2">
+              <span class="text-amber-400">● Tension</span>
+              <span class="text-cyan-400">● Temp</span>
+            </div>
+          </div>
+          <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800"></canvas>
+        </div>
+
+        <!-- Tab 2: Faction Battle Map / Planetary Riot Radar -->
+        <div id="tab-panel-radar" class="p-3 hidden">
+          <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
+            <span>Planetary Sectors</span>
+            <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE</span>
+          </div>
+          <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
+          <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
+            Click any sector node on the radar to inspect regional riot status.
           </div>
         </div>
-        <canvas id="sparkline-canvas" width="270" height="85" class="w-full bg-black rounded border border-zinc-800"></canvas>
       </div>
 
-      <!-- Faction Battle Map / Planetary Riot Radar -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
-        <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
-          <span class="flex items-center gap-1.5">📡 Riot Radar (Click Node)</span>
-          <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE RADAR</span>
+      <!-- Game Mechanics Lore Helper (Collapsible Drawer) -->
+      <details class="group bg-zinc-900/40 rounded border border-zinc-800 text-zinc-400 font-mono text-[11px]">
+        <summary class="p-2.5 cursor-pointer font-bold text-zinc-400 hover:text-zinc-200 uppercase text-[10px] flex items-center justify-between select-none">
+          <span class="flex items-center gap-1.5">📖 Operating Rules & Mandate</span>
+          <span class="text-zinc-500 text-[9px] group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <div class="p-2.5 pt-0 space-y-1.5 leading-relaxed text-[10px] border-t border-zinc-800/40 mt-1 font-sans">
+          <p>• Keep tension in the <strong class="text-amber-400">Goldilocks Rot Zone (65-92%)</strong> for 5.0x harvest multiplier.</p>
+          <p>• <strong class="text-red-400">Tension 100%</strong> triggers Kinetic Civil War.</p>
+          <p>• <strong class="text-orange-400">Temp 100°C</strong> melts planetary servers into bedrock.</p>
+          <p>• <strong class="text-emerald-400">Tension 0%</strong> causes users to touch grass (You're fired!).</p>
         </div>
-        <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
-        <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
-          Click any sector node on the radar to inspect regional riot status.
-        </div>
-      </div>
-
-      <!-- Game Mechanics Lore Helper -->
-      <div class="p-3 bg-zinc-900/40 rounded border border-zinc-800 text-zinc-400 font-mono text-[11px] space-y-1.5 leading-relaxed">
-        <div class="font-bold text-zinc-300 uppercase text-[10px] mb-1">📖 The Algorithmic Mandate</div>
-        <p>• Keep tension in the <strong class="text-amber-400">Goldilocks Rot Zone (65-92%)</strong> for 5.0x harvest multiplier.</p>
-        <p>• <strong class="text-red-400">Tension 100%</strong> causes Kinetic Civil War.</p>
-        <p>• <strong class="text-orange-400">Temp 100°C</strong> melts servers into bedrock.</p>
-        <p>• <strong class="text-emerald-400">Tension 0%</strong> causes users to touch grass (You're fired!).</p>
-      </div>
+      </details>
     </aside>
 
   </main>
