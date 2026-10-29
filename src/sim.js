@@ -59,7 +59,7 @@ class SimulationEngine {
     this.isFeedHovered = false;
     this.feedMaxItems = 12;
     this.spawnTimer = 0;
-    this.spawnIntervalSec = 28.0; // Relaxed 28.0s base interval (plenty of time to read)
+    this.spawnIntervalSec = 15.0; // Engaging & readable 15.0s base interval
     this.feedStreamMode = 'auto'; // 'auto' | 'manual'
 
     // Stats history for sparkline charts
@@ -149,31 +149,37 @@ class SimulationEngine {
     this.watts += effectiveHarvestPerSec * deltaSec;
     this.cash += (upg.passiveCash * upg.adRevMult) * deltaSec;
 
-    // 2. Server Thermodynamics Calculation (Balanced)
-    // At default 50% rage & 50% siloing: heatGen = 1.8 + 0.4 = 2.2°C/s
-    // Natural cooling = 2.4°C/s -> Temp stays at cool baseline (35-38°C)!
-    const heatGeneration = ((this.rageBias / 50) * 1.8) + ((this.echoSiloing / 50) * 0.4) + (effectiveHarvestPerSec * 0.0001);
+    // 2. Server Thermodynamics Calculation (Balanced with lively organic fluctuations)
+    // Dynamic fan activity & compute load creates subtle, live temperature breathing (~34 - 38°C baseline)
+    const thermalJitter = (Math.sin(this.gameTimeSec * 2.3) * 0.15) + (Math.cos(this.gameTimeSec * 4.7) * 0.1);
+    const heatGeneration = ((this.rageBias / 50) * 1.9) + ((this.echoSiloing / 50) * 0.5) + (effectiveHarvestPerSec * 0.0001);
     const naturalCooling = this.coolingRate;
-    const tempDelta = (heatGeneration - naturalCooling) * deltaSec;
-    this.serverTemp = Math.max(30.0, this.serverTemp + tempDelta);
+    const tempDelta = (heatGeneration - naturalCooling + thermalJitter) * deltaSec;
+    this.serverTemp = Math.max(32.0, Math.min(this.maxServerTemp + 10, this.serverTemp + tempDelta));
 
     // Update audio hum based on server strain
     if (window.AudioSynth) {
       window.AudioSynth.updateServerTempHum(this.serverTemp / this.maxServerTemp);
     }
 
-    // 3. Society Tension Drift (Gentle, stable at 50/50)
-    const tensionDrift = (((this.rageBias - 50) * 0.016) + ((this.echoSiloing - 50) * 0.012)) * upg.polarizationMult;
-    this.tension = Math.max(0, Math.min(100, this.tension + (tensionDrift * deltaSec)));
+    // 3. Society Tension Drift (Gentle, with subtle cultural fluctuations so bars are visibly alive)
+    const tensionJitter = (Math.sin(this.gameTimeSec * 1.8) * 0.04);
+    const tensionDrift = (((this.rageBias - 50) * 0.02) + ((this.echoSiloing - 50) * 0.015)) * upg.polarizationMult;
+    this.tension = Math.max(0, Math.min(100, this.tension + ((tensionDrift + tensionJitter) * deltaSec)));
 
-    // 4. Feed Spawning Loop (Gentle 28-second base interval, adjusted slightly by siloing)
+    // 4. Feed Spawning Loop (Gentle 15-second base interval, adjusted slightly by siloing)
     if (this.feedStreamMode === 'auto') {
       this.spawnTimer += deltaSec;
-      const effectiveInterval = Math.max(12.0, this.spawnIntervalSec - (this.echoSiloing * 0.05));
+      const effectiveInterval = Math.max(8.0, this.spawnIntervalSec - (this.echoSiloing * 0.04));
       if (this.spawnTimer >= effectiveInterval) {
         this.spawnTimer = 0;
         this.spawnNewPost();
       }
+    }
+
+    // Auto-reveal buffered posts smoothly when user un-hovers feed
+    if (!this.isFeedHovered && this.pendingPosts.length > 0) {
+      this.revealPendingPosts();
     }
 
     // 5. Update Sparkline history once per second

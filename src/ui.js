@@ -88,10 +88,37 @@ class UIController {
       btn.addEventListener('click', () => {
         const modal = btn.closest('.modal-container');
         if (modal) modal.classList.add('hidden');
+        if (window.ConsequencePlayer) window.ConsequencePlayer.close();
         if (this.sim && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
           this.sim.paused = false;
         }
       });
+    });
+
+    // Backdrop click to close modals & resume simulation
+    const allModals = document.querySelectorAll('.modal-container');
+    allModals.forEach(m => {
+      m.addEventListener('click', (e) => {
+        if (e.target === m) {
+          m.classList.add('hidden');
+          if (window.ConsequencePlayer) window.ConsequencePlayer.close();
+          if (this.sim && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
+            this.sim.paused = false;
+          }
+        }
+      });
+    });
+
+    // ESC key to dismiss any active modal dialog
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        allModals.forEach(m => m.classList.add('hidden'));
+        if (window.ConsequencePlayer) window.ConsequencePlayer.close();
+        if (window.TutorialSystem) window.TutorialSystem.close();
+        if (this.sim && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
+          this.sim.paused = false;
+        }
+      }
     });
 
     // Consequence modal close button
@@ -99,6 +126,9 @@ class UIController {
     if (csqClose) {
       csqClose.addEventListener('click', () => {
         if (window.ConsequencePlayer) window.ConsequencePlayer.close();
+        if (this.sim && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
+          this.sim.paused = false;
+        }
       });
     }
 
@@ -517,6 +547,12 @@ class UIController {
       ticker.innerText = window.EventSystem.breakingTicker;
     }
 
+    // Safety auto-resume: if no modal dialog is visible and player didn't manually pause, ensure game is running!
+    const hasVisibleModal = document.querySelector('.modal-container:not(.hidden)');
+    if (!hasVisibleModal && this.sim.paused && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
+      this.sim.paused = false;
+    }
+
     // Pending posts indicator
     const pendingPill = document.getElementById('feed-pending-indicator');
     if (pendingPill) {
@@ -681,7 +717,7 @@ class UIController {
               </div>
             </div>
             <div class="text-[10px] font-mono text-zinc-500">
-              #${post.id.split('_')[1]}
+              #${post.id.split('_')[1] || post.id}
             </div>
           </div>
 
@@ -689,7 +725,9 @@ class UIController {
           <p class="text-xs text-zinc-100 font-sans leading-relaxed tracking-normal select-text">
             ${post.content}
           </p>
-          <div class="mt-1.5 text-[11px] font-mono text-blue-400">${post.hashtags}</div>
+          <div class="mt-1.5 text-[11px] font-mono text-blue-400">
+            ${Array.isArray(post.hashtags) ? post.hashtags.join(' ') : (post.hashtags || '')}
+          </div>
 
           <!-- Quoted Outrage Reply -->
           ${quoteHtml}
@@ -699,10 +737,10 @@ class UIController {
 
           <!-- Stats (with informative tooltips) -->
           <div class="mt-2.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 border-t border-zinc-800/80 pt-2">
-            <span title="Total Algorithm Impressions">👁️ ${(post.stats.views).toLocaleString()}</span>
-            <span class="text-rose-400" title="Outrage & Angry Reactions">😡 ${(post.stats.angries).toLocaleString()}</span>
-            <span title="Retweets & Echo-Chamber Shares">🔄 ${(post.stats.shares).toLocaleString()}</span>
-            <span title="Toxic Quote-Dunk Ratio">💀 ${(post.stats.skulls).toLocaleString()}</span>
+            <span title="Total Algorithm Impressions">👁️ ${(post.stats?.views || 0).toLocaleString()}</span>
+            <span class="text-rose-400" title="Outrage & Angry Reactions">😡 ${(post.stats?.angries || 0).toLocaleString()}</span>
+            <span title="Retweets & Echo-Chamber Shares">🔄 ${(post.stats?.shares || 0).toLocaleString()}</span>
+            <span title="Toxic Quote-Dunk Ratio">💀 ${(post.stats?.skulls || 0).toLocaleString()}</span>
           </div>
 
           <!-- Algorithmic Interventions (with Explanatory Tooltips) -->
@@ -915,11 +953,17 @@ class UIController {
     btnA.onclick = () => {
       window.EventSystem.resolveCrisis('A', this.sim);
       modal.classList.add('hidden');
+      if (this.sim && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
+        this.sim.paused = false;
+      }
     };
 
     btnB.onclick = () => {
       window.EventSystem.resolveCrisis('B', this.sim);
       modal.classList.add('hidden');
+      if (this.sim && this.sim.gameSpeed > 0 && !this.sim.gameOver) {
+        this.sim.paused = false;
+      }
     };
   }
 

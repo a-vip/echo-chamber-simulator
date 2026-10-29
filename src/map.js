@@ -51,12 +51,17 @@ class RiotRadarMap {
     this.activeSectorBriefing = this.sectors[1];
   }
 
-  render(simState) {
+  draw(simState) {
+    return this.render(simState || window.SimulationEngine);
+  }
+
+  render(simState = window.SimulationEngine) {
     if (!this.canvas || !this.ctx) {
       this.canvas = document.getElementById('radar-map-canvas');
       if (this.canvas) this.ctx = this.canvas.getContext('2d');
       if (!this.ctx) return;
     }
+    if (!simState) return;
 
     const ctx = this.ctx;
     const w = this.canvas.width;

@@ -15,6 +15,7 @@ class FactionCharacter {
     this.state = 'walk'; // 'walk', 'argue', 'celebrate', 'rage'
     this.speechBubble = null;
     this.speechTimer = 0;
+    this.argumentCooldown = Math.random() * 4;
     this.targetChar = null;
   }
 
@@ -27,6 +28,14 @@ class FactionCharacter {
       if (this.speechTimer <= 0) this.speechBubble = null;
     }
 
+    if (this.argumentCooldown > 0) {
+      this.argumentCooldown -= deltaSec;
+    }
+
+    // Safety check for NaN
+    if (isNaN(this.x)) this.x = Math.random() * (this.arenaWidth - 50) + 25;
+    if (isNaN(this.speed) || this.speed === 0) this.speed = (Math.random() * 25 + 15) * (Math.random() < 0.5 ? 1 : -1);
+
     // State machine
     if (this.state === 'walk') {
       this.x += this.speed * deltaSec;
@@ -35,10 +44,10 @@ class FactionCharacter {
 
       // Check proximity to opposing faction
       for (const other of characters) {
-        if (other !== this && Math.abs(other.x - this.x) < 32) {
-          if (this.isRival(other.type)) {
+        if (other !== this && Math.abs(other.x - this.x) < 30) {
+          if (this.isRival(other.type) && this.argumentCooldown <= 0 && other.argumentCooldown <= 0 && this.speechTimer <= 0) {
             // Chance to start a street argument
-            if (Math.random() < 0.04 && this.speechTimer <= 0) {
+            if (Math.random() < 0.05) {
               this.startArgument(other);
               break;
             }
@@ -46,13 +55,14 @@ class FactionCharacter {
         }
       }
     } else if (this.state === 'argue') {
-      // Face each other
-      if (this.targetChar) {
-        this.speed = this.targetChar.x > this.x ? 1 : -1;
-      }
+      // Bob slightly faster during heated argument
+      this.yBob = Math.sin(this.animTime * 1.5) * 3;
       if (this.speechTimer <= 0) {
         this.state = 'walk';
-        this.speed = (Math.random() * 25 + 15) * (Math.random() < 0.5 ? 1 : -1);
+        this.speechBubble = null;
+        if (!this.speed || Math.abs(this.speed) < 10) {
+          this.speed = (Math.random() * 25 + 15) * (Math.random() < 0.5 ? 1 : -1);
+        }
       }
     }
   }
@@ -92,10 +102,17 @@ class FactionCharacter {
     const otherPhrases = phrases[other.type] || ["COUNTER!"];
 
     this.speechBubble = myPhrases[Math.floor(Math.random() * myPhrases.length)];
-    this.speechTimer = 3.5;
+    this.speechTimer = 2.6;
+    this.argumentCooldown = 9.0; // Prevent repetitive argument loop locking!
 
     other.speechBubble = otherPhrases[Math.floor(Math.random() * otherPhrases.length)];
-    other.speechTimer = 3.5;
+    other.speechTimer = 2.6;
+    other.argumentCooldown = 9.0;
+
+    // Direct rivals to walk away from each other when walking resumes
+    const walkAwaySpeed = (Math.random() * 20 + 20);
+    this.speed = this.x < other.x ? -walkAwaySpeed : walkAwaySpeed;
+    other.speed = -this.speed;
   }
 
   draw(ctx) {
@@ -434,14 +451,19 @@ class StreetArena {
 
   render(simState, deltaSec) {
     if (!this.initialized) this.init();
+    if (!this.canvas) this.canvas = document.getElementById(this.canvasId);
+    if (this.canvas && !this.ctx) this.ctx = this.canvas.getContext('2d');
     if (!this.canvas || !this.ctx) return;
 
     const ctx = this.ctx;
     const w = this.canvas.width;
     const h = this.canvas.height;
 
-    // Update characters
+    // Update characters (always update logic so positions stay smooth)
     this.characters.forEach(char => char.update(deltaSec, this.characters, simState));
+
+    // If canvas element is collapsed/hidden, skip rendering
+    if (this.canvas.classList.contains('hidden') || this.canvas.offsetHeight === 0) return;
 
     // Clear background
     ctx.fillStyle = '#0f172a';
