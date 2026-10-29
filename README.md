@@ -139,3 +139,5 @@ npm test
 ## 📜 License
 Released under the [MIT License](LICENSE). Built for satire, education, and algorithmic balance experimentation.
 
+.
+
