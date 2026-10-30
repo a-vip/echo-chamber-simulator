@@ -70,14 +70,162 @@
       text-shadow: 0 0 8px rgba(0,0,0,0.9);
     }
 
-    /* Pixel Box Shadows */
+    /* Pixel Box Shadows & 32-Bit RPG Styling */
     .pixel-box {
       box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
     }
 
-    /* Range slider styling */
+    /* 32-Bit RPG Ornate Gold Bevel Frame */
+    .pixel-border-gold {
+      border: 3px solid #78350f;
+      box-shadow: 
+        inset 2px 2px 0 #fbbf24,
+        inset -2px -2px 0 #451a03,
+        0 0 0 1px #000,
+        0 4px 12px rgba(0, 0, 0, 0.7);
+      background: linear-gradient(180deg, #131722 0%, #090c14 100%);
+    }
+
+    /* 32-Bit Heavy Steel / Arcade Frame */
+    .pixel-border-steel {
+      border: 2px solid #3f3f46;
+      box-shadow: 
+        inset 1px 1px 0 #71717a,
+        inset -2px -2px 0 #18181b,
+        0 0 0 1px #09090b,
+        0 3px 8px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(180deg, #18181b 0%, #0c0c0e 100%);
+    }
+
+    /* 32-Bit Metallic Rivet Head */
+    .pixel-rivet {
+      width: 6px;
+      height: 6px;
+      background: #a1a1aa;
+      border-radius: 1px;
+      box-shadow: 
+        inset 1px 1px 0 #f4f4f5,
+        inset -1px -1px 0 #27272a,
+        0 1px 1px rgba(0, 0, 0, 0.9);
+      pointer-events: none;
+    }
+    .pixel-rivet-gold {
+      background: #ca8a04;
+      box-shadow: 
+        inset 1px 1px 0 #fef08a,
+        inset -1px -1px 0 #713f12,
+        0 1px 1px rgba(0, 0, 0, 0.9);
+    }
+
+    /* 32-Bit Tactile Arcade Push Buttons */
+    .pixel-btn {
+      font-family: var(--font-mono);
+      position: relative;
+      border: 2px solid #52525b;
+      box-shadow: 
+        inset 1px 1px 0 rgba(255, 255, 255, 0.35),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.8),
+        0 2px 0 #000;
+      transition: all 0.08s ease-in-out;
+      cursor: pointer;
+    }
+    .pixel-btn:hover {
+      filter: brightness(1.15);
+    }
+    .pixel-btn:active {
+      transform: translateY(2px);
+      box-shadow: 
+        inset 2px 2px 0 rgba(0, 0, 0, 0.8),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 #000;
+    }
+
+    .pixel-btn-amber {
+      background: linear-gradient(180deg, #d97706 0%, #b45309 60%, #78350f 100%);
+      border-color: #fbbf24;
+      color: #fffbeb;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    .pixel-btn-blue {
+      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 60%, #1e3a8a 100%);
+      border-color: #60a5fa;
+      color: #eff6ff;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    .pixel-btn-cyan {
+      background: linear-gradient(180deg, #0891b2 0%, #0e7490 60%, #164e63 100%);
+      border-color: #22d3ee;
+      color: #ecfeff;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    .pixel-btn-rose {
+      background: linear-gradient(180deg, #e11d48 0%, #be123c 60%, #881337 100%);
+      border-color: #fb7185;
+      color: #fff1f2;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    /* 32-Bit Arcade Recessed Health / Vital Gauge Housing */
+    .pixel-gauge-housing {
+      border: 2px solid #27272a;
+      background: #09090b;
+      box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.95),
+        0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 32-Bit Segmented Overlay for arcade bars */
+    .pixel-segmented-overlay {
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 6px,
+        rgba(0, 0, 0, 0.7) 6px,
+        rgba(0, 0, 0, 0.7) 8px
+      );
+      pointer-events: none;
+    }
+
+    /* 32-Bit Recessed LCD / LED Counter Module */
+    .pixel-hud-counter {
+      border: 2px solid #3f3f46;
+      background: #09090b;
+      box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.9),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    /* Knurled 32-Bit Range Sliders */
     input[type=range] {
-      accent-color: #f59e0b;
+      -webkit-appearance: none;
+      background: #18181b;
+      height: 8px;
+      border-radius: 2px;
+      border: 1px solid #3f3f46;
+      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.9);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 20px;
+      background: #f59e0b;
+      border: 2px solid #fbbf24;
+      border-radius: 2px;
+      box-shadow: 
+        inset 1px 1px 0 #fef3c7, 
+        inset -1px -1px 0 #78350f, 
+        0 2px 4px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      background: #fbbf24;
+      filter: brightness(1.1);
     }
   </style>
 </head>
@@ -140,49 +288,49 @@
         </div>
       </div>
 
-      <!-- Core Currencies -->
-      <div class="flex items-center gap-5 font-mono">
+      <!-- Core Currencies (32-Bit Arcade Style) -->
+      <div class="flex items-center gap-4 font-mono">
         <!-- Neuro-Watts -->
-        <div class="bg-zinc-900/90 px-3 py-1 rounded border border-zinc-700 flex items-center gap-2">
-          <span class="text-amber-400 text-base">⚡</span>
+        <div class="pixel-hud-counter px-3 py-1 rounded flex items-center gap-2">
+          <span class="text-amber-400 text-lg">⚡</span>
           <div>
-            <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Neuro-Watts</div>
-            <div id="hud-watts" class="text-sm font-bold text-amber-400 leading-tight">100</div>
+            <div class="text-[9px] uppercase tracking-wider text-amber-300/70 font-bold font-pixel text-xs leading-none">Neuro-Watts</div>
+            <div id="hud-watts" class="text-base font-bold text-amber-400 font-pixel text-xl leading-tight">100</div>
           </div>
         </div>
 
         <!-- Dopamine Dimes -->
-        <div class="bg-zinc-900/90 px-3 py-1 rounded border border-zinc-700 flex items-center gap-2">
-          <span class="text-emerald-400 text-base">💵</span>
+        <div class="pixel-hud-counter px-3 py-1 rounded flex items-center gap-2">
+          <span class="text-emerald-400 text-lg">💵</span>
           <div>
-            <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Ad Revenue ($)</div>
-            <div id="hud-cash" class="text-sm font-bold text-emerald-400 leading-tight">$50</div>
+            <div class="text-[9px] uppercase tracking-wider text-emerald-300/70 font-bold font-pixel text-xs leading-none">Ad Revenue ($)</div>
+            <div id="hud-cash" class="text-base font-bold text-emerald-400 font-pixel text-xl leading-tight">$50</div>
           </div>
         </div>
       </div>
 
       <!-- Rot Zone Indicator Banner -->
-      <div id="rot-zone-banner" class="hidden px-3 py-1 rounded bg-amber-950/80 border border-amber-500 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 animate-pulse">
+      <div id="rot-zone-banner" class="hidden px-3 py-1 rounded bg-amber-950/80 border-2 border-amber-500 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 animate-pulse shadow-lg">
         <span>☢️ GOLDILOCKS ROT ZONE:</span>
         <span id="rot-multiplier" class="text-amber-200">5.0x</span>
         <span>HARVEST!</span>
       </div>
 
-      <!-- Action Controls Cluster (Minimalist & Clean) -->
+      <!-- Action Controls Cluster (32-Bit Arcade Push Buttons) -->
       <div class="flex items-center gap-2 font-mono">
         <!-- Upgrades / Research -->
-        <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Deploy unethical software architecture to optimize human addiction">
+        <button id="btn-open-upgrades" class="pixel-btn pixel-btn-amber px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Deploy unethical software architecture to optimize human addiction">
           <span>🔬</span> DARK PATTERNS
         </button>
 
         <!-- Badges & Apocalypse Gallery -->
-        <button id="btn-open-badges" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="View discovered apocalypse endings and achievement records">
+        <button id="btn-open-badges" class="pixel-btn pixel-btn-blue px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="View discovered apocalypse endings and achievement records">
           <span>🏆</span> BADGES
         </button>
 
         <!-- Tools Dropdown / Quick Actions -->
         <div class="relative group">
-          <button id="btn-tools-menu" class="px-2.5 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-300 flex items-center gap-1.5 transition-all" title="Auxiliary Creator & Analysis Tools">
+          <button id="btn-tools-menu" class="pixel-btn px-2.5 py-1.5 rounded bg-zinc-900 border-zinc-700 text-xs font-bold text-zinc-300 flex items-center gap-1.5 transition-all" title="Auxiliary Creator & Analysis Tools">
             <span>🛠️</span> <span class="hidden sm:inline">TOOLS</span> <span>▾</span>
           </button>
           <div class="absolute right-0 mt-1 w-48 bg-zinc-950 border border-zinc-700 rounded-lg shadow-2xl py-1 hidden group-hover:block hover:block z-50 text-xs">
@@ -244,11 +392,11 @@
           🚨 Tactical Interventions
         </div>
         
-        <button id="btn-deploy-bots" class="w-full py-2 px-3 rounded bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700/60 text-blue-200 font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95">
+        <button id="btn-deploy-bots" class="w-full py-2 px-3 rounded pixel-btn pixel-btn-blue font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow">
           🤖 DEPLOY RAGE BOTS ($80)
         </button>
 
-        <button id="btn-coolant" class="w-full py-2 px-3 rounded bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-700/60 text-cyan-200 font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95">
+        <button id="btn-coolant" class="w-full py-2 px-3 rounded pixel-btn pixel-btn-cyan font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow">
           ❄️ CRYO-COOLANT SPRAY ($60)
         </button>
       </div>
@@ -353,88 +501,161 @@
         <p class="text-[11px] text-zinc-500 font-mono">Thermodynamics & Civil War Risk</p>
       </div>
 
-      <!-- Global Tension Meter -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+      <!-- Global Tension Meter (32-Bit Arcade Health Bar) -->
+      <div class="p-3 pixel-border-steel rounded font-mono">
         <div class="flex items-center justify-between text-xs mb-1">
-          <span class="font-bold text-zinc-300">Civilization Tension</span>
-          <span id="hud-tension-val" class="text-amber-400 font-bold">50.0%</span>
+          <span class="font-bold text-zinc-200 font-pixel text-sm tracking-wide flex items-center gap-1.5">
+            <span>⚔️</span> CIVILIZATION TENSION
+          </span>
+          <span id="hud-tension-val" class="text-amber-400 font-bold font-pixel text-base">50.0%</span>
         </div>
-        <div class="w-full bg-zinc-800 h-3 rounded overflow-hidden p-[1px]">
+        <div class="pixel-gauge-housing h-3.5 rounded overflow-hidden">
           <div id="bar-tension" class="h-full bg-amber-500 transition-all duration-300" style="width: 50%;"></div>
+          <div class="absolute inset-0 pixel-segmented-overlay"></div>
         </div>
-        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold">
+        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold font-pixel">
           <span>Apathy (0%)</span>
           <span class="text-amber-400">Goldilocks (65-92%)</span>
           <span class="text-red-500">Civil War (100%)</span>
         </div>
       </div>
 
-      <!-- Server Core Heat Meter -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+      <!-- Server Core Heat Meter (32-Bit Thermal Meter) -->
+      <div class="p-3 pixel-border-steel rounded font-mono">
         <div class="flex items-center justify-between text-xs mb-1">
-          <span class="font-bold text-zinc-300">Planetary Server Core Heat</span>
-          <span id="hud-temp-val" class="text-cyan-400 font-bold">42.0°C / 100°C</span>
+          <span class="font-bold text-zinc-200 font-pixel text-sm tracking-wide flex items-center gap-1.5">
+            <span>🌡️</span> CORE THERMODYNAMICS
+          </span>
+          <span id="hud-temp-val" class="text-cyan-400 font-bold font-pixel text-base">42.0°C / 100°C</span>
         </div>
-        <div class="w-full bg-zinc-800 h-3 rounded overflow-hidden p-[1px]">
+        <div class="pixel-gauge-housing h-3.5 rounded overflow-hidden">
           <div id="bar-temp" class="h-full bg-cyan-500 transition-all duration-300" style="width: 42%;"></div>
+          <div class="absolute inset-0 pixel-segmented-overlay"></div>
         </div>
-        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold">
+        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold font-pixel">
           <span>Sub-Zero</span>
           <span class="text-orange-400">Fan Strain</span>
           <span class="text-red-500">Supernova (100°C)</span>
         </div>
       </div>
 
-      <!-- TABBED VISUALIZER: Oscilloscope | Riot Radar -->
-      <div class="bg-zinc-900/60 rounded border border-zinc-800 overflow-hidden font-mono">
+      <!-- TABBED VISUALIZER: Oscilloscope | 32-Bit Riot Radar -->
+      <div class="pixel-border-steel rounded overflow-hidden font-mono">
         <!-- Visualizer Tabs Header -->
-        <div class="flex border-b border-zinc-800 bg-black/40 text-xs">
-          <button id="tab-btn-sparkline" class="flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px]">
-            📈 Oscilloscope
+        <div class="flex border-b border-zinc-800 bg-black/60 text-xs">
+          <button id="tab-btn-sparkline" class="flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px] font-pixel tracking-wider">
+            📈 OSCILLOSCOPE
           </button>
-          <button id="tab-btn-radar" class="flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]">
-            📡 Riot Radar
+          <button id="tab-btn-radar" class="flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px] font-pixel tracking-wider">
+            📡 32-BIT OVERWORLD RADAR
           </button>
         </div>
 
         <!-- Tab 1: Oscilloscope Monitor -->
-        <div id="tab-panel-sparkline" class="p-3">
+        <div id="tab-panel-sparkline" class="p-2.5">
           <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
-            <span>Live Telemetry</span>
-            <div class="flex gap-2">
+            <span class="font-pixel tracking-wider">Live Waveform</span>
+            <div class="flex gap-2 text-[9px]">
               <span class="text-amber-400">● Tension</span>
               <span class="text-cyan-400">● Temp</span>
             </div>
           </div>
-          <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800"></canvas>
+          <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 shadow-inner"></canvas>
         </div>
 
-        <!-- Tab 2: Faction Battle Map / Planetary Riot Radar -->
-        <div id="tab-panel-radar" class="p-3 hidden">
+        <!-- Tab 2: 32-Bit Faction Battle Map / Planetary Riot Radar -->
+        <div id="tab-panel-radar" class="p-2.5 hidden">
           <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
-            <span>Planetary Sectors</span>
-            <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE</span>
+            <span class="font-pixel tracking-wider text-emerald-400">Tactical Overworld Radar</span>
+            <span class="text-emerald-400 animate-pulse text-[9px]">● SCANNING</span>
           </div>
-          <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
-          <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
+          <div class="relative rounded overflow-hidden border border-zinc-700/80 shadow-md">
+            <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black cursor-crosshair block"></canvas>
+          </div>
+          <div id="map-briefing-text" class="mt-2 p-1.5 bg-black/80 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight shadow-inner">
             Click any sector node on the radar to inspect regional riot status.
           </div>
         </div>
       </div>
 
-      <!-- Game Mechanics Lore Helper (Collapsible Drawer) -->
-      <details class="group bg-zinc-900/40 rounded border border-zinc-800 text-zinc-400 font-mono text-[11px]">
-        <summary class="p-2.5 cursor-pointer font-bold text-zinc-400 hover:text-zinc-200 uppercase text-[10px] flex items-center justify-between select-none">
-          <span class="flex items-center gap-1.5">📖 Operating Rules & Mandate</span>
-          <span class="text-zinc-500 text-[9px] group-open:rotate-180 transition-transform">▼</span>
-        </summary>
-        <div class="p-2.5 pt-0 space-y-1.5 leading-relaxed text-[10px] border-t border-zinc-800/40 mt-1 font-sans">
-          <p>• Keep tension in the <strong class="text-amber-400">Goldilocks Rot Zone (65-92%)</strong> for 5.0x harvest multiplier.</p>
-          <p>• <strong class="text-red-400">Tension 100%</strong> triggers Kinetic Civil War.</p>
-          <p>• <strong class="text-orange-400">Temp 100°C</strong> melts planetary servers into bedrock.</p>
-          <p>• <strong class="text-emerald-400">Tension 0%</strong> causes users to touch grass (You're fired!).</p>
+      <!-- 32-BIT RPG MANDATE QUEST LOG (Minimal, Authentic, High-Detail) -->
+      <div id="quest-log-box" class="pixel-border-gold p-3 rounded font-mono text-[11px] relative overflow-hidden">
+        <!-- Gold Rivet Corners -->
+        <div class="absolute top-1 left-1 pixel-rivet pixel-rivet-gold"></div>
+        <div class="absolute top-1 right-1 pixel-rivet pixel-rivet-gold"></div>
+        <div class="absolute bottom-1 left-1 pixel-rivet pixel-rivet-gold"></div>
+        <div class="absolute bottom-1 right-1 pixel-rivet pixel-rivet-gold"></div>
+
+        <!-- Header Ribbon -->
+        <div class="flex items-center justify-between pb-1.5 mb-2 border-b border-amber-900/60">
+          <div class="flex items-center gap-1.5 font-pixel text-amber-300 text-sm tracking-widest uppercase">
+            <span>⚔️</span>
+            <span>MANDATE QUEST LOG</span>
+          </div>
+          <span class="text-[9px] px-1.5 py-0.2 bg-amber-950/80 text-amber-300 border border-amber-800 rounded font-bold font-pixel tracking-wide">
+            ACT I
+          </span>
         </div>
-      </details>
+
+        <!-- Minimal 32-Bit Quest Directives -->
+        <div class="space-y-2 text-[10px]">
+          <!-- Objective 1: Rot Zone -->
+          <div class="flex items-center justify-between bg-black/60 p-1.5 rounded border border-zinc-800/80">
+            <div class="flex items-center gap-1.5">
+              <span class="text-amber-400 font-bold font-pixel">▶</span>
+              <div>
+                <div class="font-bold text-zinc-200">Rot Zone Harvest</div>
+                <div class="text-[9px] text-zinc-400">Target: 65% – 92% Tension</div>
+              </div>
+            </div>
+            <div id="quest-rot-status" class="px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-800 text-zinc-400 border border-zinc-700 tracking-wider">
+              STANDBY
+            </div>
+          </div>
+
+          <!-- Objective 2: Server Thermals -->
+          <div class="flex items-center justify-between bg-black/60 p-1.5 rounded border border-zinc-800/80">
+            <div class="flex items-center gap-1.5">
+              <span class="text-cyan-400 font-bold font-pixel">▶</span>
+              <div>
+                <div class="font-bold text-zinc-200">Hardware Thermals</div>
+                <div class="text-[9px] text-zinc-400">Limit: &lt; 85°C Core</div>
+              </div>
+            </div>
+            <div id="quest-temp-status" class="px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800 tracking-wider">
+              OPTIMAL
+            </div>
+          </div>
+
+          <!-- Objective 3: Neuro-Watts Quota -->
+          <div class="bg-black/60 p-1.5 rounded border border-zinc-800/80">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-amber-400 font-bold font-pixel">▶</span>
+                <span class="font-bold text-zinc-200">Harvest Quota</span>
+              </div>
+              <span id="quest-watts-counter" class="text-[9px] font-bold text-amber-300 font-pixel text-xs">100 / 50k⚡</span>
+            </div>
+            <div class="w-full bg-zinc-900 h-1.5 rounded overflow-hidden border border-zinc-800">
+              <div id="quest-watts-bar" class="h-full bg-gradient-to-r from-amber-600 via-amber-400 to-yellow-300 transition-all duration-300" style="width: 0.2%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional Mandate Lore Accordion (Collapsible & Clean) -->
+        <details class="group mt-2 border-t border-amber-900/40 pt-1.5 text-[9px] text-zinc-400">
+          <summary class="cursor-pointer text-amber-400/80 hover:text-amber-300 flex items-center justify-between select-none font-bold">
+            <span>📖 Operating Directives Lore</span>
+            <span class="group-open:rotate-180 transition-transform">▾</span>
+          </summary>
+          <div class="mt-1 space-y-1 font-sans text-zinc-400 p-1.5 bg-black/50 rounded border border-zinc-900 leading-snug">
+            <p>• Keep tension in <strong class="text-amber-400">65-92% Rot Zone</strong> for 5.0x harvest multiplier.</p>
+            <p>• <strong class="text-red-400">Tension 100%</strong> = Kinetic Civil War.</p>
+            <p>• <strong class="text-cyan-400">Temp 100°C</strong> = Hardware Meltdown.</p>
+            <p>• <strong class="text-emerald-400">Tension 0%</strong> = Users touch grass (Terminated!).</p>
+          </div>
+        </details>
+      </div>
     </aside>
 
   </main>

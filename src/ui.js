@@ -512,6 +512,47 @@ class UIController {
       }
     }
 
+    // 4b. 32-Bit Mandate Quest Log Live Status Indicators
+    const questRot = document.getElementById('quest-rot-status');
+    if (questRot) {
+      if (this.sim.goldilocksActive) {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/70 tracking-wider animate-pulse';
+        questRot.innerText = `🔥 5.0x HARVEST`;
+      } else if (this.sim.tension > 92) {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-rose-950 text-rose-300 border border-rose-600 tracking-wider animate-pulse';
+        questRot.innerText = '⚠️ WAR RISK';
+      } else if (this.sim.tension < 65) {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-800 text-zinc-400 border border-zinc-700 tracking-wider';
+        questRot.innerText = 'STANDBY';
+      } else {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-amber-950 text-amber-300 border border-amber-800 tracking-wider';
+        questRot.innerText = 'ACTIVE';
+      }
+    }
+
+    const questTemp = document.getElementById('quest-temp-status');
+    if (questTemp) {
+      if (this.sim.serverTemp > 85) {
+        questTemp.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-rose-950 text-rose-300 border border-rose-600 tracking-wider animate-pulse';
+        questTemp.innerText = '🔥 CRITICAL';
+      } else if (this.sim.serverTemp > 65) {
+        questTemp.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-amber-950 text-amber-300 border border-amber-800 tracking-wider';
+        questTemp.innerText = '⚡ STRAIN';
+      } else {
+        questTemp.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800 tracking-wider';
+        questTemp.innerText = 'OPTIMAL';
+      }
+    }
+
+    const questWattsCounter = document.getElementById('quest-watts-counter');
+    const questWattsBar = document.getElementById('quest-watts-bar');
+    if (questWattsCounter && questWattsBar) {
+      const quota = 50000;
+      const pct = Math.min(100, (this.sim.watts / quota) * 100);
+      questWattsCounter.innerText = `${Math.floor(this.sim.watts).toLocaleString()} / 50k⚡`;
+      questWattsBar.style.width = `${pct}%`;
+    }
+
     // 5. Action Button Cooldown states
     const btnBots = document.getElementById('btn-deploy-bots');
     if (btnBots) {

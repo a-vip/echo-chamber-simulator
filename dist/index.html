@@ -70,14 +70,162 @@
       text-shadow: 0 0 8px rgba(0,0,0,0.9);
     }
 
-    /* Pixel Box Shadows */
+    /* Pixel Box Shadows & 32-Bit RPG Styling */
     .pixel-box {
       box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
     }
 
-    /* Range slider styling */
+    /* 32-Bit RPG Ornate Gold Bevel Frame */
+    .pixel-border-gold {
+      border: 3px solid #78350f;
+      box-shadow: 
+        inset 2px 2px 0 #fbbf24,
+        inset -2px -2px 0 #451a03,
+        0 0 0 1px #000,
+        0 4px 12px rgba(0, 0, 0, 0.7);
+      background: linear-gradient(180deg, #131722 0%, #090c14 100%);
+    }
+
+    /* 32-Bit Heavy Steel / Arcade Frame */
+    .pixel-border-steel {
+      border: 2px solid #3f3f46;
+      box-shadow: 
+        inset 1px 1px 0 #71717a,
+        inset -2px -2px 0 #18181b,
+        0 0 0 1px #09090b,
+        0 3px 8px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(180deg, #18181b 0%, #0c0c0e 100%);
+    }
+
+    /* 32-Bit Metallic Rivet Head */
+    .pixel-rivet {
+      width: 6px;
+      height: 6px;
+      background: #a1a1aa;
+      border-radius: 1px;
+      box-shadow: 
+        inset 1px 1px 0 #f4f4f5,
+        inset -1px -1px 0 #27272a,
+        0 1px 1px rgba(0, 0, 0, 0.9);
+      pointer-events: none;
+    }
+    .pixel-rivet-gold {
+      background: #ca8a04;
+      box-shadow: 
+        inset 1px 1px 0 #fef08a,
+        inset -1px -1px 0 #713f12,
+        0 1px 1px rgba(0, 0, 0, 0.9);
+    }
+
+    /* 32-Bit Tactile Arcade Push Buttons */
+    .pixel-btn {
+      font-family: var(--font-mono);
+      position: relative;
+      border: 2px solid #52525b;
+      box-shadow: 
+        inset 1px 1px 0 rgba(255, 255, 255, 0.35),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.8),
+        0 2px 0 #000;
+      transition: all 0.08s ease-in-out;
+      cursor: pointer;
+    }
+    .pixel-btn:hover {
+      filter: brightness(1.15);
+    }
+    .pixel-btn:active {
+      transform: translateY(2px);
+      box-shadow: 
+        inset 2px 2px 0 rgba(0, 0, 0, 0.8),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 #000;
+    }
+
+    .pixel-btn-amber {
+      background: linear-gradient(180deg, #d97706 0%, #b45309 60%, #78350f 100%);
+      border-color: #fbbf24;
+      color: #fffbeb;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    .pixel-btn-blue {
+      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 60%, #1e3a8a 100%);
+      border-color: #60a5fa;
+      color: #eff6ff;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    .pixel-btn-cyan {
+      background: linear-gradient(180deg, #0891b2 0%, #0e7490 60%, #164e63 100%);
+      border-color: #22d3ee;
+      color: #ecfeff;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    .pixel-btn-rose {
+      background: linear-gradient(180deg, #e11d48 0%, #be123c 60%, #881337 100%);
+      border-color: #fb7185;
+      color: #fff1f2;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    /* 32-Bit Arcade Recessed Health / Vital Gauge Housing */
+    .pixel-gauge-housing {
+      border: 2px solid #27272a;
+      background: #09090b;
+      box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.95),
+        0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 32-Bit Segmented Overlay for arcade bars */
+    .pixel-segmented-overlay {
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 6px,
+        rgba(0, 0, 0, 0.7) 6px,
+        rgba(0, 0, 0, 0.7) 8px
+      );
+      pointer-events: none;
+    }
+
+    /* 32-Bit Recessed LCD / LED Counter Module */
+    .pixel-hud-counter {
+      border: 2px solid #3f3f46;
+      background: #09090b;
+      box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.9),
+        inset -1px -1px 0 rgba(255, 255, 255, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    /* Knurled 32-Bit Range Sliders */
     input[type=range] {
-      accent-color: #f59e0b;
+      -webkit-appearance: none;
+      background: #18181b;
+      height: 8px;
+      border-radius: 2px;
+      border: 1px solid #3f3f46;
+      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.9);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 20px;
+      background: #f59e0b;
+      border: 2px solid #fbbf24;
+      border-radius: 2px;
+      box-shadow: 
+        inset 1px 1px 0 #fef3c7, 
+        inset -1px -1px 0 #78350f, 
+        0 2px 4px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      background: #fbbf24;
+      filter: brightness(1.1);
     }
   </style>
 </head>
@@ -140,49 +288,49 @@
         </div>
       </div>
 
-      <!-- Core Currencies -->
-      <div class="flex items-center gap-5 font-mono">
+      <!-- Core Currencies (32-Bit Arcade Style) -->
+      <div class="flex items-center gap-4 font-mono">
         <!-- Neuro-Watts -->
-        <div class="bg-zinc-900/90 px-3 py-1 rounded border border-zinc-700 flex items-center gap-2">
-          <span class="text-amber-400 text-base">⚡</span>
+        <div class="pixel-hud-counter px-3 py-1 rounded flex items-center gap-2">
+          <span class="text-amber-400 text-lg">⚡</span>
           <div>
-            <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Neuro-Watts</div>
-            <div id="hud-watts" class="text-sm font-bold text-amber-400 leading-tight">100</div>
+            <div class="text-[9px] uppercase tracking-wider text-amber-300/70 font-bold font-pixel text-xs leading-none">Neuro-Watts</div>
+            <div id="hud-watts" class="text-base font-bold text-amber-400 font-pixel text-xl leading-tight">100</div>
           </div>
         </div>
 
         <!-- Dopamine Dimes -->
-        <div class="bg-zinc-900/90 px-3 py-1 rounded border border-zinc-700 flex items-center gap-2">
-          <span class="text-emerald-400 text-base">💵</span>
+        <div class="pixel-hud-counter px-3 py-1 rounded flex items-center gap-2">
+          <span class="text-emerald-400 text-lg">💵</span>
           <div>
-            <div class="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Ad Revenue ($)</div>
-            <div id="hud-cash" class="text-sm font-bold text-emerald-400 leading-tight">$50</div>
+            <div class="text-[9px] uppercase tracking-wider text-emerald-300/70 font-bold font-pixel text-xs leading-none">Ad Revenue ($)</div>
+            <div id="hud-cash" class="text-base font-bold text-emerald-400 font-pixel text-xl leading-tight">$50</div>
           </div>
         </div>
       </div>
 
       <!-- Rot Zone Indicator Banner -->
-      <div id="rot-zone-banner" class="hidden px-3 py-1 rounded bg-amber-950/80 border border-amber-500 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 animate-pulse">
+      <div id="rot-zone-banner" class="hidden px-3 py-1 rounded bg-amber-950/80 border-2 border-amber-500 text-amber-300 text-xs font-mono font-bold flex items-center gap-1.5 animate-pulse shadow-lg">
         <span>☢️ GOLDILOCKS ROT ZONE:</span>
         <span id="rot-multiplier" class="text-amber-200">5.0x</span>
         <span>HARVEST!</span>
       </div>
 
-      <!-- Action Controls Cluster (Minimalist & Clean) -->
+      <!-- Action Controls Cluster (32-Bit Arcade Push Buttons) -->
       <div class="flex items-center gap-2 font-mono">
         <!-- Upgrades / Research -->
-        <button id="btn-open-upgrades" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Deploy unethical software architecture to optimize human addiction">
+        <button id="btn-open-upgrades" class="pixel-btn pixel-btn-amber px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="Deploy unethical software architecture to optimize human addiction">
           <span>🔬</span> DARK PATTERNS
         </button>
 
         <!-- Badges & Apocalypse Gallery -->
-        <button id="btn-open-badges" class="px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-bold text-zinc-100 flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="View discovered apocalypse endings and achievement records">
+        <button id="btn-open-badges" class="pixel-btn pixel-btn-blue px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm" title="View discovered apocalypse endings and achievement records">
           <span>🏆</span> BADGES
         </button>
 
         <!-- Tools Dropdown / Quick Actions -->
         <div class="relative group">
-          <button id="btn-tools-menu" class="px-2.5 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-300 flex items-center gap-1.5 transition-all" title="Auxiliary Creator & Analysis Tools">
+          <button id="btn-tools-menu" class="pixel-btn px-2.5 py-1.5 rounded bg-zinc-900 border-zinc-700 text-xs font-bold text-zinc-300 flex items-center gap-1.5 transition-all" title="Auxiliary Creator & Analysis Tools">
             <span>🛠️</span> <span class="hidden sm:inline">TOOLS</span> <span>▾</span>
           </button>
           <div class="absolute right-0 mt-1 w-48 bg-zinc-950 border border-zinc-700 rounded-lg shadow-2xl py-1 hidden group-hover:block hover:block z-50 text-xs">
@@ -244,11 +392,11 @@
           🚨 Tactical Interventions
         </div>
         
-        <button id="btn-deploy-bots" class="w-full py-2 px-3 rounded bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700/60 text-blue-200 font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95">
+        <button id="btn-deploy-bots" class="w-full py-2 px-3 rounded pixel-btn pixel-btn-blue font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow">
           🤖 DEPLOY RAGE BOTS ($80)
         </button>
 
-        <button id="btn-coolant" class="w-full py-2 px-3 rounded bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-700/60 text-cyan-200 font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95">
+        <button id="btn-coolant" class="w-full py-2 px-3 rounded pixel-btn pixel-btn-cyan font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow">
           ❄️ CRYO-COOLANT SPRAY ($60)
         </button>
       </div>
@@ -353,88 +501,161 @@
         <p class="text-[11px] text-zinc-500 font-mono">Thermodynamics & Civil War Risk</p>
       </div>
 
-      <!-- Global Tension Meter -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+      <!-- Global Tension Meter (32-Bit Arcade Health Bar) -->
+      <div class="p-3 pixel-border-steel rounded font-mono">
         <div class="flex items-center justify-between text-xs mb-1">
-          <span class="font-bold text-zinc-300">Civilization Tension</span>
-          <span id="hud-tension-val" class="text-amber-400 font-bold">50.0%</span>
+          <span class="font-bold text-zinc-200 font-pixel text-sm tracking-wide flex items-center gap-1.5">
+            <span>⚔️</span> CIVILIZATION TENSION
+          </span>
+          <span id="hud-tension-val" class="text-amber-400 font-bold font-pixel text-base">50.0%</span>
         </div>
-        <div class="w-full bg-zinc-800 h-3 rounded overflow-hidden p-[1px]">
+        <div class="pixel-gauge-housing h-3.5 rounded overflow-hidden">
           <div id="bar-tension" class="h-full bg-amber-500 transition-all duration-300" style="width: 50%;"></div>
+          <div class="absolute inset-0 pixel-segmented-overlay"></div>
         </div>
-        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold">
+        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold font-pixel">
           <span>Apathy (0%)</span>
           <span class="text-amber-400">Goldilocks (65-92%)</span>
           <span class="text-red-500">Civil War (100%)</span>
         </div>
       </div>
 
-      <!-- Server Core Heat Meter -->
-      <div class="p-3 bg-zinc-900/60 rounded border border-zinc-800 font-mono">
+      <!-- Server Core Heat Meter (32-Bit Thermal Meter) -->
+      <div class="p-3 pixel-border-steel rounded font-mono">
         <div class="flex items-center justify-between text-xs mb-1">
-          <span class="font-bold text-zinc-300">Planetary Server Core Heat</span>
-          <span id="hud-temp-val" class="text-cyan-400 font-bold">42.0°C / 100°C</span>
+          <span class="font-bold text-zinc-200 font-pixel text-sm tracking-wide flex items-center gap-1.5">
+            <span>🌡️</span> CORE THERMODYNAMICS
+          </span>
+          <span id="hud-temp-val" class="text-cyan-400 font-bold font-pixel text-base">42.0°C / 100°C</span>
         </div>
-        <div class="w-full bg-zinc-800 h-3 rounded overflow-hidden p-[1px]">
+        <div class="pixel-gauge-housing h-3.5 rounded overflow-hidden">
           <div id="bar-temp" class="h-full bg-cyan-500 transition-all duration-300" style="width: 42%;"></div>
+          <div class="absolute inset-0 pixel-segmented-overlay"></div>
         </div>
-        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold">
+        <div class="flex justify-between text-[9px] text-zinc-500 mt-1 uppercase font-bold font-pixel">
           <span>Sub-Zero</span>
           <span class="text-orange-400">Fan Strain</span>
           <span class="text-red-500">Supernova (100°C)</span>
         </div>
       </div>
 
-      <!-- TABBED VISUALIZER: Oscilloscope | Riot Radar -->
-      <div class="bg-zinc-900/60 rounded border border-zinc-800 overflow-hidden font-mono">
+      <!-- TABBED VISUALIZER: Oscilloscope | 32-Bit Riot Radar -->
+      <div class="pixel-border-steel rounded overflow-hidden font-mono">
         <!-- Visualizer Tabs Header -->
-        <div class="flex border-b border-zinc-800 bg-black/40 text-xs">
-          <button id="tab-btn-sparkline" class="flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px]">
-            📈 Oscilloscope
+        <div class="flex border-b border-zinc-800 bg-black/60 text-xs">
+          <button id="tab-btn-sparkline" class="flex-1 py-1.5 px-2 text-center font-bold text-amber-400 border-b-2 border-amber-400 transition-all text-[11px] font-pixel tracking-wider">
+            📈 OSCILLOSCOPE
           </button>
-          <button id="tab-btn-radar" class="flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px]">
-            📡 Riot Radar
+          <button id="tab-btn-radar" class="flex-1 py-1.5 px-2 text-center font-bold text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-all text-[11px] font-pixel tracking-wider">
+            📡 32-BIT OVERWORLD RADAR
           </button>
         </div>
 
         <!-- Tab 1: Oscilloscope Monitor -->
-        <div id="tab-panel-sparkline" class="p-3">
+        <div id="tab-panel-sparkline" class="p-2.5">
           <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
-            <span>Live Telemetry</span>
-            <div class="flex gap-2">
+            <span class="font-pixel tracking-wider">Live Waveform</span>
+            <div class="flex gap-2 text-[9px]">
               <span class="text-amber-400">● Tension</span>
               <span class="text-cyan-400">● Temp</span>
             </div>
           </div>
-          <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800"></canvas>
+          <canvas id="sparkline-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 shadow-inner"></canvas>
         </div>
 
-        <!-- Tab 2: Faction Battle Map / Planetary Riot Radar -->
-        <div id="tab-panel-radar" class="p-3 hidden">
+        <!-- Tab 2: 32-Bit Faction Battle Map / Planetary Riot Radar -->
+        <div id="tab-panel-radar" class="p-2.5 hidden">
           <div class="flex items-center justify-between text-[10px] text-zinc-400 mb-1.5 uppercase font-bold">
-            <span>Planetary Sectors</span>
-            <span class="text-emerald-400 animate-pulse text-[9px]">● LIVE</span>
+            <span class="font-pixel tracking-wider text-emerald-400">Tactical Overworld Radar</span>
+            <span class="text-emerald-400 animate-pulse text-[9px]">● SCANNING</span>
           </div>
-          <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black rounded border border-zinc-800 cursor-crosshair"></canvas>
-          <div id="map-briefing-text" class="mt-1.5 p-1.5 bg-black/60 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight">
+          <div class="relative rounded overflow-hidden border border-zinc-700/80 shadow-md">
+            <canvas id="radar-map-canvas" width="270" height="90" class="w-full bg-black cursor-crosshair block"></canvas>
+          </div>
+          <div id="map-briefing-text" class="mt-2 p-1.5 bg-black/80 rounded border border-zinc-800 text-[10px] text-zinc-300 font-sans leading-tight shadow-inner">
             Click any sector node on the radar to inspect regional riot status.
           </div>
         </div>
       </div>
 
-      <!-- Game Mechanics Lore Helper (Collapsible Drawer) -->
-      <details class="group bg-zinc-900/40 rounded border border-zinc-800 text-zinc-400 font-mono text-[11px]">
-        <summary class="p-2.5 cursor-pointer font-bold text-zinc-400 hover:text-zinc-200 uppercase text-[10px] flex items-center justify-between select-none">
-          <span class="flex items-center gap-1.5">📖 Operating Rules & Mandate</span>
-          <span class="text-zinc-500 text-[9px] group-open:rotate-180 transition-transform">▼</span>
-        </summary>
-        <div class="p-2.5 pt-0 space-y-1.5 leading-relaxed text-[10px] border-t border-zinc-800/40 mt-1 font-sans">
-          <p>• Keep tension in the <strong class="text-amber-400">Goldilocks Rot Zone (65-92%)</strong> for 5.0x harvest multiplier.</p>
-          <p>• <strong class="text-red-400">Tension 100%</strong> triggers Kinetic Civil War.</p>
-          <p>• <strong class="text-orange-400">Temp 100°C</strong> melts planetary servers into bedrock.</p>
-          <p>• <strong class="text-emerald-400">Tension 0%</strong> causes users to touch grass (You're fired!).</p>
+      <!-- 32-BIT RPG MANDATE QUEST LOG (Minimal, Authentic, High-Detail) -->
+      <div id="quest-log-box" class="pixel-border-gold p-3 rounded font-mono text-[11px] relative overflow-hidden">
+        <!-- Gold Rivet Corners -->
+        <div class="absolute top-1 left-1 pixel-rivet pixel-rivet-gold"></div>
+        <div class="absolute top-1 right-1 pixel-rivet pixel-rivet-gold"></div>
+        <div class="absolute bottom-1 left-1 pixel-rivet pixel-rivet-gold"></div>
+        <div class="absolute bottom-1 right-1 pixel-rivet pixel-rivet-gold"></div>
+
+        <!-- Header Ribbon -->
+        <div class="flex items-center justify-between pb-1.5 mb-2 border-b border-amber-900/60">
+          <div class="flex items-center gap-1.5 font-pixel text-amber-300 text-sm tracking-widest uppercase">
+            <span>⚔️</span>
+            <span>MANDATE QUEST LOG</span>
+          </div>
+          <span class="text-[9px] px-1.5 py-0.2 bg-amber-950/80 text-amber-300 border border-amber-800 rounded font-bold font-pixel tracking-wide">
+            ACT I
+          </span>
         </div>
-      </details>
+
+        <!-- Minimal 32-Bit Quest Directives -->
+        <div class="space-y-2 text-[10px]">
+          <!-- Objective 1: Rot Zone -->
+          <div class="flex items-center justify-between bg-black/60 p-1.5 rounded border border-zinc-800/80">
+            <div class="flex items-center gap-1.5">
+              <span class="text-amber-400 font-bold font-pixel">▶</span>
+              <div>
+                <div class="font-bold text-zinc-200">Rot Zone Harvest</div>
+                <div class="text-[9px] text-zinc-400">Target: 65% – 92% Tension</div>
+              </div>
+            </div>
+            <div id="quest-rot-status" class="px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-800 text-zinc-400 border border-zinc-700 tracking-wider">
+              STANDBY
+            </div>
+          </div>
+
+          <!-- Objective 2: Server Thermals -->
+          <div class="flex items-center justify-between bg-black/60 p-1.5 rounded border border-zinc-800/80">
+            <div class="flex items-center gap-1.5">
+              <span class="text-cyan-400 font-bold font-pixel">▶</span>
+              <div>
+                <div class="font-bold text-zinc-200">Hardware Thermals</div>
+                <div class="text-[9px] text-zinc-400">Limit: &lt; 85°C Core</div>
+              </div>
+            </div>
+            <div id="quest-temp-status" class="px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800 tracking-wider">
+              OPTIMAL
+            </div>
+          </div>
+
+          <!-- Objective 3: Neuro-Watts Quota -->
+          <div class="bg-black/60 p-1.5 rounded border border-zinc-800/80">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-amber-400 font-bold font-pixel">▶</span>
+                <span class="font-bold text-zinc-200">Harvest Quota</span>
+              </div>
+              <span id="quest-watts-counter" class="text-[9px] font-bold text-amber-300 font-pixel text-xs">100 / 50k⚡</span>
+            </div>
+            <div class="w-full bg-zinc-900 h-1.5 rounded overflow-hidden border border-zinc-800">
+              <div id="quest-watts-bar" class="h-full bg-gradient-to-r from-amber-600 via-amber-400 to-yellow-300 transition-all duration-300" style="width: 0.2%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional Mandate Lore Accordion (Collapsible & Clean) -->
+        <details class="group mt-2 border-t border-amber-900/40 pt-1.5 text-[9px] text-zinc-400">
+          <summary class="cursor-pointer text-amber-400/80 hover:text-amber-300 flex items-center justify-between select-none font-bold">
+            <span>📖 Operating Directives Lore</span>
+            <span class="group-open:rotate-180 transition-transform">▾</span>
+          </summary>
+          <div class="mt-1 space-y-1 font-sans text-zinc-400 p-1.5 bg-black/50 rounded border border-zinc-900 leading-snug">
+            <p>• Keep tension in <strong class="text-amber-400">65-92% Rot Zone</strong> for 5.0x harvest multiplier.</p>
+            <p>• <strong class="text-red-400">Tension 100%</strong> = Kinetic Civil War.</p>
+            <p>• <strong class="text-cyan-400">Temp 100°C</strong> = Hardware Meltdown.</p>
+            <p>• <strong class="text-emerald-400">Tension 0%</strong> = Users touch grass (Terminated!).</p>
+          </div>
+        </details>
+      </div>
     </aside>
 
   </main>
@@ -2773,97 +2994,183 @@ class RiotRadarMap {
     const h = this.canvas.height;
     this.pulsePhase = (this.pulsePhase + 0.05) % (Math.PI * 2);
 
-    // Clear background
-    ctx.fillStyle = '#09090b';
+    // 1. DEEP OCEAN BASE (32-bit Retro Nautical Grid)
+    ctx.fillStyle = '#061325';
     ctx.fillRect(0, 0, w, h);
 
-    // Draw CRT radar grid
-    ctx.strokeStyle = '#18181b';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < w; x += 25) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, h);
-      ctx.stroke();
-    }
-    for (let y = 0; y < h; y += 20) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
-      ctx.stroke();
+    // Ocean depth contour bands & subtle animated wave ripples
+    ctx.fillStyle = '#0a1d38';
+    for (let wy = 18; wy < h; wy += 14) {
+      const wShift = Math.sin(this.pulsePhase + wy * 0.1) * 3;
+      ctx.fillRect(0, wy, w, 2);
+      ctx.fillStyle = 'rgba(14, 165, 233, 0.12)';
+      for (let wx = 8; wx < w; wx += 28) {
+        ctx.fillRect(wx + wShift, wy, 8, 1);
+      }
+      ctx.fillStyle = '#0a1d38';
     }
 
-    // Radar circular sweep lines
-    ctx.strokeStyle = 'rgba(16, 185, 129, 0.15)';
-    ctx.beginPath();
-    ctx.arc(w / 2, h / 2, 45, 0, Math.PI * 2);
-    ctx.arc(w / 2, h / 2, 85, 0, Math.PI * 2);
-    ctx.stroke();
+    // 2. OVERWORLD CONTINENTS & ARCHIPELAGOS (32-bit pixel landmasses)
+    const islands = [
+      // Sector 1: Silicon Peninsula (North-West)
+      { cx: 45, cy: 38, rx: 22, ry: 14, col: '#1e3a5f', coast: '#38bdf8' },
+      // Sector 2: Metro Megacity (Center-West)
+      { cx: 105, cy: 56, rx: 26, ry: 16, col: '#14532d', coast: '#4ade80' },
+      // Sector 3: Suburbia Belt (East)
+      { cx: 175, cy: 44, rx: 28, ry: 15, col: '#166534', coast: '#86efac' },
+      // Sector 4: Ancestral Valley (North-Center)
+      { cx: 130, cy: 26, rx: 20, ry: 12, col: '#78350f', coast: '#f59e0b' },
+      // Sector 5: Sub-Zero Datacenter (Far-East Glaciers)
+      { cx: 225, cy: 24, rx: 24, ry: 13, col: '#0f766e', coast: '#67e8f9' }
+    ];
 
-    // Radar scanning line
-    const sweepAngle = this.pulsePhase;
-    ctx.strokeStyle = 'rgba(16, 185, 129, 0.25)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(w / 2, h / 2);
-    ctx.lineTo((w / 2) + Math.cos(sweepAngle) * 95, (h / 2) + Math.sin(sweepAngle) * 95);
-    ctx.stroke();
+    islands.forEach(isl => {
+      // Coastline shallow water reef
+      ctx.fillStyle = 'rgba(2, 132, 199, 0.25)';
+      ctx.beginPath();
+      ctx.ellipse(isl.cx, isl.cy, isl.rx + 3, isl.ry + 2, 0, 0, Math.PI * 2);
+      ctx.fill();
 
-    // Render Sectors
+      // Landmass body
+      ctx.fillStyle = isl.col;
+      ctx.beginPath();
+      ctx.ellipse(isl.cx, isl.cy, isl.rx, isl.ry, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Pixel dither highlight on land
+      ctx.fillStyle = isl.coast;
+      ctx.globalAlpha = 0.25;
+      ctx.fillRect(isl.cx - 6, isl.cy - 3, 12, 3);
+      ctx.globalAlpha = 1.0;
+    });
+
+    // 3. RETRO TACTICAL OVERWORLD SECTORS & OUTPOSTS
     this.sectors.forEach((sec, idx) => {
-      // Calculate sector tension from its factions
       let totalTension = 0;
       sec.factions.forEach(fId => {
         totalTension += (simState.factionTensions[fId] || 50);
       });
       const avgTension = totalTension / sec.factions.length;
 
-      let statusColor = '#10b981'; // Green: Calm
-      let statusLabel = 'STABLE';
-      let radius = 4;
+      let statusColor = '#22c55e'; // Green: Calm
+      let beaconGlow = '#4ade80';
+      const isSelected = (this.activeSectorBriefing && this.activeSectorBriefing.id === sec.id);
 
       if (avgTension >= 80) {
-        statusColor = '#ef4444'; // Red: Riots / War
-        statusLabel = 'ACTIVE RIOT';
-        radius = 7;
+        statusColor = '#ef4444'; // Red: Active Riot
+        beaconGlow = '#f87171';
       } else if (avgTension >= 65) {
         statusColor = '#f59e0b'; // Amber: Unrest
-        statusLabel = 'TENSION HIGH';
-        radius = 5.5;
+        beaconGlow = '#fbbf24';
       }
 
-      // Draw pulsating hazard ring if high tension
+      // 3D Pixel Outpost Tower Body
+      ctx.fillStyle = '#09090b';
+      ctx.fillRect(sec.x - 4, sec.y - 4, 8, 8);
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(sec.x - 3, sec.y - 3, 6, 6);
+
+      // Glowing status crystal on tower roof
+      ctx.fillStyle = statusColor;
+      ctx.fillRect(sec.x - 2, sec.y - 2, 4, 4);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(sec.x - 1, sec.y - 1, 2, 2);
+
+      // Flashing warning beacon pulse ring
       if (avgTension >= 65) {
-        const pulseR = radius + Math.sin(this.pulsePhase * 2 + idx) * 3;
-        ctx.strokeStyle = statusColor;
+        const pulseR = 7 + Math.sin(this.pulsePhase * 3 + idx) * 3;
+        ctx.strokeStyle = beaconGlow;
         ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.arc(sec.x, sec.y, Math.max(1, pulseR), 0, Math.PI * 2);
+        ctx.arc(sec.x, sec.y, pulseR, 0, Math.PI * 2);
         ctx.stroke();
+
+        // Mini smoke/spark particles if severe riot
+        if (avgTension >= 80) {
+          ctx.fillStyle = Math.random() < 0.5 ? '#ef4444' : '#f59e0b';
+          const sparkY = sec.y - 6 - (Math.random() * 4);
+          ctx.fillRect(sec.x - 1 + (Math.random() * 3 - 1), sparkY, 2, 2);
+        }
       }
 
-      // Draw sector node
-      ctx.fillStyle = statusColor;
-      ctx.beginPath();
-      ctx.arc(sec.x, sec.y, radius, 0, Math.PI * 2);
-      ctx.fill();
+      // Selected Target Reticle (32-bit RPG crosshair)
+      if (isSelected) {
+        ctx.strokeStyle = '#fef08a';
+        ctx.lineWidth = 1;
+        // 4 corner crosshair brackets
+        const bSize = 8;
+        ctx.strokeRect(sec.x - bSize, sec.y - bSize, bSize * 2, bSize * 2);
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(sec.x - 1, sec.y - bSize - 2, 2, 2);
+        ctx.fillRect(sec.x - 1, sec.y + bSize + 1, 2, 2);
+      }
 
-      // Sector label
-      ctx.fillStyle = '#a1a1aa';
-      ctx.font = '8px monospace';
-      ctx.fillText(`S${idx + 1}`, sec.x + 6, sec.y + 3);
+      // Sector ID Plate
+      ctx.fillStyle = '#09090b';
+      ctx.fillRect(sec.x + 6, sec.y - 4, 18, 9);
+      ctx.strokeStyle = statusColor;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(sec.x + 6, sec.y - 4, 18, 9);
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 7px monospace';
+      ctx.fillText(`S${idx + 1}`, sec.x + 8, sec.y + 3);
     });
 
-    // Update active sector briefing text element
+    // 4. RETRO COMPASS ROSE (Top-Right)
+    const crX = w - 18;
+    const crY = 24;
+    ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(crX, crY, 8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(crX - 1, crY - 7, 2, 6); // North pointer
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = 'bold 6px monospace';
+    ctx.fillText('N', crX - 2, crY - 8);
+
+    // 5. 32-BIT ORNATE LOCATION RIBBON BANNER (Top of Canvas)
+    const locName = this.activeSectorBriefing 
+      ? this.activeSectorBriefing.name.toUpperCase() 
+      : 'SECTOR RADAR ACTIVE';
+
+    // Banner background with golden filigree edge
+    ctx.fillStyle = '#090d16';
+    ctx.fillRect(0, 0, w, 15);
+    ctx.fillStyle = '#a16207';
+    ctx.fillRect(0, 14, w, 1);
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillRect(0, 15, w, 1);
+
+    // Golden corner studs
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillRect(2, 2, 2, 2);
+    ctx.fillRect(w - 4, 2, 2, 2);
+
+    // Banner Text: Name of active location & coordinate status
+    ctx.fillStyle = '#fef08a';
+    ctx.font = 'bold 8px monospace';
+    ctx.fillText(`📍 ${locName}`, 8, 10);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '7px monospace';
+    ctx.fillText(`[GRID 32-BIT]`, w - 70, 10);
+
+    // 6. UPDATE BRIEFING CONTAINER UNDER CANVAS
     const briefingEl = document.getElementById('map-briefing-text');
     if (briefingEl && this.activeSectorBriefing) {
       let tSum = 0;
       this.activeSectorBriefing.factions.forEach(f => tSum += (simState.factionTensions[f] || 50));
       const tAvg = Math.round(tSum / this.activeSectorBriefing.factions.length);
       briefingEl.innerHTML = `
-        <span class="text-white font-bold">${this.activeSectorBriefing.name}:</span>
-        <span class="${tAvg >= 80 ? 'text-red-400 font-bold' : (tAvg >= 65 ? 'text-amber-400' : 'text-emerald-400')}">${tAvg}% Tension</span>
-        <p class="text-[10px] text-zinc-400 italic">${this.activeSectorBriefing.riotDesc}</p>
+        <div class="flex items-center justify-between text-[11px] font-mono border-b border-zinc-800 pb-1 mb-1">
+          <span class="text-amber-300 font-bold tracking-wider">🗺️ ${this.activeSectorBriefing.name}</span>
+          <span class="px-1.5 py-0.2 rounded font-bold ${tAvg >= 80 ? 'bg-red-950 text-red-300 border border-red-800' : (tAvg >= 65 ? 'bg-amber-950 text-amber-300 border border-amber-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800')}">
+            ${tAvg}% TENSION
+          </span>
+        </div>
+        <p class="text-[10px] text-zinc-300 font-sans italic leading-snug">${this.activeSectorBriefing.riotDesc}</p>
       `;
     }
   }
@@ -2964,8 +3271,9 @@ class FactionCharacter {
 
   isRival(otherType) {
     const rivals = {
-      alpha_bro: 'divine_femme',
+      alpha_bro: ['divine_femme', 'siren_femme'],
       divine_femme: 'alpha_bro',
+      siren_femme: 'alpha_bro',
       lord_cat: 'tactical_dog',
       tactical_dog: 'lord_cat',
       tech_lord: 'mud_monk',
@@ -2973,7 +3281,8 @@ class FactionCharacter {
       skibidi_rot: 'patriot_boomer',
       patriot_boomer: 'skibidi_rot'
     };
-    return rivals[this.type] === otherType;
+    const r = rivals[this.type];
+    return Array.isArray(r) ? r.includes(otherType) : r === otherType;
   }
 
   startArgument(other) {
@@ -2985,6 +3294,7 @@ class FactionCharacter {
     const phrases = {
       alpha_bro: ["GRIND, KING!", "CHOP WOOD!", "NO EYE CONTACT!", "MARROW TIME!"],
       divine_femme: ["SPRINKLE SPRINKLE💅", "WHERE IS THE $350?", "LOW VIBES!", "CORD CUT!"],
+      siren_femme: ["MANIFEST $1200💅", "UNBLOCK YOUR CHAKRA!", "HIGH FREQUENCY!", "QUEEN ENERGY!"],
       lord_cat: ["BOW DOWN, PEASANT!", "SWAT!", "DOGS ARE NOISE!", "HISSSS!"],
       tactical_dog: ["WOOF WOOF!", "TACTICAL BARK!", "CAT SLANDER!", "DEFEND YARD!"],
       tech_lord: ["BUY THE TOKEN!", "AI WILL REPLACE YOU!", "100x LEVERAGE!", "CRYPTO LUNGS!"],
@@ -3036,6 +3346,9 @@ class FactionCharacter {
         break;
       case 'divine_femme':
         this.drawDivineFemme(ctx);
+        break;
+      case 'siren_femme':
+        this.drawSirenFemme(ctx);
         break;
       case 'lord_cat':
         this.drawLordCat(ctx);
@@ -3123,38 +3436,302 @@ class FactionCharacter {
     ctx.fillRect(-2, -10, 5, 2);
   }
 
-  // Pixel Sprite: Divine Femme
+  // Pixel Sprite: Divine Femme (32-bit Stylized Beach & Resort Femsphere Siren)
   drawDivineFemme(ctx) {
-    // Shoes / Heels
-    ctx.fillStyle = '#ec4899';
-    ctx.fillRect(-3, 14, 2, 2);
-    ctx.fillRect(2, 14, 2, 2);
-    // Legs
-    ctx.fillStyle = '#fde68a';
-    ctx.fillRect(-3, 8, 2, 6);
-    ctx.fillRect(2, 8, 2, 6);
-    // Hot Pink Dress
-    ctx.fillStyle = '#db2777';
-    ctx.fillRect(-5, -2, 10, 11);
-    // Iced drink cup
-    ctx.fillStyle = '#a7f3d0';
-    ctx.fillRect(5, 1, 3, 5);
-    ctx.fillStyle = '#10b981';
-    ctx.fillRect(6, -1, 1, 2); // straw
-    // Head & Face
-    ctx.fillStyle = '#fde68a';
-    ctx.fillRect(-4, -11, 8, 8);
-    // Golden Blonde Flowing Hair
-    ctx.fillStyle = '#fbbf24';
-    ctx.fillRect(-6, -13, 12, 4);
-    ctx.fillRect(-7, -10, 3, 12);
-    // Sunglasses
-    ctx.fillStyle = '#18181b';
-    ctx.fillRect(-2, -9, 5, 2);
-    // Floating purple crystal
+    const breath = Math.sin(this.animTime * 1.8) * 0.8;
+    const hairSway = Math.sin(this.animTime * 1.2) * 1.5;
+
+    // Palette Definition (32-bit multi-tier shading)
+    const cOutline = '#1c130d';       // Deep contour outline
+    const cSkinDeep = '#a86544';      // Deep shadow
+    const cSkinShadow = '#cb855d';    // Warm shadow
+    const cSkinBase = '#ebb28d';      // Mid skin tone
+    const cSkinLight = '#f8cfb2';     // Sunlit highlight
+    const cSkinSpecular = '#fff1e8';  // Specular gleam
+
+    // Royal Blue Resort Two-Piece Swimwear
+    const cSuitDark = '#0f2952';
+    const cSuitBase = '#1d4ed8';
+    const cSuitLight = '#60a5fa';
+    const cSuitGlint = '#93c5fd';
+
+    // Voluminous Golden Caramel Hair
+    const cHairShadow = '#3b2210';
+    const cHairDeep = '#613919';
+    const cHairBase = '#925c27';
+    const cHairMid = '#bf823e';
+    const cHairLight = '#e5aa59';
+    const cHairGlint = '#fce29a';
+
+    // 1. BACK HAIR (Cascading behind shoulders and down back)
+    ctx.fillStyle = cHairShadow;
+    ctx.fillRect(-7 + hairSway, -14, 14, 18);
+    ctx.fillStyle = cHairDeep;
+    ctx.fillRect(-6 + hairSway, -12, 12, 17);
+    ctx.fillStyle = cHairBase;
+    ctx.fillRect(-5 + hairSway, -10, 10, 16);
+    ctx.fillStyle = cHairMid;
+    ctx.fillRect(2 + hairSway, -8, 5, 14);
+
+    // 2. LEGS & TONED CALVES (with slender 32-bit contour)
+    // Left leg
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-4, 6, 3, 10);
+    ctx.fillRect(-4, 15, 3, 2);
+    ctx.fillStyle = cSkinShadow;
+    ctx.fillRect(-3, 6, 2, 9);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-3, 6, 1, 9);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(-3, 7, 1, 4);
+
+    // Right leg (subtle feminine stance)
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(1, 6, 3, 10);
+    ctx.fillRect(1, 15, 3, 2);
+    ctx.fillStyle = cSkinShadow;
+    ctx.fillRect(2, 6, 2, 9);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(1, 6, 2, 9);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(1, 7, 1, 5);
+    ctx.fillStyle = cSkinSpecular;
+    ctx.fillRect(1, 8, 1, 2); // Thigh highlight sheen
+
+    // Delicate golden ankle bracelets / beach sandals
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillRect(-4, 14, 3, 1);
+    ctx.fillRect(1, 14, 3, 1);
+
+    // 3. HIPS & TWO-PIECE BOTTOM (Slender hourglass silhouette)
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-4, 2, 8, 5);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-3, 2, 6, 5);
+
+    // Swimwear bottoms
+    ctx.fillStyle = cSuitDark;
+    ctx.fillRect(-3, 2, 6, 4);
+    ctx.fillStyle = cSuitBase;
+    ctx.fillRect(-2, 2, 4, 3);
+    ctx.fillStyle = cSuitLight;
+    ctx.fillRect(-1, 2, 2, 2);
+    // Delicate side string ties
+    ctx.fillStyle = cSuitGlint;
+    ctx.fillRect(-4, 2, 1, 1);
+    ctx.fillRect(3, 2, 1, 1);
+
+    // 4. SLENDER MIDRIFF & TORSO (with subtle breathing elevation)
+    const torsoY = -4 + breath * 0.5;
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-3, torsoY, 6, 7);
+    ctx.fillStyle = cSkinShadow;
+    ctx.fillRect(-2, torsoY, 5, 6);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-2, torsoY, 4, 6);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(-1, torsoY + 1, 2, 4);
+    // Subtle belly button accent
+    ctx.fillStyle = cSkinDeep;
+    ctx.fillRect(0, torsoY + 4, 1, 1);
+
+    // 5. SWIMWEAR TOP / BIKINI TOP
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-4, torsoY, 8, 3);
+    ctx.fillStyle = cSuitDark;
+    ctx.fillRect(-3, torsoY, 6, 3);
+    ctx.fillStyle = cSuitBase;
+    ctx.fillRect(-3, torsoY, 3, 2);
+    ctx.fillRect(1, torsoY, 3, 2);
+    ctx.fillStyle = cSuitLight;
+    ctx.fillRect(-2, torsoY, 1, 1);
+    ctx.fillRect(2, torsoY, 1, 1);
+    // Center ring & delicate halter neck ties
+    ctx.fillStyle = '#fcd34d';
+    ctx.fillRect(0, torsoY + 1, 1, 1);
+    ctx.fillStyle = cSuitLight;
+    ctx.fillRect(-1, torsoY - 1, 1, 1);
+    ctx.fillRect(1, torsoY - 1, 1, 1);
+
+    // 6. SLENDER ARMS & HAND IN HAIR POSE
+    // Left arm (resting on hip)
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-5, torsoY + 1, 2, 6);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-4, torsoY + 1, 1, 5);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(-4, torsoY + 2, 1, 3);
+
+    // Right arm (gracefully raised touching voluminous hair)
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(3, torsoY - 5, 3, 8);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(4, torsoY - 4, 2, 6);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(4, torsoY - 3, 1, 4);
+
+    // 7. FACE & HEAD (Delicate feminine 32-bit features)
+    const headY = -14 + breath * 0.3;
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-3, headY, 6, 7);
+    ctx.fillStyle = cSkinShadow;
+    ctx.fillRect(-2, headY, 5, 6);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-2, headY, 4, 6);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(-1, headY + 1, 3, 4);
+
+    // Seductive eyes with soft lashes & teal iris
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-1, headY + 2, 2, 1);
+    ctx.fillStyle = '#0d9488';
+    ctx.fillRect(0, headY + 2, 1, 1);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, headY + 2, 1, 1);
+
+    // Rosy cheek blush & lips
+    ctx.fillStyle = '#f472b6';
+    ctx.fillRect(-2, headY + 4, 1, 1);
+    ctx.fillRect(1, headY + 4, 1, 1);
+    ctx.fillStyle = '#e11d48';
+    ctx.fillRect(0, headY + 5, 1, 1);
+
+    // 8. FRONT VOLUMINOUS FLOWING HAIR & HIGHLIGHTS
+    // Top crown volume / styled hair bun
+    ctx.fillStyle = cHairShadow;
+    ctx.fillRect(-4, headY - 4, 8, 4);
+    ctx.fillStyle = cHairBase;
+    ctx.fillRect(-3, headY - 3, 6, 3);
+    ctx.fillStyle = cHairLight;
+    ctx.fillRect(-2, headY - 3, 4, 2);
+    ctx.fillStyle = cHairGlint;
+    ctx.fillRect(-1, headY - 3, 2, 1);
+
+    // Front locks framing face and flowing over shoulder
+    ctx.fillStyle = cHairDeep;
+    ctx.fillRect(-4, headY, 2, 10);
+    ctx.fillRect(2 + hairSway, headY - 1, 4, 15);
+    ctx.fillStyle = cHairBase;
+    ctx.fillRect(-4, headY + 1, 1, 8);
+    ctx.fillRect(3 + hairSway, headY + 1, 3, 13);
+    ctx.fillStyle = cHairLight;
+    ctx.fillRect(4 + hairSway, headY + 3, 1, 9);
+    ctx.fillStyle = cHairGlint;
+    ctx.fillRect(4 + hairSway, headY + 5, 1, 4);
+
+    // Floating celestial aura sparkle (subtle femsphere manifestation diamond)
+    const sparkleY = headY - 6 + Math.sin(this.animTime * 2.5) * 2;
     ctx.fillStyle = '#c084fc';
-    const cBob = Math.sin(this.animTime * 1.5) * 3;
-    ctx.fillRect(-8, -14 + cBob, 3, 3);
+    ctx.fillRect(5, sparkleY, 2, 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(5, sparkleY, 1, 1);
+  }
+
+  // Pixel Sprite: Siren Femme (Purple-Haired 32-bit Femsphere Co-Star)
+  drawSirenFemme(ctx) {
+    const breath = Math.sin(this.animTime * 1.8 + 1) * 0.8;
+    const hairSway = Math.cos(this.animTime * 1.3) * 1.6;
+
+    // Palette: Sleek amethyst hair & vibrant magenta two-piece beachwear
+    const cOutline = '#170e1a';
+    const cSkinShadow = '#c27c62';
+    const cSkinBase = '#ebb28d';
+    const cSkinLight = '#f8cfb2';
+    const cSkinGlint = '#fff2e8';
+
+    // Magenta Swimwear
+    const cSuitDark = '#701a75';
+    const cSuitBase = '#c026d3';
+    const cSuitLight = '#e879f9';
+
+    // Deep Amethyst & Lavender Hair
+    const cHairShadow = '#2e1065';
+    const cHairBase = '#581c87';
+    const cHairMid = '#7e22ce';
+    const cHairLight = '#a855f7';
+    const cHairGlint = '#d8b4fe';
+
+    // Back hair
+    ctx.fillStyle = cHairShadow;
+    ctx.fillRect(-7 + hairSway, -15, 14, 19);
+    ctx.fillStyle = cHairBase;
+    ctx.fillRect(-6 + hairSway, -13, 12, 17);
+    ctx.fillStyle = cHairMid;
+    ctx.fillRect(-4 + hairSway, -11, 9, 15);
+
+    // Toned legs
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-4, 6, 3, 10);
+    ctx.fillRect(1, 6, 3, 10);
+    ctx.fillStyle = cSkinShadow;
+    ctx.fillRect(-3, 6, 2, 9);
+    ctx.fillRect(2, 6, 2, 9);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-3, 6, 1, 9);
+    ctx.fillRect(1, 6, 2, 9);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(1, 7, 1, 4);
+
+    // Two-piece bottoms
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-4, 2, 8, 5);
+    ctx.fillStyle = cSuitDark;
+    ctx.fillRect(-3, 2, 6, 4);
+    ctx.fillStyle = cSuitBase;
+    ctx.fillRect(-2, 2, 4, 3);
+    ctx.fillStyle = cSuitLight;
+    ctx.fillRect(-1, 2, 2, 1);
+
+    // Torso with light cardigan drape
+    const torsoY = -4 + breath * 0.5;
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-3, torsoY, 6, 7);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-2, torsoY, 4, 6);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(-1, torsoY + 1, 2, 4);
+
+    // Magenta top
+    ctx.fillStyle = cSuitDark;
+    ctx.fillRect(-3, torsoY, 6, 3);
+    ctx.fillStyle = cSuitBase;
+    ctx.fillRect(-3, torsoY, 3, 2);
+    ctx.fillRect(1, torsoY, 3, 2);
+    ctx.fillStyle = cSuitLight;
+    ctx.fillRect(2, torsoY, 1, 1);
+
+    // Arms
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-5, torsoY + 1, 2, 6);
+    ctx.fillRect(3, torsoY + 1, 2, 6);
+
+    // Head & face
+    const headY = -14 + breath * 0.3;
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(-3, headY, 6, 7);
+    ctx.fillStyle = cSkinBase;
+    ctx.fillRect(-2, headY, 4, 6);
+    ctx.fillStyle = cSkinLight;
+    ctx.fillRect(-1, headY + 1, 3, 4);
+    ctx.fillStyle = cOutline;
+    ctx.fillRect(0, headY + 2, 2, 1);
+    ctx.fillStyle = '#ec4899';
+    ctx.fillRect(0, headY + 5, 1, 1);
+
+    // Voluminous purple hair top & front
+    ctx.fillStyle = cHairShadow;
+    ctx.fillRect(-5, headY - 4, 10, 4);
+    ctx.fillStyle = cHairMid;
+    ctx.fillRect(-4, headY - 3, 8, 3);
+    ctx.fillStyle = cHairLight;
+    ctx.fillRect(-3, headY - 3, 6, 2);
+    ctx.fillStyle = cHairGlint;
+    ctx.fillRect(-2, headY - 3, 3, 1);
+    ctx.fillStyle = cHairMid;
+    ctx.fillRect(-5, headY, 2, 12);
+    ctx.fillRect(2 + hairSway, headY, 3, 14);
+    ctx.fillStyle = cHairLight;
+    ctx.fillRect(3 + hairSway, headY + 2, 1, 10);
   }
 
   // Pixel Sprite: Lord Cat
@@ -3324,12 +3901,13 @@ class StreetArena {
     this.ctx = this.canvas.getContext('2d');
     const w = this.canvas.width;
 
-    // Spawn 8 faction representatives
+    // Spawn faction representatives (including both femsphere models)
     const types = [
       'alpha_bro',
       'divine_femme',
       'lord_cat',
       'tactical_dog',
+      'siren_femme',
       'tech_lord',
       'mud_monk',
       'skibidi_rot',
@@ -3354,52 +3932,195 @@ class StreetArena {
     const w = this.canvas.width;
     const h = this.canvas.height;
 
-    // Update characters (always update logic so positions stay smooth)
+    // Update characters
     this.characters.forEach(char => char.update(deltaSec, this.characters, simState));
 
     // If canvas element is collapsed/hidden, skip rendering
     if (this.canvas.classList.contains('hidden') || this.canvas.offsetHeight === 0) return;
 
-    // Clear background
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, w, h);
+    const time = simState ? simState.gameTimeSec : (performance.now() / 1000);
 
-    // City Skyline Backdrop (retro pixel buildings)
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(10, 15, 35, 45);
-    ctx.fillRect(55, 8, 45, 52);
-    ctx.fillRect(115, 18, 50, 42);
-    ctx.fillRect(180, 5, 40, 55);
-    ctx.fillRect(235, 22, 30, 38);
+    // 1. SKY GRADIENT (Deep cyber twilight with stars)
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, 48);
+    skyGrad.addColorStop(0, '#030712');
+    skyGrad.addColorStop(0.6, '#0f172a');
+    skyGrad.addColorStop(1, '#1e293b');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, w, 52);
 
-    // Building window lights (flickering neon)
-    ctx.fillStyle = '#fde047';
-    for (let i = 0; i < 5; i++) {
-      ctx.fillRect(65 + (i % 2) * 15, 18 + Math.floor(i / 2) * 10, 4, 4);
-      ctx.fillRect(190 + (i % 2) * 15, 15 + Math.floor(i / 2) * 12, 4, 4);
+    // Subtle stars
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    for (let s = 0; s < 12; s++) {
+      const sx = (s * 49 + 15) % w;
+      const sy = 4 + (s * 7) % 20;
+      ctx.fillRect(sx, sy, 1, 1);
     }
 
-    // Neon Billboards
-    ctx.fillStyle = '#e11d48';
+    // 2. 3D ISOMETRIC / PERSPECTIVE BUILDINGS & HOUSES (Enhanced architectural depth)
+    const buildings = [
+      { x: 12, w: 50, h: 42, frontCol: '#1e293b', sideCol: '#0f172a', roofCol: '#334155', type: 'villa' },
+      { x: 74, w: 46, h: 48, frontCol: '#78350f', sideCol: '#451a03', roofCol: '#92400e', type: 'brick' },
+      { x: 132, w: 58, h: 54, frontCol: '#0f766e', sideCol: '#134e4a', roofCol: '#115e59', type: 'spire' },
+      { x: 202, w: 52, h: 44, frontCol: '#1e1b4b', sideCol: '#0f0c29', roofCol: '#312e81', type: 'resort' },
+      { x: 266, w: 60, h: 50, frontCol: '#334155', sideCol: '#1e293b', roofCol: '#475569', type: 'office' },
+      { x: 338, w: 54, h: 46, frontCol: '#831843', sideCol: '#500724', roofCol: '#9d174d', type: 'brick' },
+      { x: 404, w: 50, h: 52, frontCol: '#0c4a6e', sideCol: '#082f49', roofCol: '#0369a1', type: 'spire' },
+      { x: 466, w: 56, h: 42, frontCol: '#27272a', sideCol: '#18181b', roofCol: '#3f3f46', type: 'villa' },
+      { x: 534, w: 42, h: 48, frontCol: '#713f12', sideCol: '#3f2206', roofCol: '#854d0e', type: 'brick' }
+    ];
+
+    buildings.forEach((b, bIdx) => {
+      const bTop = 52 - b.h;
+      const sideW = 6; // 3D perspective shadow side wall
+
+      // 3D Shadowed Side Wall (Isometric angled perspective depth)
+      ctx.fillStyle = b.sideCol;
+      ctx.fillRect(b.x + b.w - sideW, bTop, sideW, b.h);
+
+      // Lit Front Facade
+      ctx.fillStyle = b.frontCol;
+      ctx.fillRect(b.x, bTop, b.w - sideW, b.h);
+
+      // 3D Roof Molding & Cornice
+      ctx.fillStyle = b.roofCol;
+      ctx.fillRect(b.x - 2, bTop - 3, b.w + 1, 3);
+      ctx.fillStyle = '#ffffff';
+      ctx.globalAlpha = 0.15;
+      ctx.fillRect(b.x - 2, bTop - 3, b.w - sideW + 2, 1);
+      ctx.globalAlpha = 1.0;
+
+      // Rooftop Features (Antennas, AC Compressors, Water Towers)
+      if (b.type === 'spire') {
+        // Antenna with flashing red aviation beacon
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillRect(b.x + 14, bTop - 12, 2, 9);
+        const beacon = Math.sin(time * 5 + bIdx) > 0;
+        ctx.fillStyle = beacon ? '#ef4444' : '#7f1d1d';
+        ctx.fillRect(b.x + 13, bTop - 14, 4, 2);
+      } else if (b.type === 'brick') {
+        // 3D Brick Chimney
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(b.x + 8, bTop - 8, 6, 5);
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(b.x + 12, bTop - 8, 2, 5);
+      } else if (b.type === 'villa') {
+        // Rooftop AC unit
+        ctx.fillStyle = '#64748b';
+        ctx.fillRect(b.x + 10, bTop - 6, 8, 3);
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(b.x + 16, bTop - 6, 2, 3);
+      }
+
+      // Lit Multi-Pane Windows (with subtle randomized interior glow)
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          const wx = b.x + 6 + c * 13;
+          const wy = bTop + 8 + r * 11;
+          if (wx + 7 < b.x + b.w - sideW) {
+            // Window frame (dark)
+            ctx.fillStyle = '#09090b';
+            ctx.fillRect(wx - 1, wy - 1, 8, 7);
+
+            // Lit interior pane
+            const isLit = ((bIdx * 7 + r * 3 + c * 5) % 4 !== 0);
+            const flicker = Math.sin(time * 2 + bIdx + r) * 0.1;
+            ctx.fillStyle = isLit ? (bIdx % 2 === 0 ? '#fef08a' : '#67e8f9') : '#18181b';
+            ctx.fillRect(wx, wy, 6, 5);
+
+            // Window cross mullions
+            ctx.fillStyle = '#09090b';
+            ctx.fillRect(wx + 2, wy, 1, 5);
+            ctx.fillRect(wx, wy + 2, 6, 1);
+          }
+        }
+      }
+    });
+
+    // 3. NEON BILLBOARDS (32-bit Glowing Signs)
+    // Sign 1: Left
+    ctx.fillStyle = 'rgba(0,0,0,0.85)';
+    ctx.fillRect(138, 12, 56, 10);
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(138, 12, 56, 10);
+    ctx.fillStyle = '#22d3ee';
     ctx.font = 'bold 7px monospace';
-    ctx.fillText('FEED ROT 24/7', 120, 28);
+    ctx.fillText('⚡ ALGO-ROT', 142, 20);
 
+    // Sign 2: Right
+    ctx.fillStyle = 'rgba(0,0,0,0.85)';
+    ctx.fillRect(412, 10, 52, 10);
+    ctx.strokeStyle = '#ec4899';
+    ctx.strokeRect(412, 10, 52, 10);
+    ctx.fillStyle = '#f472b6';
+    ctx.fillText('DIVINE RESORT', 416, 18);
+
+    // 4. WATERFRONT PROMENADE DOCK & BRICK BULKHEAD (Matching reference visual)
+    // Textured brick dock deck
+    ctx.fillStyle = '#7f1d1d';
+    ctx.fillRect(0, 52, w, 11);
+
+    // Brick paver texture
+    ctx.fillStyle = '#991b1b';
+    for (let bx = 0; bx < w; bx += 8) {
+      ctx.fillRect(bx + 1, 53, 6, 4);
+      ctx.fillRect(bx + 5, 58, 6, 4);
+    }
+    // Heavy wooden/stone bullnose coping edge
+    ctx.fillStyle = '#450a0a';
+    ctx.fillRect(0, 62, w, 3);
+    ctx.fillStyle = '#b91c1c';
+    ctx.fillRect(0, 62, w, 1);
+
+    // 5. ANIMATED FOREGROUND WATER CANAL WITH WHITE FOAM RIPPLES (from reference)
+    // Deep turquoise water base
+    ctx.fillStyle = '#0369a1';
+    ctx.fillRect(0, 65, w, h - 65);
+
+    // Cyan mid-water wave layers
     ctx.fillStyle = '#06b6d4';
-    ctx.fillText('⚡ HARVEST CORP', 185, 14);
-
-    // Ground / Sidewalk
-    ctx.fillStyle = '#334155';
-    ctx.fillRect(0, 58, w, 22);
-
-    // Pavement curbs and road line
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(0, 72, w, 8);
-    ctx.fillStyle = '#f59e0b';
-    for (let rx = 10; rx < w; rx += 30) {
-      ctx.fillRect(rx, 75, 15, 2);
+    const waveShift = (time * 28) % 32;
+    for (let wx = -32; wx < w + 32; wx += 24) {
+      const wy1 = 66 + Math.sin((wx + waveShift) * 0.15) * 1.5;
+      ctx.fillRect(wx, Math.round(wy1), 16, 3);
     }
 
-    // Sort characters by Y bob so they layer naturally
+    // Bright aqua wave highlights
+    ctx.fillStyle = '#22d3ee';
+    for (let wx = -20; wx < w + 20; wx += 28) {
+      const wy2 = 70 + Math.cos((wx - waveShift) * 0.18) * 1.2;
+      ctx.fillRect(wx, Math.round(wy2), 12, 2);
+    }
+
+    // Frothy white shoreline wave foam (matching dock water in reference image)
+    ctx.fillStyle = '#ffffff';
+    for (let fx = 0; fx < w; fx += 16) {
+      const foamOffset = Math.sin(time * 3 + fx * 0.2) * 1.5;
+      ctx.fillRect(fx + 2, 65, 8, 1);
+      ctx.fillRect(fx + 6, 66 + foamOffset, 4, 1);
+    }
+
+    // Promenade Decorative Streetlamps (casting volumetric light cones)
+    const lamps = [70, 240, 420];
+    lamps.forEach(lx => {
+      // Lamp pole
+      ctx.fillStyle = '#09090b';
+      ctx.fillRect(lx, 32, 2, 21);
+      ctx.fillStyle = '#d97706';
+      ctx.fillRect(lx - 2, 30, 6, 3);
+      // Glowing warm lantern
+      ctx.fillStyle = '#fef08a';
+      ctx.fillRect(lx - 1, 31, 4, 3);
+      // Soft ambient light cone onto promenade
+      ctx.fillStyle = 'rgba(254, 240, 138, 0.08)';
+      ctx.beginPath();
+      ctx.moveTo(lx + 1, 33);
+      ctx.lineTo(lx - 14, 53);
+      ctx.lineTo(lx + 16, 53);
+      ctx.fill();
+    });
+
+    // 6. CHARACTERS LAYER (Sorted by yBob for realistic natural depth)
     const sorted = [...this.characters].sort((a, b) => a.yBob - b.yBob);
     sorted.forEach(c => c.draw(ctx));
   }
@@ -3426,6 +4147,38 @@ class StreetArena {
     }
   }
 }
+
+// 32-BIT EXPORTED SPRITE ASSET MANIFEST (Ready for external reuse & inspection)
+window.SPRITE_ASSETS_32BIT = {
+  version: '2.0-32BIT',
+  palettes: {
+    femsphereSiren: {
+      outline: '#1c130d',
+      skinShadow: '#cb855d',
+      skinBase: '#ebb28d',
+      skinLight: '#f8cfb2',
+      swimwearBase: '#1d4ed8',
+      swimwearLight: '#60a5fa',
+      hairBase: '#925c27',
+      hairLight: '#e5aa59'
+    },
+    sirenAmethyst: {
+      outline: '#170e1a',
+      skinBase: '#ebb28d',
+      swimwearBase: '#c026d3',
+      hairBase: '#581c87',
+      hairLight: '#a855f7'
+    },
+    waterfront: {
+      deepWater: '#0369a1',
+      cyanWave: '#06b6d4',
+      aquaHighlight: '#22d3ee',
+      frothWhite: '#ffffff',
+      brickDeck: '#7f1d1d',
+      brickPaver: '#991b1b'
+    }
+  }
+};
 
 window.StreetArena = new StreetArena();
 
@@ -5285,6 +6038,47 @@ class UIController {
       } else {
         rotBanner.classList.add('hidden');
       }
+    }
+
+    // 4b. 32-Bit Mandate Quest Log Live Status Indicators
+    const questRot = document.getElementById('quest-rot-status');
+    if (questRot) {
+      if (this.sim.goldilocksActive) {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/70 tracking-wider animate-pulse';
+        questRot.innerText = `🔥 5.0x HARVEST`;
+      } else if (this.sim.tension > 92) {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-rose-950 text-rose-300 border border-rose-600 tracking-wider animate-pulse';
+        questRot.innerText = '⚠️ WAR RISK';
+      } else if (this.sim.tension < 65) {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-800 text-zinc-400 border border-zinc-700 tracking-wider';
+        questRot.innerText = 'STANDBY';
+      } else {
+        questRot.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-amber-950 text-amber-300 border border-amber-800 tracking-wider';
+        questRot.innerText = 'ACTIVE';
+      }
+    }
+
+    const questTemp = document.getElementById('quest-temp-status');
+    if (questTemp) {
+      if (this.sim.serverTemp > 85) {
+        questTemp.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-rose-950 text-rose-300 border border-rose-600 tracking-wider animate-pulse';
+        questTemp.innerText = '🔥 CRITICAL';
+      } else if (this.sim.serverTemp > 65) {
+        questTemp.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-amber-950 text-amber-300 border border-amber-800 tracking-wider';
+        questTemp.innerText = '⚡ STRAIN';
+      } else {
+        questTemp.className = 'px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800 tracking-wider';
+        questTemp.innerText = 'OPTIMAL';
+      }
+    }
+
+    const questWattsCounter = document.getElementById('quest-watts-counter');
+    const questWattsBar = document.getElementById('quest-watts-bar');
+    if (questWattsCounter && questWattsBar) {
+      const quota = 50000;
+      const pct = Math.min(100, (this.sim.watts / quota) * 100);
+      questWattsCounter.innerText = `${Math.floor(this.sim.watts).toLocaleString()} / 50k⚡`;
+      questWattsBar.style.width = `${pct}%`;
     }
 
     // 5. Action Button Cooldown states
